@@ -4,25 +4,55 @@ import NSURLConnection_Mock
 
 class Tests: XCTestCase {
     
-    override func setUp() {
-        super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    class URLConnectionDelegate : NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelegate {
+        
+        var response: NSURLResponse?
+        var data: NSMutableData?
+        
+        let complete: () -> ()
+        
+        init(complete: () -> ()) {
+            self.complete = complete
+        }
+        
+        func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
+            self.response = response
+        }
+        
+        func connection(connection: NSURLConnection, didReceiveData data: NSData) {
+            if self.data == nil {
+                self.data = NSMutableData()
+            }
+            self.data!.appendData(data)
+        }
+        
+        func connectionDidFinishLoading(connection: NSURLConnection) {
+            self.complete()
+        }
     }
     
-    override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-        super.tearDown()
-    }
-    
-    func testExample() {
-        // This is an example of a functional test case.
-        XCTAssert(true, "Pass")
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
+    func test_WithMockURL_ShouldReturnMockedData() {
+        let expectation = self.expectationWithDescription("Complete called")
+        
+        // Tell NSURLConnection to mock this URL
+        let URL = NSURL(string: "https://www.example.com/1")!
+        let data = "test".dataUsingEncoding(NSUTF8StringEncoding)!
+        NSURLConnection.mock(URL, data: data)
+        
+        // Make a delegate we will inspect at the end of the test
+        let delegate = URLConnectionDelegate(complete: {
+            expectation.fulfill()
+        })
+        
+        // Make the request
+        let request = NSURLRequest(URL: URL)
+        let connection = NSURLConnection.init(request: request, delegate: delegate)
+        XCTAssertNotNil(connection)
+        
+        // Validate that the mock data was returned
+        self.waitForExpectationsWithTimeout(0.5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(data, delegate.data)
         }
     }
     

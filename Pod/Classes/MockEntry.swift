@@ -9,8 +9,8 @@
 import Foundation
 
 struct MockEntry {
-    let url: NSURL
+    let URL: NSURL
     
     let headers: Dictionary<String, String> = Dictionary()
-    let response: NSData
+    let data: NSData
 }
