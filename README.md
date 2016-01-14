@@ -1,6 +1,6 @@
 # NSURLConnection-Mock
 
-[![CI Status](http://img.shields.io/travis/Sam Dean/NSURLConnection-Mock.svg?style=flat)](https://travis-ci.org/Sam Dean/NSURLConnection-Mock)
+[![CI Status](http://img.shields.io/travis/net-a-porter-mobile/NSURLConnection-Mock.svg?style=flat)](https://travis-ci.org/Sam Dean/NSURLConnection-Mock)
 [![Version](https://img.shields.io/cocoapods/v/NSURLConnection-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLConnection-Mock)
 [![License](https://img.shields.io/cocoapods/l/NSURLConnection-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLConnection-Mock)
 [![Platform](https://img.shields.io/cocoapods/p/NSURLConnection-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLConnection-Mock)
