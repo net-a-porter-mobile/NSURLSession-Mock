@@ -1,0 +1,12 @@
+source 'https://github.com/CocoaPods/Specs.git'
+use_frameworks!
+
+target 'NSURLConnection-Mock_Example', :exclusive => true do
+  pod "NSURLConnection-Mock", :path => "../"
+end
+
+target 'NSURLConnection-Mock_Tests', :exclusive => true do
+  pod "NSURLConnection-Mock", :path => "../"
+
+  
+end
