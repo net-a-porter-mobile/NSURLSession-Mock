@@ -8,17 +8,28 @@ public enum NSURLConnectionMock: ErrorType {
 }
 
 public extension NSURLConnection {
-
-    /**
-     For a given URL, return the specified NSData to the connection's delegate
-     */
-    public class func mock(URL: NSURL, data: NSData) {
+    
+    private class func addMockEntry(entry: MockEntry) {
         // If we are not mocking any URLs, then we need to swizzle right now.
         self.swizzleIfNeeded()
         
-        // Add this URL and response into the list of mocked responses
-        let entry = MockEntry(URL: URL, data: data)
         entries.append(entry)
+    }
+
+    /**
+     For each call to a given URL, return the specified NSData to the connection's delegate.
+     */
+    public class func mockEvery(URL: NSURL, data: NSData) {
+        let entry = MockEntry(URL: URL, data: data, isSingle: false)
+        self.addMockEntry(entry)
+    }
+    
+    /**
+     For a single call to a given URL, return the specified NSData to the connection's delegate.
+     */
+     public class func mockSingle(URL: NSURL, data: NSData) {
+        let entry = MockEntry(URL: URL, data: data, isSingle: true)
+        self.addMockEntry(entry)
     }
     
     /**
@@ -84,6 +95,16 @@ public extension NSURLConnection {
     func swizzledStart() {
         for entry in entries {
             if entry.URL == self.currentRequest.URL {
+                
+                // If this is a single entry then we should remove it from the
+                // entries array.
+                if entry.isSingle {
+                    let index = entries.indexOf { $0 == entry }
+                    entries.removeAtIndex(index!)
+                }
+                
+                // Mock the callbacks for a successful response, but use the
+                // mock entry's data
                 if let delegate = self.delegate as? NSURLConnectionDataDelegate {
                     let mult = Double(NSEC_PER_SEC)
                     let queue = dispatch_get_main_queue()
