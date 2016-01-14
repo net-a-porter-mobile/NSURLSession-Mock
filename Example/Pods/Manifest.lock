@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  NSURLConnection-Mock: 67d175ad8d1d7456e6beb91ebc68d6cd4f632d76
+  NSURLConnection-Mock: 34c57933a2928151de36eccbcd7a14d4c5c36576
 
 COCOAPODS: 0.38.2

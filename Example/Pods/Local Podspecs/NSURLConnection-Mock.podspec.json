@@ -4,7 +4,10 @@
   "summary": "A short description of NSURLConnection-Mock.",
   "description": "",
   "homepage": "https://github.com/<GITHUB_USERNAME>/NSURLConnection-Mock",
-  "license": "MIT",
+  "license": {
+    "type": "Apache",
+    "file": "LICENSE"
+  },
   "authors": {
     "Sam Dean": "sam.dean@net-a-porter.com"
   },

@@ -1,6 +1,6 @@
 import UIKit
 import XCTest
-import NSURLConnection-Mock
+import NSURLConnection_Mock
 
 class Tests: XCTestCase {
     
