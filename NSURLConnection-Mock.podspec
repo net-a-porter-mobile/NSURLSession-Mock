@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
 
   s.homepage         = "https://github.com/<GITHUB_USERNAME>/NSURLConnection-Mock"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
-  s.license          = 'MIT'
+  s.license          = { :type => 'Apache', :file => 'LICENSE' }
   s.author           = { "Sam Dean" => "sam.dean@net-a-porter.com" }
   s.source           = { :git => "https://github.com/<GITHUB_USERNAME>/NSURLConnection-Mock.git", :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
