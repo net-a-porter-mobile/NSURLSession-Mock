@@ -1,0 +1,778 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		430D1182C579365B3A9135D980183A20 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE2F134B1AB05A3EEB0C419B7439AF36 /* Foundation.framework */; };
+		4D9CDA49A8B83CABB4BD94ED61F70FC9 /* Pods-NSURLConnection-Mock_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FDDA6B6D3E8043BD501CF5183E65141E /* Pods-NSURLConnection-Mock_Example-dummy.m */; };
+		57B17B0A8FD41253665DF3BC1D851E13 /* NSURLConnection-Mock-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8EC2E206A749857849930A7CEFB32864 /* NSURLConnection-Mock-dummy.m */; };
+		5BCD4063D6CB586447E008AB285F74E9 /* Pods-NSURLConnection-Mock_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C822CA725A9E2EDF6B63EADF75C717E6 /* Pods-NSURLConnection-Mock_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6E7C077F95228A75F9ECAC30F495BEF3 /* NSURLConnection-Mock.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CBAC2CCC42D4C8CD55D76BE23D155714 /* NSURLConnection-Mock.bundle */; };
+		719C6EA77B67748CE2EFA5DCDFE208A7 /* Pods-NSURLConnection-Mock_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 120DDE9D5D22E16F8D56A47DC7CD8AEB /* Pods-NSURLConnection-Mock_Tests-dummy.m */; };
+		8CF7D5617C2FEFB54CC787B64354001E /* Pods-NSURLConnection-Mock_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0BB1A9639D087AFAAC001C702C69EF48 /* Pods-NSURLConnection-Mock_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9D113289A32F0ACA907F917CBBC87EFB /* ReplaceMe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 904B43CA9F5FF3610F4E5B9941A4FB8B /* ReplaceMe.swift */; };
+		AD573D98738B7AD2001C9E3BA2674765 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE2F134B1AB05A3EEB0C419B7439AF36 /* Foundation.framework */; };
+		ED3729C36B062E85BE3ABD7BA744E143 /* NSURLConnection-Mock-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CFF5B8D868FDBEBD31516A2361BF15E8 /* NSURLConnection-Mock-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FA285F68140110A5DAB0559CAD2BC0BE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE2F134B1AB05A3EEB0C419B7439AF36 /* Foundation.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		0745970195E846DD9D6239F478B51830 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 68E6D4C1AACDDDEEB385F591BC36DF65;
+			remoteInfo = "NSURLConnection-Mock-NSURLConnection-Mock";
+		};
+		C1B6E1104803A6F99E4AF20F266DE6D8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13020B499E62865B8856A282E0872258;
+			remoteInfo = "NSURLConnection-Mock";
+		};
+		C9246789B8A3E3FAC37BAAD19117336D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 13020B499E62865B8856A282E0872258;
+			remoteInfo = "NSURLConnection-Mock";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0031669ED30AF9C1322B2A137EF7EF21 /* Pods-NSURLConnection-Mock_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-NSURLConnection-Mock_Example-resources.sh"; sourceTree = "<group>"; };
+		0A1EE1A52FDE61992CF2AF56D48432F4 /* NSURLConnection-Mock.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "NSURLConnection-Mock.xcconfig"; sourceTree = "<group>"; };
+		0BB1A9639D087AFAAC001C702C69EF48 /* Pods-NSURLConnection-Mock_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-NSURLConnection-Mock_Tests-umbrella.h"; sourceTree = "<group>"; };
+		0C3319D396C5821A46AEBB4C0B2F6999 /* Pods-NSURLConnection-Mock_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-NSURLConnection-Mock_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		0F34F181DC5E02F3B3294634F8F3C408 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		120DDE9D5D22E16F8D56A47DC7CD8AEB /* Pods-NSURLConnection-Mock_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-NSURLConnection-Mock_Tests-dummy.m"; sourceTree = "<group>"; };
+		384F4BC996E4FD2EB03049BE4DC6B5F5 /* Pods-NSURLConnection-Mock_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-NSURLConnection-Mock_Tests-resources.sh"; sourceTree = "<group>"; };
+		38A2D185662C27BB6EFA526C834DFC41 /* Pods-NSURLConnection-Mock_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-NSURLConnection-Mock_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
+		4738BC267F6F817CAB3832C25613D26C /* Pods-NSURLConnection-Mock_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-NSURLConnection-Mock_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		590E2A0F2CA8298702EFA443B3349D82 /* Pods-NSURLConnection-Mock_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-NSURLConnection-Mock_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		5AA932A77D091BC43243D63D4A7E5042 /* Pods-NSURLConnection-Mock_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-NSURLConnection-Mock_Example.release.xcconfig"; sourceTree = "<group>"; };
+		5FA7FEBD4582990B324CB162A83506EC /* Pods_NSURLConnection_Mock_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSURLConnection_Mock_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		66269F9E7D0761B13F19EF3E35B3EFD5 /* Pods-NSURLConnection-Mock_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-NSURLConnection-Mock_Tests-frameworks.sh"; sourceTree = "<group>"; };
+		6F1796C58F25729A4204916C75E72DCB /* Pods-NSURLConnection-Mock_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-NSURLConnection-Mock_Example-acknowledgements.plist"; sourceTree = "<group>"; };
+		850EC73DD459556EA83A28C572E106FB /* Pods-NSURLConnection-Mock_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-NSURLConnection-Mock_Example-frameworks.sh"; sourceTree = "<group>"; };
+		8EC2E206A749857849930A7CEFB32864 /* NSURLConnection-Mock-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NSURLConnection-Mock-dummy.m"; sourceTree = "<group>"; };
+		8FA3647E118344089187C43F4586F505 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		904B43CA9F5FF3610F4E5B9941A4FB8B /* ReplaceMe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ReplaceMe.swift; sourceTree = "<group>"; };
+		942DE730B5050AEBB636E0293E35B5D5 /* NSURLConnection-Mock-Private.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "NSURLConnection-Mock-Private.xcconfig"; sourceTree = "<group>"; };
+		99317C65CA8B9286564C18B8281A5874 /* NSURLConnection_Mock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NSURLConnection_Mock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE2F134B1AB05A3EEB0C419B7439AF36 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		C822CA725A9E2EDF6B63EADF75C717E6 /* Pods-NSURLConnection-Mock_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-NSURLConnection-Mock_Example-umbrella.h"; sourceTree = "<group>"; };
+		CBAC2CCC42D4C8CD55D76BE23D155714 /* NSURLConnection-Mock.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NSURLConnection-Mock.bundle"; sourceTree = BUILT_PRODUCTS_DIR; };
+		CFF5B8D868FDBEBD31516A2361BF15E8 /* NSURLConnection-Mock-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection-Mock-umbrella.h"; sourceTree = "<group>"; };
+		D88911A879E73615644BB0955B3B2307 /* Pods-NSURLConnection-Mock_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-NSURLConnection-Mock_Tests.modulemap"; sourceTree = "<group>"; };
+		DD14258DBBAB7A0E753FEADAEA12B413 /* NSURLConnection-Mock-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection-Mock-prefix.pch"; sourceTree = "<group>"; };
+		E1576542FFCE5EA9A74E9DDFA72BE774 /* Pods-NSURLConnection-Mock_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-NSURLConnection-Mock_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		E6CD81E796471BC1B65E7E1D080A5585 /* NSURLConnection-Mock.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "NSURLConnection-Mock.modulemap"; sourceTree = "<group>"; };
+		EB7EA3BA0AAAAAA22A11AF1A2E0B04AE /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EC64E94748B3B616570AE02F1C31AC76 /* Pods_NSURLConnection_Mock_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSURLConnection_Mock_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ED16B1D31E9D7E953367536C16B5D14F /* Pods-NSURLConnection-Mock_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-NSURLConnection-Mock_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
+		F28A18F9B57BCA50B67B2AA0B6FAB2E4 /* Pods-NSURLConnection-Mock_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-NSURLConnection-Mock_Example.modulemap"; sourceTree = "<group>"; };
+		FDDA6B6D3E8043BD501CF5183E65141E /* Pods-NSURLConnection-Mock_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-NSURLConnection-Mock_Example-dummy.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7A4B720F88444AE8A5404ADC5F6067B4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9A7F89F4C890E74F9AE6F67DF0AB5DBD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA285F68140110A5DAB0559CAD2BC0BE /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D8F43F594FBCD16BAA96F5A36F29BE77 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				430D1182C579365B3A9135D980183A20 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EE8BDF930408A626F6042F68D100A85F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AD573D98738B7AD2001C9E3BA2674765 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		28E71CB7A45ED01EDA4F2C705E93CC73 /* Pods-NSURLConnection-Mock_Tests */ = {
+			isa = PBXGroup;
+			children = (
+				8FA3647E118344089187C43F4586F505 /* Info.plist */,
+				D88911A879E73615644BB0955B3B2307 /* Pods-NSURLConnection-Mock_Tests.modulemap */,
+				38A2D185662C27BB6EFA526C834DFC41 /* Pods-NSURLConnection-Mock_Tests-acknowledgements.markdown */,
+				ED16B1D31E9D7E953367536C16B5D14F /* Pods-NSURLConnection-Mock_Tests-acknowledgements.plist */,
+				120DDE9D5D22E16F8D56A47DC7CD8AEB /* Pods-NSURLConnection-Mock_Tests-dummy.m */,
+				66269F9E7D0761B13F19EF3E35B3EFD5 /* Pods-NSURLConnection-Mock_Tests-frameworks.sh */,
+				384F4BC996E4FD2EB03049BE4DC6B5F5 /* Pods-NSURLConnection-Mock_Tests-resources.sh */,
+				0BB1A9639D087AFAAC001C702C69EF48 /* Pods-NSURLConnection-Mock_Tests-umbrella.h */,
+				4738BC267F6F817CAB3832C25613D26C /* Pods-NSURLConnection-Mock_Tests.debug.xcconfig */,
+				E1576542FFCE5EA9A74E9DDFA72BE774 /* Pods-NSURLConnection-Mock_Tests.release.xcconfig */,
+			);
+			name = "Pods-NSURLConnection-Mock_Tests";
+			path = "Target Support Files/Pods-NSURLConnection-Mock_Tests";
+			sourceTree = "<group>";
+		};
+		53F661C0CA7190D2CF05023FB33D61E4 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				AE2F134B1AB05A3EEB0C419B7439AF36 /* Foundation.framework */,
+			);
+			name = iOS;
+			sourceTree = "<group>";
+		};
+		7340DF0D7FCFC111BE5E2C8215001209 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				904B43CA9F5FF3610F4E5B9941A4FB8B /* ReplaceMe.swift */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		7DB346D0F39D3F0E887471402A8071AB = {
+			isa = PBXGroup;
+			children = (
+				BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */,
+				EED7F7B43637E6E8529C9787731921B4 /* Development Pods */,
+				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
+				CCA510CFBEA2D207524CDA0D73C3B561 /* Products */,
+				7DD5B3CCA8F2A308BC06A1CBDEA82C65 /* Targets Support Files */,
+			);
+			sourceTree = "<group>";
+		};
+		7DD5B3CCA8F2A308BC06A1CBDEA82C65 /* Targets Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				8E4EDC32B9623EAB4E5B98C8D0446AF5 /* Pods-NSURLConnection-Mock_Example */,
+				28E71CB7A45ED01EDA4F2C705E93CC73 /* Pods-NSURLConnection-Mock_Tests */,
+			);
+			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		8E4EDC32B9623EAB4E5B98C8D0446AF5 /* Pods-NSURLConnection-Mock_Example */ = {
+			isa = PBXGroup;
+			children = (
+				0F34F181DC5E02F3B3294634F8F3C408 /* Info.plist */,
+				F28A18F9B57BCA50B67B2AA0B6FAB2E4 /* Pods-NSURLConnection-Mock_Example.modulemap */,
+				590E2A0F2CA8298702EFA443B3349D82 /* Pods-NSURLConnection-Mock_Example-acknowledgements.markdown */,
+				6F1796C58F25729A4204916C75E72DCB /* Pods-NSURLConnection-Mock_Example-acknowledgements.plist */,
+				FDDA6B6D3E8043BD501CF5183E65141E /* Pods-NSURLConnection-Mock_Example-dummy.m */,
+				850EC73DD459556EA83A28C572E106FB /* Pods-NSURLConnection-Mock_Example-frameworks.sh */,
+				0031669ED30AF9C1322B2A137EF7EF21 /* Pods-NSURLConnection-Mock_Example-resources.sh */,
+				C822CA725A9E2EDF6B63EADF75C717E6 /* Pods-NSURLConnection-Mock_Example-umbrella.h */,
+				0C3319D396C5821A46AEBB4C0B2F6999 /* Pods-NSURLConnection-Mock_Example.debug.xcconfig */,
+				5AA932A77D091BC43243D63D4A7E5042 /* Pods-NSURLConnection-Mock_Example.release.xcconfig */,
+			);
+			name = "Pods-NSURLConnection-Mock_Example";
+			path = "Target Support Files/Pods-NSURLConnection-Mock_Example";
+			sourceTree = "<group>";
+		};
+		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				53F661C0CA7190D2CF05023FB33D61E4 /* iOS */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		CCA510CFBEA2D207524CDA0D73C3B561 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				CBAC2CCC42D4C8CD55D76BE23D155714 /* NSURLConnection-Mock.bundle */,
+				99317C65CA8B9286564C18B8281A5874 /* NSURLConnection_Mock.framework */,
+				5FA7FEBD4582990B324CB162A83506EC /* Pods_NSURLConnection_Mock_Example.framework */,
+				EC64E94748B3B616570AE02F1C31AC76 /* Pods_NSURLConnection_Mock_Tests.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D96B236A910226CD6D24389EEDD6DC8F /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				7340DF0D7FCFC111BE5E2C8215001209 /* Classes */,
+			);
+			path = Pod;
+			sourceTree = "<group>";
+		};
+		D9FB4DE239C3AE70156FD646C04F725D /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				EB7EA3BA0AAAAAA22A11AF1A2E0B04AE /* Info.plist */,
+				E6CD81E796471BC1B65E7E1D080A5585 /* NSURLConnection-Mock.modulemap */,
+				0A1EE1A52FDE61992CF2AF56D48432F4 /* NSURLConnection-Mock.xcconfig */,
+				942DE730B5050AEBB636E0293E35B5D5 /* NSURLConnection-Mock-Private.xcconfig */,
+				8EC2E206A749857849930A7CEFB32864 /* NSURLConnection-Mock-dummy.m */,
+				DD14258DBBAB7A0E753FEADAEA12B413 /* NSURLConnection-Mock-prefix.pch */,
+				CFF5B8D868FDBEBD31516A2361BF15E8 /* NSURLConnection-Mock-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/NSURLConnection-Mock";
+			sourceTree = "<group>";
+		};
+		E72844FFE179A0E1DCE1CA4C853A1D25 /* NSURLConnection-Mock */ = {
+			isa = PBXGroup;
+			children = (
+				D96B236A910226CD6D24389EEDD6DC8F /* Pod */,
+				D9FB4DE239C3AE70156FD646C04F725D /* Support Files */,
+			);
+			name = "NSURLConnection-Mock";
+			path = ../..;
+			sourceTree = "<group>";
+		};
+		EED7F7B43637E6E8529C9787731921B4 /* Development Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E72844FFE179A0E1DCE1CA4C853A1D25 /* NSURLConnection-Mock */,
+			);
+			name = "Development Pods";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		39991652CD9CE7482873404FC00F4BC2 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ED3729C36B062E85BE3ABD7BA744E143 /* NSURLConnection-Mock-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		615B297E1E49130690718A5CDA452CA3 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8CF7D5617C2FEFB54CC787B64354001E /* Pods-NSURLConnection-Mock_Tests-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BE3F689C78CA468A29477A24E4859677 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5BCD4063D6CB586447E008AB285F74E9 /* Pods-NSURLConnection-Mock_Example-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		13020B499E62865B8856A282E0872258 /* NSURLConnection-Mock */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9E942C090494C3BCDBB0C0684F3400C3 /* Build configuration list for PBXNativeTarget "NSURLConnection-Mock" */;
+			buildPhases = (
+				D551EA256B2485A419FC1A57C4D0A700 /* Sources */,
+				9A7F89F4C890E74F9AE6F67DF0AB5DBD /* Frameworks */,
+				46139DEC6802723CA95B7FB87FCEF00A /* Resources */,
+				39991652CD9CE7482873404FC00F4BC2 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1C8657A1B4E079B07EE218703E9F8EDA /* PBXTargetDependency */,
+			);
+			name = "NSURLConnection-Mock";
+			productName = "NSURLConnection-Mock";
+			productReference = 99317C65CA8B9286564C18B8281A5874 /* NSURLConnection_Mock.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		68E6D4C1AACDDDEEB385F591BC36DF65 /* NSURLConnection-Mock-NSURLConnection-Mock */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24D2DE2E176FE3B843012A992205944B /* Build configuration list for PBXNativeTarget "NSURLConnection-Mock-NSURLConnection-Mock" */;
+			buildPhases = (
+				534DEC6612AA2D4C0F8A85323092085A /* Sources */,
+				7A4B720F88444AE8A5404ADC5F6067B4 /* Frameworks */,
+				26F2F6E2836F836FB5DB1323DACBC4E7 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "NSURLConnection-Mock-NSURLConnection-Mock";
+			productName = "NSURLConnection-Mock-NSURLConnection-Mock";
+			productReference = CBAC2CCC42D4C8CD55D76BE23D155714 /* NSURLConnection-Mock.bundle */;
+			productType = "com.apple.product-type.bundle";
+		};
+		DDA7D237F73C8E88F60ABF4DB3B35B16 /* Pods-NSURLConnection-Mock_Example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = CE6718AD098BAB3F4274C3A1BAE25217 /* Build configuration list for PBXNativeTarget "Pods-NSURLConnection-Mock_Example" */;
+			buildPhases = (
+				2178FBD8C3274AC764AA11C22031E7BA /* Sources */,
+				EE8BDF930408A626F6042F68D100A85F /* Frameworks */,
+				BE3F689C78CA468A29477A24E4859677 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				10B70191CCCD216C90BA88D1F70CC17A /* PBXTargetDependency */,
+			);
+			name = "Pods-NSURLConnection-Mock_Example";
+			productName = "Pods-NSURLConnection-Mock_Example";
+			productReference = 5FA7FEBD4582990B324CB162A83506EC /* Pods_NSURLConnection_Mock_Example.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		EF4A87C8196FF018A1C3226E92C673A0 /* Pods-NSURLConnection-Mock_Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2AC5A458C6E4AE57BCD451E922B9AF4B /* Build configuration list for PBXNativeTarget "Pods-NSURLConnection-Mock_Tests" */;
+			buildPhases = (
+				EA387CE3CC173E1D675BDC174F32F7DD /* Sources */,
+				D8F43F594FBCD16BAA96F5A36F29BE77 /* Frameworks */,
+				615B297E1E49130690718A5CDA452CA3 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FC77DC7D1450185E300810A9D1CF271C /* PBXTargetDependency */,
+			);
+			name = "Pods-NSURLConnection-Mock_Tests";
+			productName = "Pods-NSURLConnection-Mock_Tests";
+			productReference = EC64E94748B3B616570AE02F1C31AC76 /* Pods_NSURLConnection_Mock_Tests.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D41D8CD98F00B204E9800998ECF8427E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
+			};
+			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
+			productRefGroup = CCA510CFBEA2D207524CDA0D73C3B561 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				13020B499E62865B8856A282E0872258 /* NSURLConnection-Mock */,
+				68E6D4C1AACDDDEEB385F591BC36DF65 /* NSURLConnection-Mock-NSURLConnection-Mock */,
+				DDA7D237F73C8E88F60ABF4DB3B35B16 /* Pods-NSURLConnection-Mock_Example */,
+				EF4A87C8196FF018A1C3226E92C673A0 /* Pods-NSURLConnection-Mock_Tests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		26F2F6E2836F836FB5DB1323DACBC4E7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		46139DEC6802723CA95B7FB87FCEF00A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6E7C077F95228A75F9ECAC30F495BEF3 /* NSURLConnection-Mock.bundle in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2178FBD8C3274AC764AA11C22031E7BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4D9CDA49A8B83CABB4BD94ED61F70FC9 /* Pods-NSURLConnection-Mock_Example-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		534DEC6612AA2D4C0F8A85323092085A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D551EA256B2485A419FC1A57C4D0A700 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				57B17B0A8FD41253665DF3BC1D851E13 /* NSURLConnection-Mock-dummy.m in Sources */,
+				9D113289A32F0ACA907F917CBBC87EFB /* ReplaceMe.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA387CE3CC173E1D675BDC174F32F7DD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				719C6EA77B67748CE2EFA5DCDFE208A7 /* Pods-NSURLConnection-Mock_Tests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		10B70191CCCD216C90BA88D1F70CC17A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "NSURLConnection-Mock";
+			target = 13020B499E62865B8856A282E0872258 /* NSURLConnection-Mock */;
+			targetProxy = C9246789B8A3E3FAC37BAAD19117336D /* PBXContainerItemProxy */;
+		};
+		1C8657A1B4E079B07EE218703E9F8EDA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "NSURLConnection-Mock-NSURLConnection-Mock";
+			target = 68E6D4C1AACDDDEEB385F591BC36DF65 /* NSURLConnection-Mock-NSURLConnection-Mock */;
+			targetProxy = 0745970195E846DD9D6239F478B51830 /* PBXContainerItemProxy */;
+		};
+		FC77DC7D1450185E300810A9D1CF271C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "NSURLConnection-Mock";
+			target = 13020B499E62865B8856A282E0872258 /* NSURLConnection-Mock */;
+			targetProxy = C1B6E1104803A6F99E4AF20F266DE6D8 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		10DE1947DAC0ED28F6C0A9F9BD75D546 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PREPROCESSOR_DEFINITIONS = "RELEASE=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4E789F5E0BB12AA6C6747C3BD9CC72E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0C3319D396C5821A46AEBB4C0B2F6999 /* Pods-NSURLConnection-Mock_Example.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-NSURLConnection-Mock_Example/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-NSURLConnection-Mock_Example/Pods-NSURLConnection-Mock_Example.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_NSURLConnection_Mock_Example;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		552D02D5BA751AC2E8790D2811D496CA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				ONLY_ACTIVE_ARCH = YES;
+				STRIP_INSTALLED_PRODUCT = NO;
+				SYMROOT = "${SRCROOT}/../build";
+			};
+			name = Debug;
+		};
+		57A5E8C46B6CF26CB2422F3F1458A39A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5AA932A77D091BC43243D63D4A7E5042 /* Pods-NSURLConnection-Mock_Example.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-NSURLConnection-Mock_Example/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-NSURLConnection-Mock_Example/Pods-NSURLConnection-Mock_Example.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_NSURLConnection_Mock_Example;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		73DC19EE5B6D43ED2E2F98E015A306E5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 942DE730B5050AEBB636E0293E35B5D5 /* NSURLConnection-Mock-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 0.1.0;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 0.1.0;
+				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/NSURLConnection-Mock/NSURLConnection-Mock-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/NSURLConnection-Mock/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/NSURLConnection-Mock/NSURLConnection-Mock.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = NSURLConnection_Mock;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		B11B4DC980B9E075BFD7189BEA5F95FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 942DE730B5050AEBB636E0293E35B5D5 /* NSURLConnection-Mock-Private.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				PRODUCT_NAME = "NSURLConnection-Mock";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
+		};
+		BFD2CA2548752FAAD1F020DDD072014A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4738BC267F6F817CAB3832C25613D26C /* Pods-NSURLConnection-Mock_Tests.debug.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-NSURLConnection-Mock_Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-NSURLConnection-Mock_Tests/Pods-NSURLConnection-Mock_Tests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_NSURLConnection_Mock_Tests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		C3CFF877E9B0E911FDCDF38BDE1E3B16 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 942DE730B5050AEBB636E0293E35B5D5 /* NSURLConnection-Mock-Private.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 0.1.0;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 0.1.0;
+				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_PREFIX_HEADER = "Target Support Files/NSURLConnection-Mock/NSURLConnection-Mock-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/NSURLConnection-Mock/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/NSURLConnection-Mock/NSURLConnection-Mock.modulemap";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = NSURLConnection_Mock;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		EE06D7ED94DDA59BF0F993A7A5CA5CCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = E1576542FFCE5EA9A74E9DDFA72BE774 /* Pods-NSURLConnection-Mock_Tests.release.xcconfig */;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				INFOPLIST_FILE = "Target Support Files/Pods-NSURLConnection-Mock_Tests/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/Pods-NSURLConnection-Mock_Tests/Pods-NSURLConnection-Mock_Tests.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_NAME = Pods_NSURLConnection_Mock_Tests;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		F7FE9E4C658F81F597968FC694F4705B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 942DE730B5050AEBB636E0293E35B5D5 /* NSURLConnection-Mock-Private.xcconfig */;
+			buildSettings = {
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				PRODUCT_NAME = "NSURLConnection-Mock";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		24D2DE2E176FE3B843012A992205944B /* Build configuration list for PBXNativeTarget "NSURLConnection-Mock-NSURLConnection-Mock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F7FE9E4C658F81F597968FC694F4705B /* Debug */,
+				B11B4DC980B9E075BFD7189BEA5F95FE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2AC5A458C6E4AE57BCD451E922B9AF4B /* Build configuration list for PBXNativeTarget "Pods-NSURLConnection-Mock_Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BFD2CA2548752FAAD1F020DDD072014A /* Debug */,
+				EE06D7ED94DDA59BF0F993A7A5CA5CCE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				552D02D5BA751AC2E8790D2811D496CA /* Debug */,
+				10DE1947DAC0ED28F6C0A9F9BD75D546 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9E942C090494C3BCDBB0C0684F3400C3 /* Build configuration list for PBXNativeTarget "NSURLConnection-Mock" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C3CFF877E9B0E911FDCDF38BDE1E3B16 /* Debug */,
+				73DC19EE5B6D43ED2E2F98E015A306E5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		CE6718AD098BAB3F4274C3A1BAE25217 /* Build configuration list for PBXNativeTarget "Pods-NSURLConnection-Mock_Example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4E789F5E0BB12AA6C6747C3BD9CC72E2 /* Debug */,
+				57A5E8C46B6CF26CB2422F3F1458A39A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+}

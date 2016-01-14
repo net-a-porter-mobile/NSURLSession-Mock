@@ -1,0 +1,14 @@
+PODS:
+  - NSURLConnection-Mock (0.1.0)
+
+DEPENDENCIES:
+  - NSURLConnection-Mock (from `../`)
+
+EXTERNAL SOURCES:
+  NSURLConnection-Mock:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  NSURLConnection-Mock: 67d175ad8d1d7456e6beb91ebc68d6cd4f632d76
+
+COCOAPODS: 0.38.2
