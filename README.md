@@ -26,4 +26,4 @@ Sam Dean, sam.dean@net-a-porter.com
 
 ## License
 
-NSURLConnection-Mock is available under the MIT license. See the LICENSE file for more info.
+NSURLConnection-Mock is available under the Apache license. See the LICENSE file for more info.

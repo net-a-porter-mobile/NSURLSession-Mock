@@ -15,6 +15,7 @@
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		E554026C1C4947FF000EE008 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = E554026B1C4947FF000EE008 /* CHANGELOG.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		AD9881B831DFF277D62F01E3 /* Pods_NSURLConnection_Mock_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSURLConnection_Mock_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B65BB5CE67AB9139A2B2940D /* Pods-NSURLConnection-Mock_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSURLConnection-Mock_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NSURLConnection-Mock_Tests/Pods-NSURLConnection-Mock_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E1AE2B81217EB41BA329F0A5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		E554026B1C4947FF000EE008 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		EE1F938096A7B92AE9A3298C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -144,6 +146,7 @@
 				4117AEE72DCABB19C6F5DA93 /* NSURLConnection-Mock.podspec */,
 				E1AE2B81217EB41BA329F0A5 /* README.md */,
 				EE1F938096A7B92AE9A3298C /* LICENSE */,
+				E554026B1C4947FF000EE008 /* CHANGELOG.md */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
@@ -360,6 +363,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
+				E554026C1C4947FF000EE008 /* CHANGELOG.md in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

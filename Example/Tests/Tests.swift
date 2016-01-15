@@ -8,6 +8,7 @@ class Tests: XCTestCase {
         
         var response: NSURLResponse?
         var data: NSMutableData?
+        var error: NSError?
         
         let complete: () -> ()
         
@@ -29,6 +30,11 @@ class Tests: XCTestCase {
         func connectionDidFinishLoading(connection: NSURLConnection) {
             self.complete()
         }
+        
+        func connection(connection: NSURLConnection, didFailWithError error: NSError) {
+            self.error = error
+            self.complete()
+        }
     }
     
     override func tearDown() {
@@ -37,7 +43,7 @@ class Tests: XCTestCase {
         NSURLConnection.removeAllMocks()
     }
     
-    func testMock_WithMockURL_ShouldReturnMockedData() {
+    func ztestMock_WithMockURL_ShouldReturnMockedData() {
         let expectation = self.expectationWithDescription("Complete called")
         
         // Tell NSURLConnection to mock this URL
@@ -59,10 +65,11 @@ class Tests: XCTestCase {
         self.waitForExpectationsWithTimeout(0.5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(data, delegate.data)
+            XCTAssertNil(delegate.error)
         }
     }
     
-    func testMock_WithTwoSingleMocks_ShouldReturnBoth() {
+    func ztestMock_WithTwoSingleMocks_ShouldReturnBoth() {
         let expectation = self.expectationWithDescription("Complete called")
         
         // Tell NSURLConnection to mock these two URLs
@@ -97,6 +104,32 @@ class Tests: XCTestCase {
             XCTAssertNil(error)
             XCTAssertEqual(data1, delegate1.data)
             XCTAssertEqual(data2, delegate2.data)
+        }
+    }
+    
+    func testMock_WithErrorMock_ShouldReturnError() {
+        let expectation = self.expectationWithDescription("Complete called")
+        
+        // Tell NSURLConnection to mock this URL
+        let URL = NSURL(string: "https://www.example.com/1")!
+        let error = NSError(domain: "TestDomain", code: 0, userInfo: nil)
+        NSURLConnection.mockEvery(URL, error: error)
+        
+        // Make a delegate we will inspect at the end of the test
+        let delegate = URLConnectionDelegate(complete: {
+            expectation.fulfill()
+        })
+        
+        // Make the request
+        let request = NSURLRequest(URL: URL)
+        let connection = NSURLConnection.init(request: request, delegate: delegate)
+        XCTAssertNotNil(connection)
+        
+        // Validate that the mock data was returned
+        self.waitForExpectationsWithTimeout(0.5) { timeoutError in
+            XCTAssertNil(timeoutError)
+            XCTAssertEqual(error, delegate.error)
+            XCTAssertNil(delegate.data)
         }
     }
 }
