@@ -23,7 +23,7 @@ If you want to mock a sequence of responses to a URL, use mockSingle instead
 let URL = NSURL(string: "https://www.example.com/2")!
 
 let data1 = "some-data".dataUsingEncoding(NSUTF8StringEncoding)!
-NSURLConnection.mockSinge(URL, data: data1)
+NSURLConnection.mockSingle(URL, data: data1)
 
 let data2 = "some-more-data".dataUsingEncoding(NSUTF8StringEncoding)!
 NSURLConnection.mockSingle(URL, data: data2)
