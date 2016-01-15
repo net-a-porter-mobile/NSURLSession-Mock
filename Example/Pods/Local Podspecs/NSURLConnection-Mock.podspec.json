@@ -1,9 +1,9 @@
 {
   "name": "NSURLConnection-Mock",
   "version": "0.1.0",
-  "summary": "A short description of NSURLConnection-Mock.",
-  "description": "",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/NSURLConnection-Mock",
+  "summary": "Stub responses from NSURLConnection",
+  "description": "This pod will add methods to NSURLConnection to help stubbing server responses, making functional testing simpler",
+  "homepage": "https://github.com/net-a-porter-mobile/NSURLConnection-Mock",
   "license": {
     "type": "Apache",
     "file": "LICENSE"
@@ -19,6 +19,7 @@
     "ios": "8.0"
   },
   "requires_arc": true,
+  "compiler_flags": "-Wall -Werror -Wextra",
   "source_files": "Pod/Classes/**/*",
   "resource_bundles": {
     "NSURLConnection-Mock": [
