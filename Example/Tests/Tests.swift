@@ -43,7 +43,7 @@ class Tests: XCTestCase {
         NSURLConnection.removeAllMocks()
     }
     
-    func ztestMock_WithMockURL_ShouldReturnMockedData() {
+    func testMock_WithMockURL_ShouldReturnMockedData() {
         let expectation = self.expectationWithDescription("Complete called")
         
         // Tell NSURLConnection to mock this URL
@@ -69,7 +69,7 @@ class Tests: XCTestCase {
         }
     }
     
-    func ztestMock_WithTwoSingleMocks_ShouldReturnBoth() {
+    func testMock_WithTwoSingleMocks_ShouldReturnBoth() {
         let expectation = self.expectationWithDescription("Complete called")
         
         // Tell NSURLConnection to mock these two URLs
