@@ -128,4 +128,45 @@ class NSURLConnectionTests: XCTestCase {
             XCTAssert(interval > 1.0, "This request should have taken longer, it took \(interval)")
         }
     }
+    
+    func testMock_WithTwoConcurrentRequests_ShouldNotInterfereWithEachOther() {
+        let expectation1 = self.expectationWithDescription("Complete 1 called")
+        let expectation2 = self.expectationWithDescription("Complete 2 called")
+        
+        // Tell NSURLConnection to mock these two URLs
+        let URL1 = NSURL(string: "https://www.example.com/1")!
+        let data1 = "test1".dataUsingEncoding(NSUTF8StringEncoding)!
+        NSURLConnection.mockSingle(URL1, data: data1, delay: 2)
+        
+        let URL2 = NSURL(string: "https://www.example.com/2")!
+        let data2 = "test2".dataUsingEncoding(NSUTF8StringEncoding)!
+        NSURLConnection.mockSingle(URL2, data: data2, delay: 1)
+        
+        // Check that call 1 is returned _after_ call 2, even though they are requested the other way round
+        var date1: NSDate?
+        var date2: NSDate?
+
+        let delegate1 = TestDelegate(complete: {
+            date1 = NSDate()
+            expectation1.fulfill()
+        })
+        let delegate2 = TestDelegate(complete: {
+            date2 = NSDate()
+            expectation2.fulfill()
+        })
+        let connection1 = NSURLConnection.init(request: NSURLRequest(URL: URL1), delegate: delegate1)
+        let connection2 = NSURLConnection.init(request: NSURLRequest(URL: URL2), delegate: delegate2)
+        
+        XCTAssertNotNil(connection1)
+        XCTAssertNotNil(connection2)
+        
+        self.waitForExpectationsWithTimeout(5) { error in
+            XCTAssertNil(error)
+            XCTAssertEqual(delegate1.data, data1)
+            XCTAssertEqual(delegate2.data, data2)
+            
+            let interval = date1!.timeIntervalSinceDate(date2!)
+            XCTAssertGreaterThan(interval, 0, "The second request should have returned before the first one")
+        }
+    }
 }

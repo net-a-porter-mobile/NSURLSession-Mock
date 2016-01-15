@@ -1,6 +1,6 @@
 # NSURLConnection-Mock
 
-[![CI Status](http://img.shields.io/travis/net-a-porter-mobile/NSURLConnection-Mock.svg?style=flat)](https://travis-ci.org/Sam Dean/NSURLConnection-Mock)
+[![CI Status](http://img.shields.io/travis/net-a-porter-mobile/NSURLConnection-Mock.svg?style=flat)](https://travis-ci.org/net-a-porter-mobile/NSURLConnection-Mock)
 [![Version](https://img.shields.io/cocoapods/v/NSURLConnection-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLConnection-Mock)
 [![License](https://img.shields.io/cocoapods/l/NSURLConnection-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLConnection-Mock)
 [![Platform](https://img.shields.io/cocoapods/p/NSURLConnection-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLConnection-Mock)
@@ -45,6 +45,13 @@ let URL = NSURL(string: "https://www.example.com/invalid/path")!
 let error = NSError(domain: "TestDomain", code: 0, userInfo: nil)
 NSURLConnection.mockEvery(URL, error: error, delay: 10.0)
 ```
+
+Removing all mocks
+
+```objc
+NSURLConnection.removeAllMocks()
+```
+
 
 ### Example project
 
