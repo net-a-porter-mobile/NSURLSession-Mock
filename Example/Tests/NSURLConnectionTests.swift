@@ -2,40 +2,7 @@ import UIKit
 import XCTest
 import NSURLConnection_Mock
 
-class Tests: XCTestCase {
-    
-    class URLConnectionDelegate : NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelegate {
-        
-        var response: NSURLResponse?
-        var data: NSMutableData?
-        var error: NSError?
-        
-        let complete: () -> ()
-        
-        init(complete: () -> ()) {
-            self.complete = complete
-        }
-        
-        func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
-            self.response = response
-        }
-        
-        func connection(connection: NSURLConnection, didReceiveData data: NSData) {
-            if self.data == nil {
-                self.data = NSMutableData()
-            }
-            self.data!.appendData(data)
-        }
-        
-        func connectionDidFinishLoading(connection: NSURLConnection) {
-            self.complete()
-        }
-        
-        func connection(connection: NSURLConnection, didFailWithError error: NSError) {
-            self.error = error
-            self.complete()
-        }
-    }
+class NSURLConnectionTests: XCTestCase {
     
     override func tearDown() {
         super.tearDown()
@@ -52,7 +19,7 @@ class Tests: XCTestCase {
         NSURLConnection.mockEvery(URL, data: data)
         
         // Make a delegate we will inspect at the end of the test
-        let delegate = URLConnectionDelegate(complete: {
+        let delegate = TestDelegate(complete: {
             expectation.fulfill()
         })
         
@@ -82,13 +49,13 @@ class Tests: XCTestCase {
         NSURLConnection.mockSingle(URL2, data: data2)
         
         // Make a delegate we will inspect at the end of the test
-        let delegate2 = URLConnectionDelegate(complete: {
+        let delegate2 = TestDelegate(complete: {
             expectation.fulfill()
         })
         
         // Make a delegate that will trigger the second request after the first 
         // one is complete
-        let delegate1 = URLConnectionDelegate(complete: {
+        let delegate1 = TestDelegate(complete: {
             let request = NSURLRequest(URL: URL2)
             let connection = NSURLConnection.init(request: request, delegate: delegate2)
             XCTAssertNotNil(connection)
@@ -116,7 +83,7 @@ class Tests: XCTestCase {
         NSURLConnection.mockEvery(URL, error: error)
         
         // Make a delegate we will inspect at the end of the test
-        let delegate = URLConnectionDelegate(complete: {
+        let delegate = TestDelegate(complete: {
             expectation.fulfill()
         })
         
@@ -130,6 +97,35 @@ class Tests: XCTestCase {
             XCTAssertNil(timeoutError)
             XCTAssertEqual(error, delegate.error)
             XCTAssertNil(delegate.data)
+        }
+    }
+    
+    func testMock_WithDelay_ShouldWaitForDelay() {
+        let expectation = self.expectationWithDescription("Complete called")
+        
+        // Tell NSURLConnection to mock this URL
+        let URL = NSURL(string: "https://www.example.com/1")!
+        let error = NSError(domain: "TestDomain", code: 0, userInfo: nil)
+        NSURLConnection.mockEvery(URL, error: error, delay: 1.5)
+        
+        // Make a delegate we will inspect at the end of the test
+        let delegate = TestDelegate(complete: {
+            expectation.fulfill()
+        })
+        
+        // Make the request
+        let request = NSURLRequest(URL: URL)
+        let connection = NSURLConnection.init(request: request, delegate: delegate)
+        XCTAssertNotNil(connection)
+        
+        // Validate that the mock data was returned
+        let start = NSDate()
+        self.waitForExpectationsWithTimeout(2.5) { timeoutError in
+            XCTAssertNil(timeoutError)
+            
+            let end = NSDate()
+            let interval = end.timeIntervalSinceDate(start)
+            XCTAssert(interval > 1.0, "This request should have taken longer, it took \(interval)")
         }
     }
 }

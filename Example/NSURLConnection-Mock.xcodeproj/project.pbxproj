@@ -14,8 +14,9 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
+		607FACEC1AFB9204008FA782 /* NSURLConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* NSURLConnectionTests.swift */; };
 		E554026C1C4947FF000EE008 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = E554026B1C4947FF000EE008 /* CHANGELOG.md */; };
+		E5FA96541C4974A5009C8265 /* TestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FA96531C4974A5009C8265 /* TestDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,7 +41,7 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* NSURLConnection-Mock_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "NSURLConnection-Mock_Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACEB1AFB9204008FA782 /* Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests.swift; sourceTree = "<group>"; };
+		607FACEB1AFB9204008FA782 /* NSURLConnectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSURLConnectionTests.swift; sourceTree = "<group>"; };
 		6F561186B199AA3C465C8634 /* Pods-NSURLConnection-Mock_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSURLConnection-Mock_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NSURLConnection-Mock_Tests/Pods-NSURLConnection-Mock_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		9C476E25D3B0EFB1B7E2FDB2 /* Pods-NSURLConnection-Mock_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSURLConnection-Mock_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-NSURLConnection-Mock_Example/Pods-NSURLConnection-Mock_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		A6B239BF2C07018CF240EC43 /* Pods-NSURLConnection-Mock_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSURLConnection-Mock_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-NSURLConnection-Mock_Example/Pods-NSURLConnection-Mock_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -48,6 +49,7 @@
 		B65BB5CE67AB9139A2B2940D /* Pods-NSURLConnection-Mock_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSURLConnection-Mock_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-NSURLConnection-Mock_Tests/Pods-NSURLConnection-Mock_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E1AE2B81217EB41BA329F0A5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E554026B1C4947FF000EE008 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		E5FA96531C4974A5009C8265 /* TestDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDelegate.swift; sourceTree = "<group>"; };
 		EE1F938096A7B92AE9A3298C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -126,7 +128,8 @@
 		607FACE81AFB9204008FA782 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				607FACEB1AFB9204008FA782 /* Tests.swift */,
+				607FACEB1AFB9204008FA782 /* NSURLConnectionTests.swift */,
+				E5FA96531C4974A5009C8265 /* TestDelegate.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
 			path = Tests;
@@ -372,7 +375,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACEC1AFB9204008FA782 /* Tests.swift in Sources */,
+				E5FA96541C4974A5009C8265 /* TestDelegate.swift in Sources */,
+				607FACEC1AFB9204008FA782 /* NSURLConnectionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

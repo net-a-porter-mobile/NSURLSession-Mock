@@ -19,21 +19,32 @@ public extension NSURLConnection {
     /**
      For each call to a given URL, return the specified NSData to the connection's delegate.
      */
-    public class func mockEvery(URL: NSURL, data: NSData) {
-        let entry = MockEntry.everyURL(URL, withData: data)
+    public class func mockEvery(URL: NSURL, data: NSData, delay: Double = MockEntry.DefaultDelay) {
+        let entry = MockEntry.everyURL(URL, withData: data, delay: delay)
         self.addMockEntry(entry)
     }
     
     /**
      For a single call to a given URL, return the specified NSData to the connection's delegate.
      */
-     public class func mockSingle(URL: NSURL, data: NSData) {
-        let entry = MockEntry.singleURL(URL, withData: data)
+     public class func mockSingle(URL: NSURL, data: NSData, delay: Double = MockEntry.DefaultDelay) {
+        let entry = MockEntry.singleURL(URL, withData: data, delay: delay)
         self.addMockEntry(entry)
     }
     
-    public class func mockEvery(URL: NSURL, error: NSError) {
-        let entry = MockEntry.everyURL(URL, withError: error)
+    /**
+     Return an error from the given URL each time it's called
+     */
+    public class func mockEvery(URL: NSURL, error: NSError, delay: Double = MockEntry.DefaultDelay) {
+        let entry = MockEntry.everyURL(URL, withError: error, delay: delay)
+        self.addMockEntry(entry)
+    }
+    
+    /**
+     Return an error from the given URL the first time it's called
+     */
+    public class func mockSingle(URL: NSURL, error: NSError, delay: Double = MockEntry.DefaultDelay) {
+        let entry = MockEntry.singleURL(URL, withError: error, delay: delay)
         self.addMockEntry(entry)
     }
     
@@ -44,7 +55,7 @@ public extension NSURLConnection {
         entries = []
     }
     
-    // MARK: - Swizzle utils
+    // MARK: - Swizzling utils
     
     private class func swizzleIfNeeded() {
         struct Static {
@@ -97,6 +108,7 @@ public extension NSURLConnection {
     
     // MARK: - Swizzled methods
     
+    @objc(swizzledStart)
     func swizzledStart() {
         for entry in entries {
             if entry.URL == self.currentRequest.URL {
@@ -113,7 +125,7 @@ public extension NSURLConnection {
                 if let delegate = self.delegate as? NSURLConnectionDataDelegate {
                     let mult = Double(NSEC_PER_SEC)
                     let timeDelta = 0.05
-                    var time = timeDelta
+                    var time = entry.delay
                     let queue = dispatch_get_main_queue()
                     
                     // What kind of response is this, data or error?
