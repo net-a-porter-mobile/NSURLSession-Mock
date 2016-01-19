@@ -1,6 +1,6 @@
 //
 //  NSURLSessionTests.swift
-//  NSURLConnection-Mock
+//  NSURLSession-Mock
 //
 //  Created by Sam Dean on 18/01/2016.
 //  Copyright © 2016 CocoaPods. All rights reserved.
@@ -8,8 +8,7 @@
 
 import XCTest
 
-import NSURLConnection_Mock
-
+import NSURLSession_Mock
 
 private class SessionTestDelegate: NSObject, NSURLSessionDataDelegate {
     var expectations: [XCTestExpectation]

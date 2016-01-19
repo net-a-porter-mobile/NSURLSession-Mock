@@ -1,6 +1,6 @@
 //
 //  TestDelegate.swift
-//  NSURLConnection-Mock
+//  NSURLSession-Mock
 //
 //  Created by Sam Dean on 15/01/2016.
 //  Copyright © 2016 CocoaPods. All rights reserved.

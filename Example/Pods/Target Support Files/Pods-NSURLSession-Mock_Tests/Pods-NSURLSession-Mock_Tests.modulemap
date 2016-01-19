@@ -1,0 +1,6 @@
+framework module Pods_NSURLSession_Mock_Tests {
+  umbrella header "Pods-NSURLSession-Mock_Tests-umbrella.h"
+
+  export *
+  module * { export * }
+}

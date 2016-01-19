@@ -1,6 +1,0 @@
-framework module Pods_NSURLConnection_Mock_Tests {
-  umbrella header "Pods-NSURLConnection-Mock_Tests-umbrella.h"
-
-  export *
-  module * { export * }
-}

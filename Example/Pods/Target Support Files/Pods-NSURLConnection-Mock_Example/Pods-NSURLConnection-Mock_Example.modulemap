@@ -1,6 +1,0 @@
-framework module Pods_NSURLConnection_Mock_Example {
-  umbrella header "Pods-NSURLConnection-Mock_Example-umbrella.h"
-
-  export *
-  module * { export * }
-}

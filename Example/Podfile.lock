@@ -20,26 +20,26 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - NSURLConnection-Mock (0.1.0):
-    - NSURLConnection-Mock/Common (= 0.1.0)
-    - NSURLConnection-Mock/NSURLConnection (= 0.1.0)
-    - NSURLConnection-Mock/NSURLSession (= 0.1.0)
-  - NSURLConnection-Mock/Common (0.1.0)
-  - NSURLConnection-Mock/NSURLConnection (0.1.0):
-    - NSURLConnection-Mock/Common
-  - NSURLConnection-Mock/NSURLSession (0.1.0):
-    - NSURLConnection-Mock/Common
+  - NSURLSession-Mock (0.1.0):
+    - NSURLSession-Mock/Common (= 0.1.0)
+    - NSURLSession-Mock/NSURLConnection (= 0.1.0)
+    - NSURLSession-Mock/NSURLSession (= 0.1.0)
+  - NSURLSession-Mock/Common (0.1.0)
+  - NSURLSession-Mock/NSURLConnection (0.1.0):
+    - NSURLSession-Mock/Common
+  - NSURLSession-Mock/NSURLSession (0.1.0):
+    - NSURLSession-Mock/Common
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
-  - NSURLConnection-Mock (from `../`)
+  - NSURLSession-Mock (from `../`)
 
 EXTERNAL SOURCES:
-  NSURLConnection-Mock:
+  NSURLSession-Mock:
     :path: "../"
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  NSURLConnection-Mock: 4337de57447f19b4baa43d7543bd4a636733e877
+  NSURLSession-Mock: 9e52f5198d6caf3fa319c209c4c1db2fdfea6849
 
 COCOAPODS: 0.38.2

@@ -1,0 +1,6 @@
+framework module NSURLSession_Mock {
+  umbrella header "NSURLSession-Mock-umbrella.h"
+
+  export *
+  module * { export * }
+}
