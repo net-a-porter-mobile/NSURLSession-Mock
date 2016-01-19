@@ -8,18 +8,18 @@
 
 import Foundation
 
-private let DefaultDelay = 0.25
-
 private let mult = Double(NSEC_PER_SEC)
 
 class SuccessSessionMock : SessionMock {
     
     private let request: NSURLRequest
     private let body: NSData?
+    private let delay: Double
     
-    init(request: NSURLRequest, body: NSData? = nil) {
+    init(request: NSURLRequest, body: NSData? = nil, delay: Double) {
         self.request = request
         self.body = body
+        self.delay = delay
     }
     
     func matchesRequest(request: NSURLRequest) -> Bool {
@@ -33,7 +33,8 @@ class SuccessSessionMock : SessionMock {
         let task = MockSessionDataTask() { task in
             task._state = .Running
             
-            var time = DefaultDelay
+            let timeDelta = 0.05
+            var time = self.delay
             
             if let delegate = session.delegate as? NSURLSessionDataDelegate {
                 if let body = self.body {
@@ -41,7 +42,7 @@ class SuccessSessionMock : SessionMock {
                         delegate.URLSession?(session, dataTask: task, didReceiveData: body)
                     }
                     
-                    time += DefaultDelay
+                    time += timeDelta
                 }
             }
             

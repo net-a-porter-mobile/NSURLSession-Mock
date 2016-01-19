@@ -24,5 +24,9 @@ protocol SessionMock {
     otherwise it will return `nil`
     */
     func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask?
-    
 }
+
+/**
+A default delay to use when mocking requests
+*/
+var DefaultDelay: Double = 0.25

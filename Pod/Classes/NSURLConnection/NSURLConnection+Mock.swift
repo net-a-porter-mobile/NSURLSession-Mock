@@ -88,7 +88,7 @@ public extension NSURLConnection {
     // MARK: - Swizzled methods
     
     @objc(swizzledStart)
-    func swizzledStart() {
+    private func swizzledStart() {
         for entry in entries {
             if entry.URL == self.currentRequest.URL {
                 
@@ -151,7 +151,7 @@ public extension NSURLConnection {
     // We swizzle this init method so that we can grab the delegate as it passes
     // by
     @objc(swizzledInitWithRequest:delegate:)
-    func swizzledInit(request: NSURLRequest, delegate: AnyObject) -> Self {
+    private func swizzledInit(request: NSURLRequest, delegate: AnyObject) -> Self {
         self.delegate = delegate
         return self.swizzledInit(request, delegate: delegate)
     }

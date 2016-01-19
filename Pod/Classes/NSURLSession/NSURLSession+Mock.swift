@@ -14,18 +14,24 @@ extension NSURLSession {
     
     /**
      The next call matching `request` will successfully return `body`
+     
+     - parameter request: The request to mock
+     - parameter body: The data to return in the callback. If this is `nil` then the didRecieveData callback won't be called.
      */
-    public class func mockSingle(request: NSURLRequest, body: NSData?) {
-        mocks.append(SingleSuccessSessionMock(request: request, body: body))
+    public class func mockSingle(request: NSURLRequest, body: NSData?, delay: Double = DefaultDelay) {
+        mocks.append(SingleSuccessSessionMock(request: request, body: body, delay: delay))
         
         swizzleIfNeeded()
     }
     
     /**
      All calls matching `request` will successfully return `body`
+     
+     - parameter request: The request to mock
+     - parameter body: The data to return in the callback. If this is `nil` then the didRecieveData callback won't be called.
      */
-    public class func mockEvery(request: NSURLRequest, body: NSData?) {
-        mocks.append(SuccessSessionMock(request: request, body: body))
+    public class func mockEvery(request: NSURLRequest, body: NSData?, delay: Double = DefaultDelay) {
+        mocks.append(SuccessSessionMock(request: request, body: body, delay: delay))
         
         swizzleIfNeeded()
     }
@@ -65,7 +71,7 @@ extension NSURLSession {
     // MARK: Swizzled methods
     
     @objc(swizzledDataTaskWithRequest:)
-    public func swizzledDataTaskWithRequest(request: NSURLRequest!) -> NSURLSessionDataTask {
+    private func swizzledDataTaskWithRequest(request: NSURLRequest!) -> NSURLSessionDataTask {
         // If any of our mocks match this request, just do that instead
         if let task = nextSessionMockWithRequest(request) {
             return task
@@ -78,7 +84,7 @@ extension NSURLSession {
     }
     
     @objc(swizzledDataTaskWithURL:)
-    public func swizzledDataTaskWithURL(URL: NSURL!) -> NSURLSessionDataTask {
+    private func swizzledDataTaskWithURL(URL: NSURL!) -> NSURLSessionDataTask {
         let request = NSURLRequest(URL: URL)
         if let task = nextSessionMockWithRequest(request) {
             return task
