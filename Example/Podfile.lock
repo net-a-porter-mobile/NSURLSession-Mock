@@ -1,7 +1,37 @@
 PODS:
-  - NSURLConnection-Mock (0.1.0)
+  - AFNetworking (2.6.3):
+    - AFNetworking/NSURLConnection (= 2.6.3)
+    - AFNetworking/NSURLSession (= 2.6.3)
+    - AFNetworking/Reachability (= 2.6.3)
+    - AFNetworking/Security (= 2.6.3)
+    - AFNetworking/Serialization (= 2.6.3)
+    - AFNetworking/UIKit (= 2.6.3)
+  - AFNetworking/NSURLConnection (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.6.3):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.6.3)
+  - AFNetworking/Security (2.6.3)
+  - AFNetworking/Serialization (2.6.3)
+  - AFNetworking/UIKit (2.6.3):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - NSURLConnection-Mock (0.1.0):
+    - NSURLConnection-Mock/Common (= 0.1.0)
+    - NSURLConnection-Mock/NSURLConnection (= 0.1.0)
+    - NSURLConnection-Mock/NSURLSession (= 0.1.0)
+  - NSURLConnection-Mock/Common (0.1.0)
+  - NSURLConnection-Mock/NSURLConnection (0.1.0):
+    - NSURLConnection-Mock/Common
+  - NSURLConnection-Mock/NSURLSession (0.1.0):
+    - NSURLConnection-Mock/Common
 
 DEPENDENCIES:
+  - AFNetworking (~> 2.0)
   - NSURLConnection-Mock (from `../`)
 
 EXTERNAL SOURCES:
@@ -9,6 +39,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  NSURLConnection-Mock: f4014c36f79288ad76b88abc37dd7366163f9836
+  AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  NSURLConnection-Mock: 4337de57447f19b4baa43d7543bd4a636733e877
 
 COCOAPODS: 0.38.2

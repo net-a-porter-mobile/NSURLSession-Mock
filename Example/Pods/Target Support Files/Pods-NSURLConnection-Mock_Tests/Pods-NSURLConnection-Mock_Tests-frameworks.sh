@@ -53,7 +53,9 @@ code_sign_if_enabled() {
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework 'Pods-NSURLConnection-Mock_Tests/NSURLConnection_Mock.framework'
+  install_framework 'Pods-NSURLConnection-Mock_Tests/AFNetworking.framework'
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework 'Pods-NSURLConnection-Mock_Tests/NSURLConnection_Mock.framework'
+  install_framework 'Pods-NSURLConnection-Mock_Tests/AFNetworking.framework'
 fi

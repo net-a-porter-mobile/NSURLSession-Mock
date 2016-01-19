@@ -7,6 +7,6 @@ end
 
 target 'NSURLConnection-Mock_Tests', :exclusive => true do
   pod "NSURLConnection-Mock", :path => "../"
-
   
+  pod "AFNetworking", "~> 2.0"
 end

@@ -32,12 +32,21 @@ Pod::Spec.new do |s|
 
   s.compiler_flags = "-Wall -Werror -Wextra"
 
-  s.source_files = 'Pod/Classes/**/*'
-  s.resource_bundles = {
-    'NSURLConnection-Mock' => ['Pod/Assets/*.png']
-  }
+  s.subspec 'Common' do |ss|
+    ss.source_files = 'Pod/Classes/Common/**/*'
+  end
 
-  # s.public_header_files = 'Pod/Classes/**/*.h'
-  # s.frameworks = 'UIKit', 'MapKit'
+  s.subspec 'NSURLConnection' do |ss|
+    ss.source_files = 'Pod/Classes/NSURLConnection/**/*'
+
+    ss.dependency 'NSURLConnection-Mock/Common'
+  end
+
+  s.subspec 'NSURLSession' do |ss|
+    ss.source_files = 'Pod/Classes/NSURLSession/**/*'
+
+    ss.dependency 'NSURLConnection-Mock/Common'
+  end
+
   # s.dependency 'AFNetworking', '~> 2.3'
 end

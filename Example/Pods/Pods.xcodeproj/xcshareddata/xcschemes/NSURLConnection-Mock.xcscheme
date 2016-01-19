@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "5E7D1F7F58A4F88912796949"
+               BlueprintIdentifier = "C216D3FB39CC4854D211F21D"
                BuildableName = "NSURLConnection_Mock.framework"
                BlueprintName = "NSURLConnection-Mock"
                ReferencedContainer = "container:Pods.xcodeproj">

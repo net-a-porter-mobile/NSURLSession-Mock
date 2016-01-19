@@ -8,31 +8,56 @@
 
 import XCTest
 
+import NSURLConnection_Mock
+
 class NSURLSessionTests: XCTestCase {
+    
+    override func tearDown() {
+        NSURLSession.removeAllMocks()
+    }
     
     func testSession_WithSingleMock_ShouldReturnMockData() {
         let expectation = self.expectationWithDescription("Complete called")
         
         // Tell NSURLConnection to mock this URL
         let URL = NSURL(string: "https://www.example.com/1")!
-        let error = NSError(domain: "TestDomain", code: 0, userInfo: nil)
-        NSURLConnection.mockEvery(URL, error: error, delay: 1.5)
+        let body = "Test response".dataUsingEncoding(NSUTF8StringEncoding)!
+        let request = NSURLRequest.init(URL: URL)
+        NSURLSession.mockSingle(request, body: body)
         
-        let session = NSURLSession.sharedSession()
-        
-        let task = session.dataTaskWithURL(URL) { (data, response, error) -> Void in
-            expectation.fulfill()
+        class TestDelegate: NSObject, NSURLSessionDataDelegate {
+            let expectation: XCTestExpectation
+            var data: NSMutableData?
+            
+            init(expectation: XCTestExpectation) {
+                self.expectation = expectation
+            }
+            
+            @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData recievedData: NSData) {
+                if data == nil {
+                    data = NSMutableData()
+                }
+                
+                data!.appendData(recievedData)
+            }
+            
+            @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+                expectation.fulfill()
+            }
         }
-        XCTAssertNotNil(task)
+        
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = TestDelegate(expectation: expectation)
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
         
         // Validate that the mock data was returned
-        let start = NSDate()
-        self.waitForExpectationsWithTimeout(2.5) { timeoutError in
+        self.waitForExpectationsWithTimeout(1) { timeoutError in
             XCTAssertNil(timeoutError)
             
-            let end = NSDate()
-            let interval = end.timeIntervalSinceDate(start)
-            XCTAssert(interval > 1.0, "This request should have taken longer, it took \(interval)")
+            XCTAssertEqual(delegate.data, body)
         }
     }
     

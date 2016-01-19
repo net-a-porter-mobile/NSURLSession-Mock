@@ -12,7 +12,7 @@ enum Swizzle: ErrorType {
     case Failed(method: String)
 }
 
-func swizzle(_ reciever: AnyClass, replace from: String, with to: String) throws {
+func swizzle(reciever: AnyClass, replace from: String, with to: String) throws {
     let originalSelector = Selector(from)
     let swizzledSelector = Selector(to)
     
