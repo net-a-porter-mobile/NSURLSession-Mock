@@ -1,4 +1,4 @@
-# NSURLConnection-Mock
+# NSURLSession-Mock
 
 [![CI Status](http://img.shields.io/travis/net-a-porter-mobile/NSURLSession-Mock.svg?style=flat)](https://travis-ci.org/net-a-porter-mobile/NSURLSession-Mock)
 [![Version](https://img.shields.io/cocoapods/v/NSURLSession-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLSession-Mock)
@@ -107,17 +107,18 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-NSURLConnection-Mock is available through [CocoaPods](http://cocoapods.org). To install
+NSURLSession-Mock is available through [CocoaPods](http://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod "NSURLConnection-Mock"
+pod "NSURLSession-Mock"
 ```
 
 ## TODO:
 
 + mock all the convenience methods of NSURLSession (i.e. the ones which take in completion blocks)
 + Mock headers in a response instead of just the body
++ Mock status codes in a response
 
 ## Author
 
@@ -125,4 +126,4 @@ Sam Dean, sam.dean@net-a-porter.com
 
 ## License
 
-NSURLConnection-Mock is available under the Apache license. See the LICENSE file for more info.
+NSURLSession-Mock is available under the Apache license. See the LICENSE file for more info.
