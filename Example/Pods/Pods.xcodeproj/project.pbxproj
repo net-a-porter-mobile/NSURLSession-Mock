@@ -17,6 +17,7 @@
 		9F8851905446189FD2F694D6C19D927D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACACDA3E0CE082108021E963BFD30CDB /* Foundation.framework */; };
 		AD573D98738B7AD2001C9E3BA2674765 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACACDA3E0CE082108021E963BFD30CDB /* Foundation.framework */; };
 		DAF1969C6815749EA376680944D289EF /* NSURLConnection+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFA6A6C0CEAD4E62D9F3C0BA99CB4AE4 /* NSURLConnection+Mock.swift */; settings = {COMPILER_FLAGS = "-Wall -Werror -Wextra"; }; };
+		E57C3A0F1C4E30D500DAC943 /* Swizzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57C3A0E1C4E30D500DAC943 /* Swizzle.swift */; };
 		E5991387947551549D98E02F1145E0CB /* MockEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = EDB07D916780EC91DB6B3A23801A6FD4 /* MockEntry.swift */; settings = {COMPILER_FLAGS = "-Wall -Werror -Wextra"; }; };
 		FA7DC7A3FE8B6B9046EB849F8A515C07 /* NSURLConnection-Mock-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0711B58C238BA6973449A3629AD65863 /* NSURLConnection-Mock-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -73,6 +74,7 @@
 		DB4218EC894902B72C31B143D1F94410 /* NSURLConnection_Mock.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = NSURLConnection_Mock.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DD14258DBBAB7A0E753FEADAEA12B413 /* NSURLConnection-Mock-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSURLConnection-Mock-prefix.pch"; sourceTree = "<group>"; };
 		E1576542FFCE5EA9A74E9DDFA72BE774 /* Pods-NSURLConnection-Mock_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-NSURLConnection-Mock_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		E57C3A0E1C4E30D500DAC943 /* Swizzle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Swizzle.swift; sourceTree = "<group>"; };
 		E6CD81E796471BC1B65E7E1D080A5585 /* NSURLConnection-Mock.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "NSURLConnection-Mock.modulemap"; sourceTree = "<group>"; };
 		EB7EA3BA0AAAAAA22A11AF1A2E0B04AE /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		EC64E94748B3B616570AE02F1C31AC76 /* Pods_NSURLConnection_Mock_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSURLConnection_Mock_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -221,6 +223,7 @@
 			children = (
 				EDB07D916780EC91DB6B3A23801A6FD4 /* MockEntry.swift */,
 				AFA6A6C0CEAD4E62D9F3C0BA99CB4AE4 /* NSURLConnection+Mock.swift */,
+				E57C3A0E1C4E30D500DAC943 /* Swizzle.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E57C3A0F1C4E30D500DAC943 /* Swizzle.swift in Sources */,
 				E5991387947551549D98E02F1145E0CB /* MockEntry.swift in Sources */,
 				DAF1969C6815749EA376680944D289EF /* NSURLConnection+Mock.swift in Sources */,
 				235D76C42C2AE73DB5CBF56B7943D7A7 /* NSURLConnection-Mock-dummy.m in Sources */,

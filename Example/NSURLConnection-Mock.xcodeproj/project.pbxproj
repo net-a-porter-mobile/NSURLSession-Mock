@@ -17,6 +17,7 @@
 		607FACEC1AFB9204008FA782 /* NSURLConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* NSURLConnectionTests.swift */; };
 		E554026C1C4947FF000EE008 /* CHANGELOG.md in Sources */ = {isa = PBXBuildFile; fileRef = E554026B1C4947FF000EE008 /* CHANGELOG.md */; };
 		E5FA96541C4974A5009C8265 /* TestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FA96531C4974A5009C8265 /* TestDelegate.swift */; };
+		E5FA96561C4CFBCB009C8265 /* NSURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5FA96551C4CFBCB009C8265 /* NSURLSessionTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		E1AE2B81217EB41BA329F0A5 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		E554026B1C4947FF000EE008 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		E5FA96531C4974A5009C8265 /* TestDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDelegate.swift; sourceTree = "<group>"; };
+		E5FA96551C4CFBCB009C8265 /* NSURLSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLSessionTests.swift; sourceTree = "<group>"; };
 		EE1F938096A7B92AE9A3298C /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACEB1AFB9204008FA782 /* NSURLConnectionTests.swift */,
+				E5FA96551C4CFBCB009C8265 /* NSURLSessionTests.swift */,
 				E5FA96531C4974A5009C8265 /* TestDelegate.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 			);
@@ -377,6 +380,7 @@
 			files = (
 				E5FA96541C4974A5009C8265 /* TestDelegate.swift in Sources */,
 				607FACEC1AFB9204008FA782 /* NSURLConnectionTests.swift in Sources */,
+				E5FA96561C4CFBCB009C8265 /* NSURLSessionTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
