@@ -14,9 +14,15 @@ import Foundation
 protocol SessionMock {
     
     /**
+     For a given request, return `true` if this mock matches it (i.e. will return
+     a data task from `consumeRequest(request:session:)`.
+     */
+    func matchesRequest(request: NSURLRequest) -> Bool
+    
+    /**
     For a given request, this method will return a data task if it matches,
     otherwise it will return `nil`
     */
-    mutating func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask?
+    func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask?
     
 }

@@ -66,6 +66,11 @@ it, simply add the following line to your Podfile:
 pod "NSURLConnection-Mock"
 ```
 
+## TODO:
+
++ mock all the convenience methods of NSURLSession (i.e. the ones which take in completion blocks)
++ Mock headers in a response instead of just the body
+
 ## Author
 
 Sam Dean, sam.dean@net-a-porter.com

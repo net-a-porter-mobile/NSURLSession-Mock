@@ -12,7 +12,7 @@ private let DefaultDelay = 0.25
 
 private let mult = Double(NSEC_PER_SEC)
 
-struct SuccessSessionMock : SessionMock {
+class SuccessSessionMock : SessionMock {
     
     private let request: NSURLRequest
     private let body: NSData?
@@ -22,9 +22,13 @@ struct SuccessSessionMock : SessionMock {
         self.body = body
     }
     
-    mutating func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask? {
+    func matchesRequest(request: NSURLRequest) -> Bool {
+        return request.isMockableWith(self.request)
+    }
+    
+    func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask? {
         // If this isn't for us, don't produce a task
-        guard request.isMockableWith(self.request) else { return nil }
+        guard self.matchesRequest(request) else { return nil }
         
         let task = MockSessionDataTask() { task in
             task._state = .Running
@@ -53,6 +57,21 @@ struct SuccessSessionMock : SessionMock {
         task._originalRequest = request
         
         return task
+    }
+    
+}
+
+class SingleSuccessSessionMock : SuccessSessionMock {
+    
+    var canRun = true
+    
+    override func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask? {
+        guard self.matchesRequest(request) else { return nil }
+        
+        guard canRun else { return nil }
+        canRun = false
+        
+        return super.consumeRequest(request, session: session)
     }
     
 }

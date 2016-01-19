@@ -10,7 +10,12 @@ import Foundation
 
 private var globalTaskIdentifier: Int = 100000 // Some number bigger than the session would naturally create
 
-public class MockSessionDataTask : NSURLSessionDataTask {
+/**
+Internal implementation of `NSURLSessionDataTask` with read-write properties.
+
+And, curiously, added the properties that `NSURLSessionDataTask` says it has but doesn't actuall have. Not sure what's going on there.
+*/
+class MockSessionDataTask : NSURLSessionDataTask {
     
     let onResume: (task: MockSessionDataTask)->()
     
@@ -19,37 +24,37 @@ public class MockSessionDataTask : NSURLSessionDataTask {
     }
     
     var _taskIdentifier: Int = { return ++globalTaskIdentifier }()
-    override public var taskIdentifier: Int {
+    override var taskIdentifier: Int {
         return _taskIdentifier
     }
     
     var _originalRequest: NSURLRequest?
-    override public var originalRequest: NSURLRequest? {
+    override var originalRequest: NSURLRequest? {
         return _originalRequest
     }
     
     var _currentRequest: NSURLRequest?
-    override public var currentRequest: NSURLRequest? {
+    override var currentRequest: NSURLRequest? {
         return _currentRequest
     }
     
     var _state: NSURLSessionTaskState = .Suspended
-    override public var state: NSURLSessionTaskState {
+    override var state: NSURLSessionTaskState {
         return _state
     }
     
-    override public func resume() {
+    override func resume() {
         self.onResume(task: self)
     }
     
     private var _taskDescription: String?
-    override public var taskDescription: String? {
+    override var taskDescription: String? {
         get { return _taskDescription }
         set { _taskDescription = newValue }
     }
     
     private var _response: NSURLResponse?
-    override public var response: NSURLResponse? {
+    override var response: NSURLResponse? {
         get { return _response }
         set { _response = newValue }
     }

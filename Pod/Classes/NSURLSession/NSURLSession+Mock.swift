@@ -12,15 +12,42 @@ private var mocks: Array<SessionMock> = Array()
 
 extension NSURLSession {
     
+    /**
+     The next call matching `request` will successfully return `body`
+     */
     public class func mockSingle(request: NSURLRequest, body: NSData?) {
+        mocks.append(SingleSuccessSessionMock(request: request, body: body))
+        
+        swizzleIfNeeded()
+    }
+    
+    /**
+     All calls matching `request` will successfully return `body`
+     */
+    public class func mockEvery(request: NSURLRequest, body: NSData?) {
         mocks.append(SuccessSessionMock(request: request, body: body))
         
         swizzleIfNeeded()
     }
     
+    /**
+     Remove all mocks - NSURLSession will behave as if it had never been touched
+     */
     public class func removeAllMocks() {
         mocks.removeAll()
     }
+    
+    /**
+     Remove all mocks matching the given request. All other requests will still
+     be mocked
+     */
+    public class func removeAllMocks(of request: NSURLRequest) {
+        mocks = mocks.filter { (item) -> Bool in
+            return !item.matchesRequest(request)
+        }
+    }
+    
+    // MARK: - Swizling
     
     private class func swizzleIfNeeded() {
         struct Static {
@@ -35,7 +62,7 @@ extension NSURLSession {
         }
     }
     
-    // MARK: - Swizzled methods
+    // MARK: Swizzled methods
     
     @objc(swizzledDataTaskWithRequest:)
     public func swizzledDataTaskWithRequest(request: NSURLRequest!) -> NSURLSessionDataTask {
@@ -67,7 +94,7 @@ extension NSURLSession {
     // MARK: - Helpers
     
     private func nextSessionMockWithRequest(request: NSURLRequest) -> NSURLSessionDataTask? {
-        for var mock in mocks {
+        for mock in mocks {
             if let task = mock.consumeRequest(request, session: self) {
                 return task
             }
