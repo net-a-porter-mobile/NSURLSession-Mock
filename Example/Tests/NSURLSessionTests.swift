@@ -40,8 +40,16 @@ private class SessionTestDelegate: NSObject, NSURLSessionDataDelegate {
 
 class NSURLSessionTests: XCTestCase {
     
+    override func setUp() {
+        super.setUp()
+        
+        NSURLSession.debugMockRequests = .All
+    }
+    
     override func tearDown() {
         NSURLSession.removeAllMocks()
+        
+        super.tearDown()
     }
     
     func testSession_WithSingleMock_ShouldReturnMockDataOnce() {

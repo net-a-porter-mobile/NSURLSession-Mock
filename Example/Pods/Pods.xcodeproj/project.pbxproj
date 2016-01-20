@@ -59,6 +59,8 @@
 		D254CD6314B04A8B4810AEF21347FE55 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = BF9095FD1A5A878F7489D91E22EE89DD /* UIProgressView+AFNetworking.m */; };
 		E091235D8FB572577404E49E334F4DFA /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = EB0E8BADB35BD4AB8F02CCA5D8199F59 /* UIRefreshControl+AFNetworking.m */; };
 		E0A0E72B97EDB7C6822721DC20F9B566 /* Pods-NSURLSession-Mock_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8EAB630B073F53D57D53629325A81A28 /* Pods-NSURLSession-Mock_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E59CE5451C4FC9300032BFF5 /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59CE5441C4FC9300032BFF5 /* Logging.swift */; };
+		E59CE5471C4FCC210032BFF5 /* NSURLRequest+mockDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E59CE5461C4FCC210032BFF5 /* NSURLRequest+mockDebug.swift */; };
 		EC5AB4F2B70761BE1972C404ABA96834 /* UIButton+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 44E70224B412C08FDD00FEA517292807 /* UIButton+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EDD76B94CB63FFB035CAB82465D7081C /* Pods-NSURLSession-Mock_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = ABABAA0E90A37C4940F3F98497E411E5 /* Pods-NSURLSession-Mock_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE819BA4C4F16FCC5205A7F2C5A21B72 /* NSURLSession-Mock-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 289924ED80A8680B9C89A232176C39B3 /* NSURLSession-Mock-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -179,6 +181,8 @@
 		E04EA31508FF7A62FD866741359F3ECF /* Pods-NSURLSession-Mock_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-NSURLSession-Mock_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		E15630E5489C67CD15E807E586334A33 /* NSURLSession-Mock-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSURLSession-Mock-prefix.pch"; sourceTree = "<group>"; };
 		E1FCD550F40391434976AF80BD31944C /* UIAlertView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+AFNetworking.h"; path = "UIKit+AFNetworking/UIAlertView+AFNetworking.h"; sourceTree = "<group>"; };
+		E59CE5441C4FC9300032BFF5 /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logging.swift; sourceTree = "<group>"; };
+		E59CE5461C4FCC210032BFF5 /* NSURLRequest+mockDebug.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLRequest+mockDebug.swift"; sourceTree = "<group>"; };
 		E870FA69885EE202F6DA62E22B29D2BD /* NSURLSession-Mock.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "NSURLSession-Mock.xcconfig"; sourceTree = "<group>"; };
 		EB0E8BADB35BD4AB8F02CCA5D8199F59 /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIRefreshControl+AFNetworking.m"; path = "UIKit+AFNetworking/UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		ECA56FC2FF9541DA58D54D984A5C1640 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIWebView+AFNetworking.m"; path = "UIKit+AFNetworking/UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
@@ -246,6 +250,8 @@
 			children = (
 				D598241CB556D78CBC45FCD07EA37D32 /* NSURLRequest+isMockableWith.swift */,
 				DC906BF8417CD9994AEAED2E05AC3773 /* Swizzle.swift */,
+				E59CE5441C4FC9300032BFF5 /* Logging.swift */,
+				E59CE5461C4FCC210032BFF5 /* NSURLRequest+mockDebug.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -738,11 +744,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				54A859DC875EA03120C981E5DDA018FB /* MockEntry.swift in Sources */,
+				E59CE5451C4FC9300032BFF5 /* Logging.swift in Sources */,
 				CCE16BA00819C08B7F97A4909D304641 /* MockSessionDataTask.swift in Sources */,
 				160E0D1E869841C64AB7FA18C7AA35F1 /* NSURLConnection+Mock.swift in Sources */,
 				5B536CF2F7825DC3CF2E8ABEB9894C17 /* NSURLRequest+isMockableWith.swift in Sources */,
 				8A6BAAA935C8F8A77D8F9B11BFFC0C37 /* NSURLSession+Mock.swift in Sources */,
 				42E8D9EE10D02E729579DE78107CA31B /* NSURLSession-Mock-dummy.m in Sources */,
+				E59CE5471C4FCC210032BFF5 /* NSURLRequest+mockDebug.swift in Sources */,
 				809BB43EB970CD62173790F54CC41CC2 /* SessionMock.swift in Sources */,
 				10E8D69CD7C4CF9F0F1988ED7C56B90D /* SuccessSessionMock.swift in Sources */,
 				31A2424A3174F7BE7CA07ECC2B9E1D1B /* Swizzle.swift in Sources */,

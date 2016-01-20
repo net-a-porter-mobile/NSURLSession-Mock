@@ -62,7 +62,7 @@ public extension NSURLConnection {
             try! swizzle(self, replace: "start", with: "swizzledStart")
             try! swizzle(self, replace: "initWithRequest:delegate:", with: "swizzledInitWithRequest:delegate:")
             
-            print("NSURLConnection now mocked")
+            Log("NSURLConnection now mocked")
         }
         
     }

@@ -10,6 +10,20 @@ import Foundation
 
 private var mocks: Array<SessionMock> = Array()
 
+/**
+ Set the debug level on NSURLSession to output all the request that flow through
+ this extension.
+ 
+ - None: Don't log any requests
+ - Mocked: Only log requests which are mocked
+ - All: Log all requests whether they match a mock or not
+*/
+public enum RequestDebugLevel: Int {
+    case None
+    case Mocked
+    case All
+}
+
 extension NSURLSession {
     
     /**
@@ -53,6 +67,11 @@ extension NSURLSession {
         }
     }
     
+    /**
+     Set this to output all requests which were mocked to the console
+     */
+    public static var debugMockRequests: RequestDebugLevel = .None
+    
     // MARK: - Swizling
     
     private class func swizzleIfNeeded() {
@@ -64,7 +83,7 @@ extension NSURLSession {
             try! swizzle(self, replace: "dataTaskWithRequest:", with: "swizzledDataTaskWithRequest:")
             try! swizzle(self, replace: "dataTaskWithURL:", with: "swizzledDataTaskWithURL:")
             
-            print("NSURLSession now mocked")
+            Log("NSURLSession now mocked")
         }
     }
     
@@ -74,10 +93,17 @@ extension NSURLSession {
     private func swizzledDataTaskWithRequest(request: NSURLRequest!) -> NSURLSessionDataTask {
         // If any of our mocks match this request, just do that instead
         if let task = nextSessionMockWithRequest(request) {
+            
+            if NSURLSession.debugMockRequests != .None {
+                Log("request: \(request.debugMockDescription) mocked")
+            }
+            
             return task
         }
         
-        print("Attempted, but failed, to match mock (request: \(request))")
+        if NSURLSession.debugMockRequests == .All {
+            Log("request: \(request.debugMockDescription) not mocked")
+        }
         
         // Otherwise, super
         return swizzledDataTaskWithRequest(request)
