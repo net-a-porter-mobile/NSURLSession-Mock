@@ -113,11 +113,17 @@ extension NSURLSession {
     private func swizzledDataTaskWithURL(URL: NSURL!) -> NSURLSessionDataTask {
         let request = NSURLRequest(URL: URL)
         if let task = nextSessionMockWithRequest(request) {
+
+            if NSURLSession.debugMockRequests != .None {
+                Log("request: \(request.debugMockDescription) mocked")
+            }
+
             return task
         }
         
-        // If any of our mocks match this request, just do that instead
-        print("Attempted, but failed, to match mock (URL: \(URL))")
+        if NSURLSession.debugMockRequests == .All {
+            Log("request: \(request.debugMockDescription) not mocked")
+        }
         
         // Otherwise, super
         return swizzledDataTaskWithURL(URL)
