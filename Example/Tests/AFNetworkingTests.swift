@@ -18,7 +18,7 @@ class AFNetworkingTests: XCTestCase {
         NSURLSession.removeAllMocks()
     }
 
-    func testAFNetworking_WithSessionMock_WorksTogether() {
+    func testAFNetworking_WithSessionMockGET_WorksTogether() {
         let expectation = self.expectationWithDescription("Success completion block called")
         
         let URL = NSURL(string: "https://www.example.com/1")!
@@ -41,5 +41,30 @@ class AFNetworkingTests: XCTestCase {
             XCTAssertNil(expectationError)
         }
     }
-    
+
+    func testAFNetworking_WithSessionMockPOST_WorksTogether() {
+        let expectation = self.expectationWithDescription("Success completion block called")
+        
+        let URL = NSURL(string: "https://www.example.com/2")!
+        let body = "{ \"data\": 2 }".dataUsingEncoding(NSUTF8StringEncoding)!
+        let request = NSMutableURLRequest.init(URL: URL)
+        request.HTTPMethod = "POST"
+        NSURLSession.mockSingle(request, body: body)
+        
+        let manager = AFHTTPSessionManager()
+        
+        manager.POST(URL.absoluteString, parameters: nil, success: { (task, response) -> Void in
+            
+            XCTAssertEqual(response as? NSDictionary, [ "data": 2 ])
+            
+            expectation.fulfill()
+            }) { (task, error) -> Void in
+                XCTFail("This shouldn't return an error")
+        }
+        
+        self.waitForExpectationsWithTimeout(1) { (expectationError) -> Void in
+            XCTAssertNil(expectationError)
+        }
+    }
+
 }
