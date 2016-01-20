@@ -50,6 +50,7 @@
 		E53125391C4EDC7A00C4AF2E /* NSURLSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLSessionTests.swift; sourceTree = "<group>"; };
 		E531253A1C4EDC7A00C4AF2E /* TestDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDelegate.swift; sourceTree = "<group>"; };
 		E53125431C4EDCFA00C4AF2E /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
+		E53125451C4F9B9700C4AF2E /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = .travis.yml; path = ../.travis.yml; sourceTree = "<group>"; };
 		F3F3B5A55CD9F866F9357776 /* Pods-NSURLSession-Mock_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSURLSession-Mock_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-NSURLSession-Mock_Example/Pods-NSURLSession-Mock_Example.release.xcconfig"; sourceTree = "<group>"; };
 		F818DBF80AD193BB25FFCCD6 /* Pods_NSURLSession_Mock_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSURLSession_Mock_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE931D3F8E50157BF079260 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -142,6 +143,7 @@
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
+				E53125451C4F9B9700C4AF2E /* .travis.yml */,
 				E53125431C4EDCFA00C4AF2E /* CHANGELOG.md */,
 				1A269A16D200523F1693B178 /* NSURLSession-Mock.podspec */,
 				FBE931D3F8E50157BF079260 /* README.md */,
