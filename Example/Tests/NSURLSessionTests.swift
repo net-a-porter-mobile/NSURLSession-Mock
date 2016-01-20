@@ -146,7 +146,7 @@ class NSURLSessionTests: XCTestCase {
             // Check the delay
             let interval = -start.timeIntervalSinceNow
             XCTAssert(interval > 1, "Should have taken more than one second to perform (it took \(interval)")
-            XCTAssert(interval < 1.15, "Should have taken less than 1.15 seconds to perform (it took \(interval)")
+            XCTAssert(interval < 1.2, "Should have taken less than 1.2 seconds to perform (it took \(interval)")
         }
     }
 
