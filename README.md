@@ -114,14 +114,6 @@ it, simply add the following line to your Podfile:
 pod "NSURLSession-Mock"
 ```
 
-## TODO:
-
-+ mock all the convenience methods of NSURLSession (i.e. the ones which take in completion blocks)
-+ Mock headers in a response instead of just the body
-+ Mock status codes in a response
-+ Allow a block instead of static NSData for body responses
-+ Allow regular expression matches instead of fixed URLs when adding mocks
-
 ## Author
 
 Sam Dean, sam.dean@net-a-porter.com
