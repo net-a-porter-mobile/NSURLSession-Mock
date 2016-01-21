@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "NSURLSession-Mock"
-  s.version          = "0.2.1"
+  s.version          = "0.3.0"
   s.summary          = "Stub responses from NSURLSession"
 
 # This description is used to generate tags and improve search results.
