@@ -20,10 +20,15 @@ protocol SessionMock {
     func matchesRequest(request: NSURLRequest) -> Bool
     
     /**
-    For a given request, this method will return a data task if it matches,
-    otherwise it will return `nil`
+     For a given request, this method will return a data task. This method will
+     throw if it's asked to consume a request that it doesn't match
     */
-    func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask?
+    func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask
+}
+
+enum SessionMockError: ErrorType {
+    case InvalidRequest(request: NSURLRequest)
+    case HasAlreadyRun
 }
 
 /**

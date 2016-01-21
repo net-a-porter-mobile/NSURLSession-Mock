@@ -133,9 +133,9 @@ extension NSURLSession {
     
     private func nextSessionMockWithRequest(request: NSURLRequest) -> NSURLSessionDataTask? {
         for mock in mocks {
-            if let task = mock.consumeRequest(request, session: self) {
-                return task
-            }
+            guard mock.matchesRequest(request) else { continue }
+            
+            return try! mock.consumeRequest(request, session: self)
         }
         
         return nil

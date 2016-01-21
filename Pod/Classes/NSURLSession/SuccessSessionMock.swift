@@ -26,9 +26,9 @@ class SuccessSessionMock : SessionMock {
         return request.isMockableWith(self.request)
     }
     
-    func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask? {
+    func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask {
         // If this isn't for us, don't produce a task
-        guard self.matchesRequest(request) else { return nil }
+        guard self.matchesRequest(request) else { throw SessionMockError.InvalidRequest(request: request) }
         
         let task = MockSessionDataTask() { task in
             task._state = .Running
@@ -66,13 +66,20 @@ class SingleSuccessSessionMock : SuccessSessionMock {
     
     var canRun = true
     
-    override func consumeRequest(request: NSURLRequest, session: NSURLSession) -> NSURLSessionDataTask? {
-        guard self.matchesRequest(request) else { return nil }
+    override func matchesRequest(request: NSURLRequest) -> Bool {
+        return canRun && super.matchesRequest(request)
+    }
+    
+    override func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask {
+        guard self.matchesRequest(request) else { throw SessionMockError.InvalidRequest(request: request) }
         
-        guard canRun else { return nil }
+        guard canRun else { throw SessionMockError.HasAlreadyRun }
+        
+        let task = try super.consumeRequest(request, session: session)
+        
         canRun = false
         
-        return super.consumeRequest(request, session: session)
+        return task
     }
     
 }
