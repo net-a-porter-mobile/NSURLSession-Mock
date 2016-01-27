@@ -118,7 +118,7 @@ public extension NSURLConnection {
                 // What kind of response is this, data or error?
                 if let data = entry.response.data {
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
-                        let response = NSHTTPURLResponse(URL: entry.URL, statusCode: entry.response.statusCode, HTTPVersion: "HTTP/1.1", headerFields: entry.response.headers)!
+                        let response = entry.asHTTPURLResponse()
                         delegate.connection?(self, didReceiveResponse: response)
                     }
                     
@@ -135,7 +135,7 @@ public extension NSURLConnection {
                     }
                 } else {
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
-                        let response = NSHTTPURLResponse(URL: entry.URL, statusCode: entry.response.statusCode, HTTPVersion: "HTTP/1.1", headerFields: entry.response.headers)!
+                        let response = entry.asHTTPURLResponse()
                         delegate.connection?(self, didReceiveResponse: response)
                     }
                     

@@ -51,6 +51,13 @@ extension MockEntry {
     }
 }
 
+
+extension MockEntry {
+    func asHTTPURLResponse() -> NSHTTPURLResponse {
+        return NSHTTPURLResponse(URL: self.URL, statusCode: self.response.statusCode, HTTPVersion: "HTTP/1.1", headerFields: self.response.headers)!
+    }
+}
+
 extension MockEntry : Equatable { }
 
 func ==(a: MockEntry, b: MockEntry) -> Bool {
