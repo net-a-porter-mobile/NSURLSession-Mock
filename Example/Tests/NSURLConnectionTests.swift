@@ -193,7 +193,9 @@ class NSURLConnectionTests: XCTestCase {
         self.waitForExpectationsWithTimeout(0.5) { error in
             XCTAssertNil(error)
             XCTAssertEqual(data, delegate.data)
-            XCTAssertEqual(headers, delegate.headers!)
+            let response = delegate.response as! NSHTTPURLResponse
+            let responseHeaders = response.allHeaderFields as! [String : String]
+            XCTAssertEqual(headers, responseHeaders)
             XCTAssertNil(delegate.error)
         }
     }
@@ -221,7 +223,9 @@ class NSURLConnectionTests: XCTestCase {
         self.waitForExpectationsWithTimeout(1.5) { expectationError in
             XCTAssertNil(expectationError)
             XCTAssertEqual(error, delegate.error)
-            XCTAssertEqual(headers, delegate.headers!)
+            let response = delegate.response as! NSHTTPURLResponse
+            let responseHeaders = response.allHeaderFields as! [String : String]
+            XCTAssertEqual(headers, responseHeaders)
         }
     }
     

@@ -13,7 +13,6 @@ class TestDelegate : NSObject, NSURLConnectionDelegate, NSURLConnectionDataDeleg
     var response: NSURLResponse?
     var data: NSMutableData?
     var error: NSError?
-    var headers: [String : String]?
     
     let complete: () -> ()
     
@@ -23,16 +22,6 @@ class TestDelegate : NSObject, NSURLConnectionDelegate, NSURLConnectionDataDeleg
     
     func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
         self.response = response
-        
-        guard let httpResponse = response as? NSHTTPURLResponse else {
-            return
-        }
-        
-        guard let headers = httpResponse.allHeaderFields as? [String : String] else {
-            return
-        }
-        
-        self.headers = headers
     }
     
     func connection(connection: NSURLConnection, didReceiveData data: NSData) {
