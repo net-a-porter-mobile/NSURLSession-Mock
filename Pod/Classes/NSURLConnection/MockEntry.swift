@@ -24,15 +24,10 @@ struct MockEntry {
     let URL: NSURL
     
     /**
-     The mock data to return
-     */
-    let data: NSData?
-    
-    /**
-     An error to return
-     */
-    let error: NSError?
-    
+     The Mock response to return from this request
+    */
+    let response: MockResponse
+     
     /**
      If this is true then the mock data should only be returned once
      */
@@ -47,20 +42,12 @@ struct MockEntry {
 // MARK: - Contructors 
 
 extension MockEntry {
-    static func singleURL(URL: NSURL, withData data: NSData, delay: Double) -> MockEntry {
-        return MockEntry(URL: URL, data: data, error: nil, isSingle: true, delay: delay)
+    static func singleURL(URL: NSURL, withResponse response: MockResponse, delay: Double) -> MockEntry {
+        return MockEntry(URL: URL, response: response, isSingle: true, delay: delay)
     }
     
-    static func everyURL(URL: NSURL, withData data: NSData, delay: Double) -> MockEntry {
-        return MockEntry(URL: URL, data: data, error: nil, isSingle: false, delay: delay)
-    }
-    
-    static func singleURL(URL: NSURL, withError error: NSError, delay: Double) -> MockEntry {
-        return MockEntry(URL: URL, data: nil, error: error, isSingle: true, delay: delay)
-    }
-    
-    static func everyURL(URL: NSURL, withError error: NSError, delay: Double) -> MockEntry {
-        return MockEntry(URL: URL, data: nil, error: error, isSingle: false, delay: delay)
+    static func everyURL(URL: NSURL, withResponse response: MockResponse, delay: Double) -> MockEntry {
+        return MockEntry(URL: URL, response: response, isSingle: false, delay: delay)
     }
 }
 
@@ -68,6 +55,8 @@ extension MockEntry : Equatable { }
 
 func ==(a: MockEntry, b: MockEntry) -> Bool {
     return (a.URL == b.URL &&
-            a.data == b.data &&
+            a.response == b.response &&
             a.isSingle == b.isSingle)
 }
+
+
