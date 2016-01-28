@@ -61,7 +61,7 @@ class NSURLSessionTests: XCTestCase {
         let expectation1 = self.expectationWithDescription("Complete called for 1")
         let expectation2 = self.expectationWithDescription("Complete called for 2")
         
-        // Tell NSURLSession to mock thhis URL, each time with different data
+        // Tell NSURLSession to mock this URL, each time with different data
         let URL = NSURL(string: "https://www.example.com/1")!
         let body1 = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
         let request1 = NSURLRequest.init(URL: URL)
@@ -131,7 +131,7 @@ class NSURLSessionTests: XCTestCase {
     func testSession_WithDelayedMock_ShouldReturnMockAfterDelay() {
         let expectation = self.expectationWithDescription("Complete called")
         
-        // Tell NSURLSession to mock thhis URL, each time with different data
+        // Tell NSURLSession to mock this URL, each time with different data
         let URL = NSURL(string: "https://www.example.com/1")!
         let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
         let request = NSURLRequest.init(URL: URL)
@@ -139,7 +139,7 @@ class NSURLSessionTests: XCTestCase {
         
         // Create a session
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let delegate = SessionTestDelegate(expectations: [ expectation ])
+        let delegate = SessionTestDelegate(expectations: [expectation])
         let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
         
         // Perform the task
@@ -167,7 +167,7 @@ class NSURLSessionTests: XCTestCase {
     func testSession_WithStatusCodeAndHeaders_ShouldReturnTheCorrectStatusCodes() {
         let expectation = self.expectationWithDescription("Complete called for headers and status code")
         
-        // Tell NSURLSession to mock thhis URL, each time with different data
+        // Tell NSURLSession to mock this URL, each time with different data
         let URL = NSURL(string: "https://www.example.com/1")!
         let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
         let request = NSURLRequest.init(URL: URL)
@@ -176,7 +176,7 @@ class NSURLSessionTests: XCTestCase {
 
         // Create a session
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let delegate = SessionTestDelegate(expectations: [ expectation ])
+        let delegate = SessionTestDelegate(expectations: [expectation])
         let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
         
         // Perform task
