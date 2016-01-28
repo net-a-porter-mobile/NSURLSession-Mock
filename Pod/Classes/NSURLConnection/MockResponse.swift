@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct MockResponse {
+public struct MockResponse {
     /**
      The mock data to return
      */
@@ -32,7 +32,7 @@ struct MockResponse {
 
 extension MockResponse : Equatable { }
 
-func ==(a: MockResponse, b: MockResponse) -> Bool {
+public func ==(a: MockResponse, b: MockResponse) -> Bool {
     return (a.data == b.data &&
             a.statusCode == b.statusCode &&
             a.error == b.error &&

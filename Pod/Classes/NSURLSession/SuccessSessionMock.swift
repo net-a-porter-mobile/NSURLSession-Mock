@@ -13,12 +13,12 @@ private let mult = Double(NSEC_PER_SEC)
 class SuccessSessionMock : SessionMock {
     
     private let request: NSURLRequest
-    private let body: NSData?
+    private let response: MockResponse
     private let delay: Double
     
-    init(request: NSURLRequest, body: NSData? = nil, delay: Double) {
+    init(request: NSURLRequest, response: MockResponse, delay: Double) {
         self.request = request
-        self.body = body
+        self.response = response
         self.delay = delay
     }
     
@@ -33,11 +33,21 @@ class SuccessSessionMock : SessionMock {
         let task = MockSessionDataTask() { task in
             task._state = .Running
             
-            let timeDelta = 0.05
+            let timeDelta = 0.02
             var time = self.delay
             
             if let delegate = session.delegate as? NSURLSessionDataDelegate {
-                if let body = self.body {
+                
+                if let body = self.response.data {
+                    
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), dispatch_get_main_queue()) {
+                        let response = NSHTTPURLResponse(URL: self.request.URL!, statusCode: self.response.statusCode, HTTPVersion: "HTTP/1.1", headerFields: self.response.headers)!
+                        task.response = response
+                        delegate.URLSession?(session, dataTask: task, didReceiveResponse: response) { _ in }
+                    }
+                    
+                    time += timeDelta
+                        
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), dispatch_get_main_queue()) {
                         delegate.URLSession?(session, dataTask: task, didReceiveData: body)
                     }

@@ -13,10 +13,15 @@ import NSURLSession_Mock
 private class SessionTestDelegate: NSObject, NSURLSessionDataDelegate {
     var expectations: [XCTestExpectation]
     
-    var dataKeyedByTask = Dictionary<Int, NSMutableData>() // [ taskIdentifier: data from task ]
+    var dataKeyedByTask : [Int : NSMutableData] = [:]
+    var response : NSURLResponse?
     
     init(expectations: [XCTestExpectation]) {
         self.expectations = expectations
+    }
+    
+    @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
+        self.response = response
     }
     
     @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData recievedData: NSData) {
@@ -158,4 +163,41 @@ class NSURLSessionTests: XCTestCase {
         }
     }
 
+    
+    func testSession_WithStatusCodeAndHeaders_ShouldReturnTheCorrectStatusCodes() {
+        let expectation = self.expectationWithDescription("Complete called for headers and status code")
+        
+        // Tell NSURLSession to mock thhis URL, each time with different data
+        let URL = NSURL(string: "https://www.example.com/1")!
+        let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
+        let request = NSURLRequest.init(URL: URL)
+        let headers = ["Content-Type" : "application/test", "Custom-Header" : "Is custom"]
+        NSURLSession.mockSingle(request, body: body, headers: headers, statusCode: 200)
+
+        // Create a session
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        
+        // Perform task
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
+        
+        // Validate that the mock data was returned
+        self.waitForExpectationsWithTimeout(1) { timeoutError in
+            XCTAssertNil(timeoutError)
+            
+            XCTAssertEqual(delegate.dataKeyedByTask[task.taskIdentifier], body)
+            guard let response = delegate.response as? NSHTTPURLResponse else {
+                XCTFail("Response isn't the correct type")
+                return
+            }
+            XCTAssertEqual(response.statusCode, 200)
+            guard let responseHeaders = response.allHeaderFields as? [String : String] else {
+                XCTFail("Response headers couldn't be transformed to String")
+                return
+            }
+            XCTAssertEqual(responseHeaders, headers)
+        }
+    }
 }
