@@ -2,7 +2,11 @@ Changelog
 
 ### unreleased
 
+## 0.4.0
++ Add mock response (status and headers), thanks @kerrmarin
 
+## 0.3.0
++ Internal tweaks from peer review
 
 ## 0.2.1
 + Fix for logging in NSURLSession when mocking my URL instead of request
