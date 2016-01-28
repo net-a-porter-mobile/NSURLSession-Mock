@@ -13,23 +13,23 @@ import NSURLSession_Mock
 private class SessionTestDelegate: NSObject, NSURLSessionDataDelegate {
     var expectations: [XCTestExpectation]
     
-    var dataKeyedByTask : [Int : NSMutableData] = [:]
-    var response : NSURLResponse?
+    var dataKeyedByTaskIdentifier : [Int : NSMutableData] = [:]
+    var responseKeyedByTaskIdentifier : [Int : NSURLResponse] = [:]
     
     init(expectations: [XCTestExpectation]) {
         self.expectations = expectations
     }
     
     @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
-        self.response = response
+        self.responseKeyedByTaskIdentifier[dataTask.taskIdentifier] = response
     }
     
     @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData recievedData: NSData) {
-        var data = dataKeyedByTask[dataTask.taskIdentifier]
+        var data = dataKeyedByTaskIdentifier[dataTask.taskIdentifier]
         
         if data == nil {
             data = NSMutableData()
-            dataKeyedByTask[dataTask.taskIdentifier] = data
+            dataKeyedByTaskIdentifier[dataTask.taskIdentifier] = data
         }
         
         data!.appendData(recievedData)
@@ -87,8 +87,8 @@ class NSURLSessionTests: XCTestCase {
         self.waitForExpectationsWithTimeout(1) { timeoutError in
             XCTAssertNil(timeoutError)
             
-            XCTAssertEqual(delegate.dataKeyedByTask[task1.taskIdentifier], body1)
-            XCTAssertEqual(delegate.dataKeyedByTask[task2.taskIdentifier], body2)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body1)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], body2)
         }
     }
     
@@ -122,9 +122,9 @@ class NSURLSessionTests: XCTestCase {
         self.waitForExpectationsWithTimeout(1) { timeoutError in
             XCTAssertNil(timeoutError)
             
-            XCTAssertEqual(delegate.dataKeyedByTask[task1.taskIdentifier], body)
-            XCTAssertEqual(delegate.dataKeyedByTask[task2.taskIdentifier], body)
-            XCTAssertEqual(delegate.dataKeyedByTask[task3.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task3.taskIdentifier], body)
         }
     }
     
@@ -154,7 +154,7 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertNil(timeoutError)
 
             // Sanity it's actually mocked
-            XCTAssertEqual(delegate.dataKeyedByTask[task1.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
             
             // Check the delay
             let interval = -start.timeIntervalSinceNow
@@ -187,8 +187,8 @@ class NSURLSessionTests: XCTestCase {
         self.waitForExpectationsWithTimeout(1) { timeoutError in
             XCTAssertNil(timeoutError)
             
-            XCTAssertEqual(delegate.dataKeyedByTask[task.taskIdentifier], body)
-            guard let response = delegate.response as? NSHTTPURLResponse else {
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body)
+            guard let response = delegate.responseKeyedByTaskIdentifier[task.taskIdentifier] as? NSHTTPURLResponse else {
                 XCTFail("Response isn't the correct type")
                 return
             }
