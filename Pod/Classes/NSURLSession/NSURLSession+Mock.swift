@@ -8,7 +8,7 @@
 
 import Foundation
 
-private var mocks: Array<SessionMock> = Array()
+private var mocks: [SessionMock] = []
 
 /**
  Set the debug level on NSURLSession to output all the request that flow through
@@ -32,8 +32,9 @@ extension NSURLSession {
      - parameter request: The request to mock
      - parameter body: The data to return in the callback. If this is `nil` then the didRecieveData callback won't be called.
      */
-    public class func mockSingle(request: NSURLRequest, body: NSData?, delay: Double = DefaultDelay) {
-        mocks.append(SingleSuccessSessionMock(request: request, body: body, delay: delay))
+    public class func mockSingle(request: NSURLRequest, body: NSData? , headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
+        let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
+        mocks.append(SingleSuccessSessionMock(request: request, response: response, delay: delay))
         
         swizzleIfNeeded()
     }
@@ -44,8 +45,9 @@ extension NSURLSession {
      - parameter request: The request to mock
      - parameter body: The data to return in the callback. If this is `nil` then the didRecieveData callback won't be called.
      */
-    public class func mockEvery(request: NSURLRequest, body: NSData?, delay: Double = DefaultDelay) {
-        mocks.append(SuccessSessionMock(request: request, body: body, delay: delay))
+    public class func mockEvery(request: NSURLRequest, body: NSData? , headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
+        let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
+        mocks.append(SuccessSessionMock(request: request, response: response, delay: delay))
         
         swizzleIfNeeded()
     }

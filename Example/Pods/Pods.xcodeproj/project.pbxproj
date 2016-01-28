@@ -250,6 +250,7 @@
 		096621B2F36831D029FF2A62ED28F913 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				F2A4CC6C1C58CF3D00D2630C /* MockResponse.swift */,
 				D598241CB556D78CBC45FCD07EA37D32 /* NSURLRequest+isMockableWith.swift */,
 				DC906BF8417CD9994AEAED2E05AC3773 /* Swizzle.swift */,
 				E59CE5441C4FC9300032BFF5 /* Logging.swift */,
@@ -402,7 +403,6 @@
 			children = (
 				755E0B3A9BF904FC7E66615F2846062C /* MockEntry.swift */,
 				0BA72143B2A2ED889F90D443342E791D /* NSURLConnection+Mock.swift */,
-				F2A4CC6C1C58CF3D00D2630C /* MockResponse.swift */,
 			);
 			path = NSURLConnection;
 			sourceTree = "<group>";

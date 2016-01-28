@@ -13,18 +13,23 @@ import NSURLSession_Mock
 private class SessionTestDelegate: NSObject, NSURLSessionDataDelegate {
     var expectations: [XCTestExpectation]
     
-    var dataKeyedByTask = Dictionary<Int, NSMutableData>() // [ taskIdentifier: data from task ]
+    var dataKeyedByTaskIdentifier : [Int : NSMutableData] = [:]
+    var responseKeyedByTaskIdentifier : [Int : NSURLResponse] = [:]
     
     init(expectations: [XCTestExpectation]) {
         self.expectations = expectations
     }
     
+    @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
+        self.responseKeyedByTaskIdentifier[dataTask.taskIdentifier] = response
+    }
+    
     @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData recievedData: NSData) {
-        var data = dataKeyedByTask[dataTask.taskIdentifier]
+        var data = dataKeyedByTaskIdentifier[dataTask.taskIdentifier]
         
         if data == nil {
             data = NSMutableData()
-            dataKeyedByTask[dataTask.taskIdentifier] = data
+            dataKeyedByTaskIdentifier[dataTask.taskIdentifier] = data
         }
         
         data!.appendData(recievedData)
@@ -56,7 +61,7 @@ class NSURLSessionTests: XCTestCase {
         let expectation1 = self.expectationWithDescription("Complete called for 1")
         let expectation2 = self.expectationWithDescription("Complete called for 2")
         
-        // Tell NSURLSession to mock thhis URL, each time with different data
+        // Tell NSURLSession to mock this URL, each time with different data
         let URL = NSURL(string: "https://www.example.com/1")!
         let body1 = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
         let request1 = NSURLRequest.init(URL: URL)
@@ -82,8 +87,8 @@ class NSURLSessionTests: XCTestCase {
         self.waitForExpectationsWithTimeout(1) { timeoutError in
             XCTAssertNil(timeoutError)
             
-            XCTAssertEqual(delegate.dataKeyedByTask[task1.taskIdentifier], body1)
-            XCTAssertEqual(delegate.dataKeyedByTask[task2.taskIdentifier], body2)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body1)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], body2)
         }
     }
     
@@ -117,16 +122,16 @@ class NSURLSessionTests: XCTestCase {
         self.waitForExpectationsWithTimeout(1) { timeoutError in
             XCTAssertNil(timeoutError)
             
-            XCTAssertEqual(delegate.dataKeyedByTask[task1.taskIdentifier], body)
-            XCTAssertEqual(delegate.dataKeyedByTask[task2.taskIdentifier], body)
-            XCTAssertEqual(delegate.dataKeyedByTask[task3.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task3.taskIdentifier], body)
         }
     }
     
     func testSession_WithDelayedMock_ShouldReturnMockAfterDelay() {
         let expectation = self.expectationWithDescription("Complete called")
         
-        // Tell NSURLSession to mock thhis URL, each time with different data
+        // Tell NSURLSession to mock this URL, each time with different data
         let URL = NSURL(string: "https://www.example.com/1")!
         let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
         let request = NSURLRequest.init(URL: URL)
@@ -134,7 +139,7 @@ class NSURLSessionTests: XCTestCase {
         
         // Create a session
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let delegate = SessionTestDelegate(expectations: [ expectation ])
+        let delegate = SessionTestDelegate(expectations: [expectation])
         let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
         
         // Perform the task
@@ -149,7 +154,7 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertNil(timeoutError)
 
             // Sanity it's actually mocked
-            XCTAssertEqual(delegate.dataKeyedByTask[task1.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
             
             // Check the delay
             let interval = -start.timeIntervalSinceNow
@@ -158,4 +163,41 @@ class NSURLSessionTests: XCTestCase {
         }
     }
 
+    
+    func testSession_WithStatusCodeAndHeaders_ShouldReturnTheCorrectStatusCodes() {
+        let expectation = self.expectationWithDescription("Complete called for headers and status code")
+        
+        // Tell NSURLSession to mock this URL, each time with different data
+        let URL = NSURL(string: "https://www.example.com/1")!
+        let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
+        let request = NSURLRequest.init(URL: URL)
+        let headers = ["Content-Type" : "application/test", "Custom-Header" : "Is custom"]
+        NSURLSession.mockSingle(request, body: body, headers: headers, statusCode: 200)
+
+        // Create a session
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [expectation])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        
+        // Perform task
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
+        
+        // Validate that the mock data was returned
+        self.waitForExpectationsWithTimeout(1) { timeoutError in
+            XCTAssertNil(timeoutError)
+            
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body)
+            guard let response = delegate.responseKeyedByTaskIdentifier[task.taskIdentifier] as? NSHTTPURLResponse else {
+                XCTFail("Response isn't the correct type")
+                return
+            }
+            XCTAssertEqual(response.statusCode, 200)
+            guard let responseHeaders = response.allHeaderFields as? [String : String] else {
+                XCTFail("Response headers couldn't be transformed to String")
+                return
+            }
+            XCTAssertEqual(responseHeaders, headers)
+        }
+    }
 }
