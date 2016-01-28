@@ -1,7 +1,7 @@
 import ObjectiveC
 import Foundation
 
-private var entries: Array<MockEntry> = []
+private var entries: [MockEntry] = []
 
 public extension NSURLConnection {
     
@@ -15,32 +15,36 @@ public extension NSURLConnection {
     /**
      For each call to a given URL, return the specified NSData to the connection's delegate.
      */
-    public class func mockEvery(URL: NSURL, data: NSData, delay: Double = MockEntry.DefaultDelay) {
-        let entry = MockEntry.everyURL(URL, withData: data, delay: delay)
+    public class func mockEvery(URL: NSURL, data: NSData, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = MockEntry.DefaultDelay) {
+        let response = MockResponse(data: data, error: nil, headers: headers, statusCode: statusCode)
+        let entry = MockEntry.everyURL(URL, withResponse: response, delay: delay)
         self.addMockEntry(entry)
     }
     
     /**
      For a single call to a given URL, return the specified NSData to the connection's delegate.
      */
-     public class func mockSingle(URL: NSURL, data: NSData, delay: Double = MockEntry.DefaultDelay) {
-        let entry = MockEntry.singleURL(URL, withData: data, delay: delay)
+     public class func mockSingle(URL: NSURL, data: NSData, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = MockEntry.DefaultDelay) {
+        let response = MockResponse(data: data, error: nil, headers: headers, statusCode: statusCode)
+        let entry = MockEntry.singleURL(URL, withResponse: response, delay: delay)
         self.addMockEntry(entry)
     }
     
     /**
      Return an error from the given URL each time it's called
      */
-    public class func mockEvery(URL: NSURL, error: NSError, delay: Double = MockEntry.DefaultDelay) {
-        let entry = MockEntry.everyURL(URL, withError: error, delay: delay)
+    public class func mockEvery(URL: NSURL, error: NSError, headers: [String: String] = [:], statusCode: Int = 400, delay: Double = MockEntry.DefaultDelay) {
+        let response = MockResponse(data: nil, error: error, headers: headers, statusCode: statusCode)
+        let entry = MockEntry.everyURL(URL, withResponse: response, delay: delay)
         self.addMockEntry(entry)
     }
     
     /**
      Return an error from the given URL the first time it's called
      */
-    public class func mockSingle(URL: NSURL, error: NSError, delay: Double = MockEntry.DefaultDelay) {
-        let entry = MockEntry.singleURL(URL, withError: error, delay: delay)
+    public class func mockSingle(URL: NSURL, error: NSError, headers: [String: String] = [:], statusCode: Int = 400, delay: Double = MockEntry.DefaultDelay) {
+        let response = MockResponse(data: nil, error: error, headers: headers, statusCode: statusCode)
+        let entry = MockEntry.singleURL(URL, withResponse: response, delay: delay)
         self.addMockEntry(entry)
     }
     
@@ -99,46 +103,48 @@ public extension NSURLConnection {
                     entries.removeAtIndex(index!)
                 }
                 
-                // Mock the callbacks for a successful response, but use the
-                // mock entry's data
-                if let delegate = self.delegate as? NSURLConnectionDataDelegate {
-                    let mult = Double(NSEC_PER_SEC)
-                    let timeDelta = 0.05
-                    var time = entry.delay
-                    let queue = dispatch_get_main_queue()
-                    
-                    // What kind of response is this, data or error?
-                    if let data = entry.data {
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
-                            let response = NSURLResponse(URL: entry.URL, MIMEType: nil, expectedContentLength: data.length, textEncodingName: nil)
-                            delegate.connection?(self, didReceiveResponse: response)
-                        }
-                        
-                        time += timeDelta
-
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
-                            delegate.connection?(self, didReceiveData: data)
-                        }
-                    
-                        time += timeDelta
-                        
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
-                            delegate.connectionDidFinishLoading?(self)
-                        }
-                    } else {
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
-                            let response = NSURLResponse(URL: entry.URL, MIMEType: nil, expectedContentLength: 1000, textEncodingName: nil)
-                            delegate.connection?(self, didReceiveResponse: response)
-                        }
-                        
-                        time += timeDelta
-                        
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
-                            delegate.connection?(self, didFailWithError: entry.error!)
-                        }
-                    }
+                // If the delegate isn't set correctly, bail
+                guard let delegate = self.delegate as? NSURLConnectionDataDelegate else {
+                    return
                 }
                 
+                // Mock the callbacks for a successful response, but use the
+                // mock entry's data
+                let mult = Double(NSEC_PER_SEC)
+                let timeDelta = 0.05
+                var time = entry.delay
+                let queue = dispatch_get_main_queue()
+                
+                // What kind of response is this, data or error?
+                if let data = entry.response.data {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
+                        let response = entry.asHTTPURLResponse()
+                        delegate.connection?(self, didReceiveResponse: response)
+                    }
+                    
+                    time += timeDelta
+
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
+                        delegate.connection?(self, didReceiveData: data)
+                    }
+                
+                    time += timeDelta
+                    
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
+                        delegate.connectionDidFinishLoading?(self)
+                    }
+                } else {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
+                        let response = entry.asHTTPURLResponse()
+                        delegate.connection?(self, didReceiveResponse: response)
+                    }
+                    
+                    time += timeDelta
+                    
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), queue) {
+                        delegate.connection?(self, didFailWithError: entry.response.error!)
+                    }
+                }
                 return
             }
         }
