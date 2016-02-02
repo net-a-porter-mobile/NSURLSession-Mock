@@ -12,18 +12,18 @@ private let mult = Double(NSEC_PER_SEC)
 
 class SuccessSessionMock : SessionMock {
     
-    private let request: NSURLRequest
+    private let requestMatcher: RequestMatcher
     private let response: MockResponse
     private let delay: Double
     
-    init(request: NSURLRequest, response: MockResponse, delay: Double) {
-        self.request = request
+    init(matching requestMatcher: RequestMatcher, response: MockResponse, delay: Double) {
+        self.requestMatcher = requestMatcher
         self.response = response
         self.delay = delay
     }
     
     func matchesRequest(request: NSURLRequest) -> Bool {
-        return request.isMockableWith(self.request)
+        return requestMatcher.matches(request)
     }
     
     func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask {
@@ -41,7 +41,7 @@ class SuccessSessionMock : SessionMock {
                 if let body = self.response.data {
                     
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), dispatch_get_main_queue()) {
-                        let response = NSHTTPURLResponse(URL: self.request.URL!, statusCode: self.response.statusCode, HTTPVersion: "HTTP/1.1", headerFields: self.response.headers)!
+                        let response = NSHTTPURLResponse(URL: request.URL!, statusCode: self.response.statusCode, HTTPVersion: "HTTP/1.1", headerFields: self.response.headers)!
                         task.response = response
                         delegate.URLSession?(session, dataTask: task, didReceiveResponse: response) { _ in }
                     }

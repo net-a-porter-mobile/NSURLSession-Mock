@@ -27,28 +27,74 @@ public enum RequestDebugLevel: Int {
 extension NSURLSession {
     
     /**
-     The next call matching `request` will successfully return `body`
+     The next call exactly matching `request` will successfully return `body`
      
      - parameter request: The request to mock
-     - parameter body: The data to return in the callback. If this is `nil` then the didRecieveData callback won't be called.
+     - parameter body: The data returned by the session data task. If this is `nil` then the didRecieveData callback won't be called.
+     - parameter headers: The headers returned by the session data task
+     - parameter statusCode: The status code (default=200) returned by the session data task
+     - parameter delay: A artificial delay before the session data task starts to return response and data
      */
-    public class func mockSingle(request: NSURLRequest, body: NSData? , headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
-        let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
-        mocks.append(SingleSuccessSessionMock(request: request, response: response, delay: delay))
-        
-        swizzleIfNeeded()
+    public class func mockSingle(request: NSURLRequest, body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
+        let matcher = SimpleRequestMatcher(url: request.URL!, method: request.HTTPMethod!)
+        self.mockSingle(matcher, body: body, headers: headers, statusCode: statusCode, delay: delay)
     }
     
     /**
-     All calls matching `request` will successfully return `body`
+     All calls exactly matching `request` will successfully return `body`
      
      - parameter request: The request to mock
-     - parameter body: The data to return in the callback. If this is `nil` then the didRecieveData callback won't be called.
+     - parameter body: The data returned by the session data task. If this is `nil` then the didRecieveData callback won't be called.
+     - parameter headers: The headers returned by the session data task
+     - parameter statusCode: The status code (default=200) returned by the session data task
+     - parameter delay: A artificial delay before the session data task starts to return response and data
      */
-    public class func mockEvery(request: NSURLRequest, body: NSData? , headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
+    public class func mockEvery(request: NSURLRequest, body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
+        let matcher = SimpleRequestMatcher(url: request.URL!, method: request.HTTPMethod!)
+        self.mockEvery(matcher, body: body, headers: headers, statusCode: statusCode, delay: delay)
+    }
+    
+    /**
+     The next call matching `expression` will successfully return `body`
+     
+     - parameter expression: The regular expression to compare incoming requests against
+     - parameter HTTPMethod: The method to match against
+     - parameter body: The data returned by the session data task. If this is `nil` then the didRecieveData callback won't be called.     
+     - parameter headers: The headers returned by the session data task
+     - parameter statusCode: The status code (default=200) returned by the session data task
+     - parameter delay: A artificial delay before the session data task starts to return response and data
+     */
+    public class func mockSingle(expression: String, HTTPMethod: String = "GET", body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws {
+        let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
+        self.mockSingle(matcher, body: body, headers: headers, statusCode: statusCode, delay: delay)
+    }
+    
+    /**
+     All subsequent requests matching `expression` will successfully return `body`
+     
+     - parameter expression: The regular expression to compare incoming requests against
+     - parameter HTTPMethod: The method to match against
+     - parameter body: The data returned by the session data task. If this is `nil` then the didRecieveData callback won't be called.
+     - parameter headers: The headers returned by the session data task
+     - parameter statusCode: The status code (default=200) returned by the session data task
+     - parameter delay: A artificial delay before the session data task starts to return response and data
+     */
+    public class func mockEvery(expression: String, HTTPMethod: String = "GET", body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws {
+        let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
+        self.mockEvery(matcher, body: body, headers: headers, statusCode: statusCode, delay: delay)
+    }
+
+    // Add a request matcher to the list of mocks
+    private class func mockSingle(matcher: RequestMatcher, body: NSData? , headers: [String: String], statusCode: Int, delay: Double) {
         let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
-        mocks.append(SuccessSessionMock(request: request, response: response, delay: delay))
-        
+        mocks.append(SingleSuccessSessionMock(matching: matcher, response: response, delay: delay))
+        swizzleIfNeeded()
+    }
+
+    // Add a request matcher to the list of mocks
+    private class func mockEvery(matcher: RequestMatcher, body: NSData? , headers: [String: String], statusCode: Int, delay: Double) {
+        let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
+        mocks.append(SuccessSessionMock(matching: matcher, response: response, delay: delay))
         swizzleIfNeeded()
     }
     

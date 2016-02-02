@@ -17,7 +17,7 @@ extension NSURLRequest {
      
      - returns: `true` if it's reasonable to consider these two requests the same for mocking. `false` otherwise.
      */
-    func isMockableWith(other: NSURLRequest) -> Bool {
+    internal func isMockableWith(other: NSURLRequest) -> Bool {
         return (self.URL == other.URL &&
                 self.HTTPMethod == other.HTTPMethod)
     }
