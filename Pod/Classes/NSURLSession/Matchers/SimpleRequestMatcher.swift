@@ -33,7 +33,7 @@ struct SimpleRequestMatcher : RequestMatcher {
         
         let path = request.URL?.absoluteString ?? ""
         let options = NSMatchingOptions(rawValue: 0)
-        let range = NSMakeRange(0, (path as NSString).length)
+        let range = NSMakeRange(0, path.utf16.count)
         return pathMatcher.numberOfMatchesInString(path, options: options, range: range) == 1
     }
     
