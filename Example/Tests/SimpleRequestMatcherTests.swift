@@ -40,4 +40,13 @@ class SimpleRequestMatcherTests: XCTestCase {
         let r1 = NSURLRequest(URL: URL)
         XCTAssertTrue(matcher.matches(r1))
     }
+    
+    func testRequestMatcher_WithRegex_ShouldNotMatch() {
+        let path = ".*/a/b/c"
+        let matcher = try! SimpleRequestMatcher(expression: path, method: "GET")
+        
+        let URL = NSURL(string: "www.example.com/b/c/a")!
+        let r1 = NSURLRequest(URL: URL)
+        XCTAssertFalse(matcher.matches(r1))
+    }
 }

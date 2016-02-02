@@ -200,4 +200,33 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertEqual(responseHeaders, headers)
         }
     }
+    
+    func testSession_WithRegularExpression_ShouldMatch() {
+        let expectation1 = self.expectationWithDescription("Complete called for request 1")
+        let expectation2 = self.expectationWithDescription("Complete called for request 2")
+        
+        // Mock with a regex
+        let body = "{'mocked':true}".dataUsingEncoding(NSUTF8StringEncoding)
+        try! NSURLSession.mockEvery(".*/a.json", body: body)
+        
+        // Create a session
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        
+        // Perform two tasks
+        let request1 = NSURLRequest(URL: NSURL(string: "http://www.example.com/a.json?param1=1")!)
+        let task1 = session.dataTaskWithRequest(request1)
+        task1.resume()
+        
+        let request2 = NSURLRequest(URL: NSURL(string: "http://www.example.com/a.json?param2=2")!)
+        let task2 = session.dataTaskWithRequest(request2)
+        task2.resume()
+
+        self.waitForExpectationsWithTimeout(1) { timeoutError in
+            // Make sure it was the mock and not a valid response!
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], body)
+        }
+    }
 }

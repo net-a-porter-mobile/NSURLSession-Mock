@@ -8,6 +8,10 @@
 
 import Foundation
 
+/**
+ This struct matches by matching the path to a regular expression and by 
+ comparing the methods for equality.
+*/
 struct SimpleRequestMatcher : RequestMatcher {
     
     let pathMatcher: NSRegularExpression
