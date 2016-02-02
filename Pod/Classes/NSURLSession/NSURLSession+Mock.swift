@@ -34,7 +34,9 @@ extension NSURLSession {
      */
     public class func mockSingle(request: NSURLRequest, body: NSData? , headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
         let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
-        mocks.append(SingleSuccessSessionMock(request: request, response: response, delay: delay))
+        
+        let matcher = SimpleRequestMatcher(url: request.URL!, method: request.HTTPMethod!)
+        mocks.append(SingleSuccessSessionMock(matching: matcher, response: response, delay: delay))
         
         swizzleIfNeeded()
     }
@@ -47,7 +49,8 @@ extension NSURLSession {
      */
     public class func mockEvery(request: NSURLRequest, body: NSData? , headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
         let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
-        mocks.append(SuccessSessionMock(request: request, response: response, delay: delay))
+        let matcher = SimpleRequestMatcher(url: request.URL!, method: request.HTTPMethod!)
+        mocks.append(SuccessSessionMock(matching: matcher, response: response, delay: delay))
         
         swizzleIfNeeded()
     }
