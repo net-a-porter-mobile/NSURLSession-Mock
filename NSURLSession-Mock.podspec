@@ -34,12 +34,6 @@ Pod::Spec.new do |s|
     ss.source_files = 'Pod/Classes/Common/**/*'
   end
 
-  s.subspec 'NSURLConnection' do |ss|
-    ss.source_files = 'Pod/Classes/NSURLConnection/**/*'
-
-    ss.dependency 'NSURLSession-Mock/Common'
-  end
-
   s.subspec 'NSURLSession' do |ss|
     ss.source_files = 'Pod/Classes/NSURLSession/**/*'
 

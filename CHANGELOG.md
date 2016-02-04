@@ -1,6 +1,7 @@
 Changelog
 
 ### unreleased
++ Remove NSURLConnection mocking ability
 
 ## 0.4.0
 + Add mock response (status and headers), thanks @kerrmarin
