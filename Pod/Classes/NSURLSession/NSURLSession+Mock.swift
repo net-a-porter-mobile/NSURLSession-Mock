@@ -8,8 +8,6 @@
 
 import Foundation
 
-private var mocks: [SessionMock] = []
-
 /**
  Set the debug level on NSURLSession to output all the request that flow through
  this extension.
@@ -25,6 +23,8 @@ public enum RequestDebugLevel: Int {
 }
 
 extension NSURLSession {
+    
+    internal static let register = MockRegister()
     
     /**
      The next call exactly matching `request` will successfully return `body`
@@ -83,26 +83,12 @@ extension NSURLSession {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
         self.mockEvery(matcher, body: body, headers: headers, statusCode: statusCode, delay: delay)
     }
-
-    // Add a request matcher to the list of mocks
-    private class func mockSingle(matcher: RequestMatcher, body: NSData? , headers: [String: String], statusCode: Int, delay: Double) {
-        let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
-        mocks.append(SingleSuccessSessionMock(matching: matcher, response: response, delay: delay))
-        swizzleIfNeeded()
-    }
-
-    // Add a request matcher to the list of mocks
-    private class func mockEvery(matcher: RequestMatcher, body: NSData? , headers: [String: String], statusCode: Int, delay: Double) {
-        let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
-        mocks.append(SuccessSessionMock(matching: matcher, response: response, delay: delay))
-        swizzleIfNeeded()
-    }
     
     /**
      Remove all mocks - NSURLSession will behave as if it had never been touched
      */
     public class func removeAllMocks() {
-        mocks.removeAll()
+        self.register.removeAllMocks()
     }
     
     /**
@@ -110,82 +96,23 @@ extension NSURLSession {
      be mocked
      */
     public class func removeAllMocks(of request: NSURLRequest) {
-        mocks = mocks.filter { (item) -> Bool in
-            return !item.matchesRequest(request)
-        }
+        self.register.removeAllMocks(of: request)
     }
-    
-    /**
-     Set this to output all requests which were mocked to the console
-     */
-    public static var debugMockRequests: RequestDebugLevel = .None
-    
-    // MARK: - Swizling
-    
-    private class func swizzleIfNeeded() {
-        struct Static {
-            static var token: dispatch_once_t = 0
-        }
-        
-        dispatch_once(&Static.token) {
-            try! swizzle(self, replace: "dataTaskWithRequest:", with: "swizzledDataTaskWithRequest:")
-            try! swizzle(self, replace: "dataTaskWithURL:", with: "swizzledDataTaskWithURL:")
-            
-            Log("NSURLSession now mocked")
-        }
-    }
-    
-    // MARK: Swizzled methods
-    
-    @objc(swizzledDataTaskWithRequest:)
-    private func swizzledDataTaskWithRequest(request: NSURLRequest!) -> NSURLSessionDataTask {
-        // If any of our mocks match this request, just do that instead
-        if let task = nextSessionMockWithRequest(request) {
-            
-            if NSURLSession.debugMockRequests != .None {
-                Log("request: \(request.debugMockDescription) mocked")
-            }
-            
-            return task
-        }
-        
-        if NSURLSession.debugMockRequests == .All {
-            Log("request: \(request.debugMockDescription) not mocked")
-        }
-        
-        // Otherwise, super
-        return swizzledDataTaskWithRequest(request)
-    }
-    
-    @objc(swizzledDataTaskWithURL:)
-    private func swizzledDataTaskWithURL(URL: NSURL!) -> NSURLSessionDataTask {
-        let request = NSURLRequest(URL: URL)
-        if let task = nextSessionMockWithRequest(request) {
 
-            if NSURLSession.debugMockRequests != .None {
-                Log("request: \(request.debugMockDescription) mocked")
-            }
-
-            return task
-        }
-        
-        if NSURLSession.debugMockRequests == .All {
-            Log("request: \(request.debugMockDescription) not mocked")
-        }
-        
-        // Otherwise, super
-        return swizzledDataTaskWithURL(URL)
+    
+    //MARK: Private methods
+    
+    // Add a request matcher to the list of mocks
+    private class func mockSingle(matcher: RequestMatcher, body: NSData? , headers: [String: String], statusCode: Int, delay: Double) {
+        let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
+        self.register.addMock(SingleSuccessSessionMock(matching: matcher, response: response, delay: delay))
+        swizzleIfNeeded()
     }
     
-    // MARK: - Helpers
-    
-    private func nextSessionMockWithRequest(request: NSURLRequest) -> NSURLSessionDataTask? {
-        for mock in mocks {
-            guard mock.matchesRequest(request) else { continue }
-            
-            return try! mock.consumeRequest(request, session: self)
-        }
-        
-        return nil
+    // Add a request matcher to the list of mocks
+    private class func mockEvery(matcher: RequestMatcher, body: NSData? , headers: [String: String], statusCode: Int, delay: Double) {
+        let response = MockResponse(data: body, error: nil, headers: headers, statusCode: statusCode)
+        self.register.addMock(SuccessSessionMock(matching: matcher, response: response, delay: delay))
+        swizzleIfNeeded()
     }
 }
