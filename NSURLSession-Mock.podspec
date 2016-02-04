@@ -30,14 +30,7 @@ Pod::Spec.new do |s|
 
   s.compiler_flags = "-Wall -Werror -Wextra"
 
-  s.subspec 'Common' do |ss|
-    ss.source_files = 'Pod/Classes/Common/**/*'
-  end
+  s.source_files = 'Pod/Classes/**/*'
 
-  s.subspec 'NSURLSession' do |ss|
-    ss.source_files = 'Pod/Classes/NSURLSession/**/*'
-
-    ss.dependency 'NSURLSession-Mock/Common'
-  end
 end
 
