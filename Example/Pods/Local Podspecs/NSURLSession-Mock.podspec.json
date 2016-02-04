@@ -20,28 +20,5 @@
   },
   "requires_arc": true,
   "compiler_flags": "-Wall -Werror -Wextra",
-  "subspecs": [
-    {
-      "name": "Common",
-      "source_files": "Pod/Classes/Common/**/*"
-    },
-    {
-      "name": "NSURLConnection",
-      "source_files": "Pod/Classes/NSURLConnection/**/*",
-      "dependencies": {
-        "NSURLSession-Mock/Common": [
-
-        ]
-      }
-    },
-    {
-      "name": "NSURLSession",
-      "source_files": "Pod/Classes/NSURLSession/**/*",
-      "dependencies": {
-        "NSURLSession-Mock/Common": [
-
-        ]
-      }
-    }
-  ]
+  "source_files": "Pod/Classes/**/*"
 }

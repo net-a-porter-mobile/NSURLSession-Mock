@@ -16,7 +16,6 @@
 		9300E870D262A44136BEC769 /* Pods_NSURLSession_Mock_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C299E1A5966BDAFE70A2C636 /* Pods_NSURLSession_Mock_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		E506F01A1C609A21000D42DE /* SimpleRequestMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E506F0191C609A21000D42DE /* SimpleRequestMatcherTests.swift */; };
 		E531253F1C4EDC9A00C4AF2E /* AFNetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53125371C4EDC7A00C4AF2E /* AFNetworkingTests.swift */; };
-		E53125401C4EDC9A00C4AF2E /* NSURLConnectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53125381C4EDC7A00C4AF2E /* NSURLConnectionTests.swift */; };
 		E53125411C4EDC9A00C4AF2E /* NSURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53125391C4EDC7A00C4AF2E /* NSURLSessionTests.swift */; };
 		E53125421C4EDC9A00C4AF2E /* TestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E531253A1C4EDC7A00C4AF2E /* TestDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -48,7 +47,6 @@
 		C299E1A5966BDAFE70A2C636 /* Pods_NSURLSession_Mock_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSURLSession_Mock_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E506F0191C609A21000D42DE /* SimpleRequestMatcherTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimpleRequestMatcherTests.swift; sourceTree = "<group>"; };
 		E53125371C4EDC7A00C4AF2E /* AFNetworkingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AFNetworkingTests.swift; sourceTree = "<group>"; };
-		E53125381C4EDC7A00C4AF2E /* NSURLConnectionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLConnectionTests.swift; sourceTree = "<group>"; };
 		E53125391C4EDC7A00C4AF2E /* NSURLSessionTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSURLSessionTests.swift; sourceTree = "<group>"; };
 		E531253A1C4EDC7A00C4AF2E /* TestDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDelegate.swift; sourceTree = "<group>"; };
 		E53125431C4EDCFA00C4AF2E /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
@@ -126,7 +124,6 @@
 			isa = PBXGroup;
 			children = (
 				E53125371C4EDC7A00C4AF2E /* AFNetworkingTests.swift */,
-				E53125381C4EDC7A00C4AF2E /* NSURLConnectionTests.swift */,
 				E53125391C4EDC7A00C4AF2E /* NSURLSessionTests.swift */,
 				E506F0191C609A21000D42DE /* SimpleRequestMatcherTests.swift */,
 				E531253A1C4EDC7A00C4AF2E /* TestDelegate.swift */,
@@ -385,7 +382,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E53125421C4EDC9A00C4AF2E /* TestDelegate.swift in Sources */,
-				E53125401C4EDC9A00C4AF2E /* NSURLConnectionTests.swift in Sources */,
 				E531253F1C4EDC9A00C4AF2E /* AFNetworkingTests.swift in Sources */,
 				E53125411C4EDC9A00C4AF2E /* NSURLSessionTests.swift in Sources */,
 				E506F01A1C609A21000D42DE /* SimpleRequestMatcherTests.swift in Sources */,
