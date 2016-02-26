@@ -1,6 +1,8 @@
 Changelog
 
 ### unreleased
+
+### 0.5.0
 + Remove NSURLConnection mocking ability
 + Add format specifier to Logging
 

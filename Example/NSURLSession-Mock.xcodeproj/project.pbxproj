@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0D0BECF5772F0A79748BC1BC /* Pods_NSURLSession_Mock_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F818DBF80AD193BB25FFCCD6 /* Pods_NSURLSession_Mock_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		0D0BECF5772F0A79748BC1BC /* Pods_NSURLSession_Mock_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F818DBF80AD193BB25FFCCD6 /* Pods_NSURLSession_Mock_Tests.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
-		9300E870D262A44136BEC769 /* Pods_NSURLSession_Mock_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C299E1A5966BDAFE70A2C636 /* Pods_NSURLSession_Mock_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		9300E870D262A44136BEC769 /* Pods_NSURLSession_Mock_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C299E1A5966BDAFE70A2C636 /* Pods_NSURLSession_Mock_Example.framework */; };
 		E506F01A1C609A21000D42DE /* SimpleRequestMatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E506F0191C609A21000D42DE /* SimpleRequestMatcherTests.swift */; };
 		E531253F1C4EDC9A00C4AF2E /* AFNetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53125371C4EDC7A00C4AF2E /* AFNetworkingTests.swift */; };
 		E53125411C4EDC9A00C4AF2E /* NSURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53125391C4EDC7A00C4AF2E /* NSURLSessionTests.swift */; };

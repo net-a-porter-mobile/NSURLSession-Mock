@@ -20,7 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - NSURLSession-Mock (0.4.0)
+  - NSURLSession-Mock (0.5.0)
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
@@ -32,6 +32,6 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  NSURLSession-Mock: 982b5049f6453fbd4a9952a5c098abf10d0bc698
+  NSURLSession-Mock: 2116a6cd4977dec1fb9768b2ad9f0d8a8f9cca17
 
-COCOAPODS: 0.38.2
+COCOAPODS: 0.39.0
