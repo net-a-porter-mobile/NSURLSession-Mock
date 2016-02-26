@@ -2,6 +2,7 @@ Changelog
 
 ### unreleased
 + Remove NSURLConnection mocking ability
++ Add format specifier to Logging
 
 ## 0.4.0
 + Add mock response (status and headers), thanks @kerrmarin

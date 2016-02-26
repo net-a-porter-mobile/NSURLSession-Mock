@@ -14,5 +14,5 @@ private let marker = "[NSURLSession-Mock]"
  Wraps NSLog and makes sure we have a consistent marker in the console to filter by
  */
 func Log(format: String) {
-    NSLog("\(marker) \(format)")
+    NSLog("%@", "\(marker) \(format)")
 }
