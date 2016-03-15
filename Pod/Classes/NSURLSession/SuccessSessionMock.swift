@@ -59,8 +59,8 @@ class SuccessSessionMock : SessionMock {
             if let delegate = session.delegate as? NSURLSessionTaskDelegate {
                 
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(mult * time)), dispatch_get_main_queue()) {
-                    task._state = .Completed
                     delegate.URLSession?(session, task: task, didCompleteWithError: nil)
+                    task._state = .Completed
                 }
             }
         }
