@@ -63,8 +63,6 @@ extension NSURLSession {
             Log("request: \(request.debugMockDescription) not mocked")
         }
         
-
-        
         // Otherwise, let NSURLSession deal with it
         return swizzledDataTaskWithRequest(request)
     }
