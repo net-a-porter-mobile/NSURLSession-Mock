@@ -8,11 +8,21 @@
 
 import Foundation
 
+public typealias RequestEvaluator = (NSURLRequest) -> Bool
+
 extension NSURLSession {
     /**
      Set this to output all requests which were mocked to the console
      */
     public static var debugMockRequests: RequestDebugLevel = .None
+    
+    /**
+     Set this to a block that will decide whether or not a request must be mocked.
+     */
+    public struct Evaluator {
+        public static var requestEvaluator: RequestEvaluator = { _ in return true }
+    }
+
     
     // MARK: - Swizling
     
@@ -43,9 +53,17 @@ extension NSURLSession {
             return task
         }
         
+        guard NSURLSession.Evaluator.requestEvaluator(request) else {
+            let task = self.swizzledDataTaskWithRequest(request)
+            task.cancel()
+            return task
+        }
+        
         if NSURLSession.debugMockRequests == .All {
             Log("request: \(request.debugMockDescription) not mocked")
         }
+        
+
         
         // Otherwise, let NSURLSession deal with it
         return swizzledDataTaskWithRequest(request)
@@ -60,6 +78,12 @@ extension NSURLSession {
                 Log("request: \(request.debugMockDescription) mocked")
             }
             
+            return task
+        }
+        
+        guard NSURLSession.Evaluator.requestEvaluator(request) else {
+            let task = self.swizzledDataTaskWithURL(URL)
+            task.cancel()
             return task
         }
         

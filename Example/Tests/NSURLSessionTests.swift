@@ -229,4 +229,27 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], body)
         }
     }
+    
+    func testSession_WithUnauthorizedRequest_ShouldReturnCanceledTask() {
+        let expectation = self.expectationWithDescription("Complete called for unauthorized request")
+
+        let url = NSURL(string: "http://www.google.com")!
+        let request = NSURLRequest(URL:url)
+        
+        // Create a session
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        NSURLSession.Evaluator.requestEvaluator = { request in
+            return false
+        }
+        
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
+        
+        self.waitForExpectationsWithTimeout(1) { timeoutError in
+            XCTAssertNotNil(task.error)
+            XCTAssertEqual(task.error?.code, NSURLErrorCancelled)
+        }
+    }
 }
