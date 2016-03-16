@@ -1,6 +1,7 @@
 Changelog
 
 ### unreleased
++ Move state setting in task to after delegate callback
 
 ### 0.5.0
 + Remove NSURLConnection mocking ability
