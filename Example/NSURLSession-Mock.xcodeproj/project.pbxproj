@@ -19,6 +19,7 @@
 		E53125411C4EDC9A00C4AF2E /* NSURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53125391C4EDC7A00C4AF2E /* NSURLSessionTests.swift */; };
 		E53125421C4EDC9A00C4AF2E /* TestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E531253A1C4EDC7A00C4AF2E /* TestDelegate.swift */; };
 		F26151781C635404009D86BC /* MockRegisterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26151761C6353AC009D86BC /* MockRegisterTests.swift */; };
+		F2F35D741C9970C30002910E /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = F2F35D731C9970C30002910E /* SwiftTryCatch.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,9 @@
 		E53125431C4EDCFA00C4AF2E /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		E53125451C4F9B9700C4AF2E /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = .travis.yml; path = ../.travis.yml; sourceTree = "<group>"; };
 		F26151761C6353AC009D86BC /* MockRegisterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRegisterTests.swift; sourceTree = "<group>"; };
+		F2F35D711C9970C30002910E /* NSURLSession-Mock_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURLSession-Mock_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		F2F35D721C9970C30002910E /* SwiftTryCatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftTryCatch.h; sourceTree = "<group>"; };
+		F2F35D731C9970C30002910E /* SwiftTryCatch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SwiftTryCatch.m; sourceTree = "<group>"; };
 		F3F3B5A55CD9F866F9357776 /* Pods-NSURLSession-Mock_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NSURLSession-Mock_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-NSURLSession-Mock_Example/Pods-NSURLSession-Mock_Example.release.xcconfig"; sourceTree = "<group>"; };
 		F818DBF80AD193BB25FFCCD6 /* Pods_NSURLSession_Mock_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSURLSession_Mock_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE931D3F8E50157BF079260 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
@@ -131,6 +135,9 @@
 				E531253A1C4EDC7A00C4AF2E /* TestDelegate.swift */,
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				F26151761C6353AC009D86BC /* MockRegisterTests.swift */,
+				F2F35D721C9970C30002910E /* SwiftTryCatch.h */,
+				F2F35D731C9970C30002910E /* SwiftTryCatch.m */,
+				F2F35D711C9970C30002910E /* NSURLSession-Mock_Tests-Bridging-Header.h */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -385,6 +392,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E53125421C4EDC9A00C4AF2E /* TestDelegate.swift in Sources */,
+				F2F35D741C9970C30002910E /* SwiftTryCatch.m in Sources */,
 				F26151781C635404009D86BC /* MockRegisterTests.swift in Sources */,
 				E531253F1C4EDC9A00C4AF2E /* AFNetworkingTests.swift in Sources */,
 				E53125411C4EDC9A00C4AF2E /* NSURLSessionTests.swift in Sources */,
@@ -535,6 +543,7 @@
 			baseConfigurationReference = FD7E593F92BD807FC1D182BB /* Pods-NSURLSession-Mock_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -547,6 +556,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/NSURLSession-Mock_Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NSURLSession-Mock_Example.app/NSURLSession-Mock_Example";
 			};
 			name = Debug;
@@ -556,6 +567,7 @@
 			baseConfigurationReference = 3F7016474D788A33FEF0E30B /* Pods-NSURLSession-Mock_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -564,6 +576,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/NSURLSession-Mock_Tests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/NSURLSession-Mock_Example.app/NSURLSession-Mock_Example";
 			};
 			name = Release;

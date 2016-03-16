@@ -66,7 +66,7 @@ class NSURLSessionTests: XCTestCase {
         let body1 = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
         let request1 = NSURLRequest.init(URL: URL)
         NSURLSession.mockSingle(request1, body: body1)
-
+        
         let body2 = "Test response 2".dataUsingEncoding(NSUTF8StringEncoding)!
         let request2 = NSURLRequest.init(URL: URL)
         NSURLSession.mockSingle(request2, body: body2)
@@ -75,7 +75,7 @@ class NSURLSessionTests: XCTestCase {
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
         let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
         let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
-
+        
         // Perform both tasks
         let task1 = session.dataTaskWithRequest(request1)
         task1.resume()
@@ -114,10 +114,10 @@ class NSURLSessionTests: XCTestCase {
         
         let task2 = session.dataTaskWithRequest(request)
         task2.resume()
-
+        
         let task3 = session.dataTaskWithRequest(request)
         task3.resume()
-
+        
         // Validate that the mock data was returned
         self.waitForExpectationsWithTimeout(1) { timeoutError in
             XCTAssertNil(timeoutError)
@@ -152,7 +152,7 @@ class NSURLSessionTests: XCTestCase {
         // Validate that the mock data was returned
         self.waitForExpectationsWithTimeout(2) { timeoutError in
             XCTAssertNil(timeoutError)
-
+            
             // Sanity it's actually mocked
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
             
@@ -162,7 +162,7 @@ class NSURLSessionTests: XCTestCase {
             XCTAssert(interval < 1.2, "Should have taken less than 1.2 seconds to perform (it took \(interval)")
         }
     }
-
+    
     
     func testSession_WithStatusCodeAndHeaders_ShouldReturnTheCorrectStatusCodes() {
         let expectation = self.expectationWithDescription("Complete called for headers and status code")
@@ -173,7 +173,7 @@ class NSURLSessionTests: XCTestCase {
         let request = NSURLRequest.init(URL: URL)
         let headers = ["Content-Type" : "application/test", "Custom-Header" : "Is custom"]
         NSURLSession.mockSingle(request, body: body, headers: headers, statusCode: 200)
-
+        
         // Create a session
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
         let delegate = SessionTestDelegate(expectations: [expectation])
@@ -222,7 +222,7 @@ class NSURLSessionTests: XCTestCase {
         let request2 = NSURLRequest(URL: NSURL(string: "http://www.example.com/a.json?param2=2")!)
         let task2 = session.dataTaskWithRequest(request2)
         task2.resume()
-
+        
         self.waitForExpectationsWithTimeout(1) { timeoutError in
             // Make sure it was the mock and not a valid response!
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
@@ -231,25 +231,21 @@ class NSURLSessionTests: XCTestCase {
     }
     
     func testSession_WithUnauthorizedRequest_ShouldReturnCanceledTask() {
-        let expectation = self.expectationWithDescription("Complete called for unauthorized request")
-
         let url = NSURL(string: "http://www.google.com")!
         let request = NSURLRequest(URL:url)
         
         // Create a session
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
-        let delegate = SessionTestDelegate(expectations: [ expectation ])
+        let delegate = SessionTestDelegate(expectations: [ ])
         let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
         NSURLSession.Evaluator.requestEvaluator = { request in
             return false
         }
         
-        let task = session.dataTaskWithRequest(request)
-        task.resume()
-        
-        self.waitForExpectationsWithTimeout(1) { timeoutError in
-            XCTAssertNotNil(task.error)
-            XCTAssertEqual(task.error?.code, NSURLErrorCancelled)
-        }
+        SwiftTryCatch.tryBlock({ () -> Void in
+            let _ = session.dataTaskWithRequest(request)
+            }, catchBlock: { (exception) -> Void in
+                XCTAssertTrue(exception.name == "Mocking Exception")
+            }) {}
     }
 }

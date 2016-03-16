@@ -22,7 +22,7 @@ extension NSURLSession {
     public struct Evaluator {
         public static var requestEvaluator: RequestEvaluator = { _ in return true }
     }
-
+    
     
     // MARK: - Swizling
     
@@ -54,9 +54,11 @@ extension NSURLSession {
         }
         
         guard NSURLSession.Evaluator.requestEvaluator(request) else {
-            let task = self.swizzledDataTaskWithRequest(request)
-            task.cancel()
-            return task
+            let exception = NSException(name: "Mocking Exception",
+                reason: "Request \(request) was not mocked but is required to be mocked",
+                userInfo: [:])
+            exception.raise()
+            return self.swizzledDataTaskWithRequest(request)
         }
         
         if NSURLSession.debugMockRequests == .All {
@@ -80,9 +82,11 @@ extension NSURLSession {
         }
         
         guard NSURLSession.Evaluator.requestEvaluator(request) else {
-            let task = self.swizzledDataTaskWithURL(URL)
-            task.cancel()
-            return task
+            let exception = NSException(name: "Mocking Exception",
+                reason: "Request \(request) was not mocked but is required to be mocked",
+                userInfo: [:])
+            exception.raise()
+            return self.swizzledDataTaskWithRequest(request)
         }
         
         if NSURLSession.debugMockRequests == .All {
@@ -98,7 +102,7 @@ extension NSURLSession {
     private func taskForRequest(request: NSURLRequest) -> NSURLSessionDataTask? {
         if let mock = NSURLSession.register.nextSessionMockForRequest(request) {
             return try! mock.consumeRequest(request, session: self)
-
+            
         }
         return nil
     }
