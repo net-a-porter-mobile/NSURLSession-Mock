@@ -49,6 +49,17 @@ NSURLSession.removeAllMocks()
 NSURLSession.removeAllMocks(of: request)
 ```
 
+If you would like to fail requests that haven't been mocked, set the NSURLSession's request evaluator to return whether or not the requests must be allowed. For example, to ensure that all calls to Net-A-Porter's domain are mocked you would:
+
+```swift
+NSURLSession.Evaluator.requestEvaluator = { request in
+    return request.URL?.host == "www.net-a-porter.com"
+}
+
+```
+
+If a request to www.net-a-porter.com is made and not mocked, an exception will be raised.
+
 ### AFNetworking
 
 This pod is designed to be AFNetworking (~>2.0) friendly - mocks to NSURLSession will work via AFNetworking's `AFHTTPSessionManager` methods. Checkout `AFNetworkingTests.swift` for an example.

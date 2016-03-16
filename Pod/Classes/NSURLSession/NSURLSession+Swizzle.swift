@@ -56,7 +56,7 @@ extension NSURLSession {
         guard NSURLSession.Evaluator.requestEvaluator(request) else {
             let exception = NSException(name: "Mocking Exception",
                 reason: "Request \(request) was not mocked but is required to be mocked",
-                userInfo: [:])
+                userInfo: nil)
             exception.raise()
             return self.swizzledDataTaskWithRequest(request)
         }
@@ -84,7 +84,7 @@ extension NSURLSession {
         guard NSURLSession.Evaluator.requestEvaluator(request) else {
             let exception = NSException(name: "Mocking Exception",
                 reason: "Request \(request) was not mocked but is required to be mocked",
-                userInfo: [:])
+                userInfo: nil)
             exception.raise()
             return self.swizzledDataTaskWithRequest(request)
         }
