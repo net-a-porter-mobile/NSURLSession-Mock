@@ -1,10 +1,12 @@
 Changelog
 
 ### unreleased
+
+## 0.6.0
 + Move state setting in task to after delegate callback
 + Add ability to block unmocked requests
 
-### 0.5.0
+## 0.5.0
 + Remove NSURLConnection mocking ability
 + Add format specifier to Logging
 
