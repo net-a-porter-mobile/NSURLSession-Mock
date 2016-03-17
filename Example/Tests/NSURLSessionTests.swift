@@ -239,7 +239,7 @@ class NSURLSessionTests: XCTestCase {
         let delegate = SessionTestDelegate(expectations: [ ])
         let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
         NSURLSession.Evaluator.requestEvaluator = { request in
-            return false
+            return .Reject
         }
         
         SwiftTryCatch.tryBlock({ () -> Void in

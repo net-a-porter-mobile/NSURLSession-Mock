@@ -23,7 +23,10 @@ class MockSessionDataTask : NSURLSessionDataTask {
         self.onResume = onResume
     }
     
-    var _taskIdentifier: Int = { return ++globalTaskIdentifier }()
+    var _taskIdentifier: Int = {
+        globalTaskIdentifier += 1
+        return globalTaskIdentifier
+    }()
     override var taskIdentifier: Int {
         return _taskIdentifier
     }

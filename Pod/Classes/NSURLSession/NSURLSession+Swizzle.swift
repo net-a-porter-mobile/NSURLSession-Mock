@@ -8,7 +8,12 @@
 
 import Foundation
 
-public typealias RequestEvaluator = (NSURLRequest) -> Bool
+public enum EvaluationResult {
+    case PassThrough
+    case Reject
+}
+
+public typealias RequestEvaluator = (NSURLRequest) -> EvaluationResult
 
 extension NSURLSession {
     /**
@@ -20,7 +25,13 @@ extension NSURLSession {
      Set this to a block that will decide whether or not a request must be mocked.
      */
     public struct Evaluator {
-        public static var requestEvaluator: RequestEvaluator = { _ in return true }
+        private static let defaultEvaluator: RequestEvaluator = { _ in return .PassThrough }
+        
+        public static var requestEvaluator: RequestEvaluator = defaultEvaluator {
+            didSet {
+                NSURLSession.swizzleIfNeeded()
+            }
+        }
     }
     
     
@@ -53,7 +64,7 @@ extension NSURLSession {
             return task
         }
         
-        guard NSURLSession.Evaluator.requestEvaluator(request) else {
+        guard NSURLSession.Evaluator.requestEvaluator(request) == .PassThrough else {
             let exception = NSException(name: "Mocking Exception",
                 reason: "Request \(request) was not mocked but is required to be mocked",
                 userInfo: nil)
@@ -81,7 +92,7 @@ extension NSURLSession {
             return task
         }
         
-        guard NSURLSession.Evaluator.requestEvaluator(request) else {
+        guard NSURLSession.Evaluator.requestEvaluator(request) == .PassThrough else {
             let exception = NSException(name: "Mocking Exception",
                 reason: "Request \(request) was not mocked but is required to be mocked",
                 userInfo: nil)
