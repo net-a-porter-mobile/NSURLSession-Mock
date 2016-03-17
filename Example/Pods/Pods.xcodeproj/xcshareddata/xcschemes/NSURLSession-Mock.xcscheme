@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '1A778CBA6D75F3A9D84B1E9B'
+               BlueprintIdentifier = '25BC22B88CA6C94CA073D853'
                BlueprintName = 'NSURLSession-Mock'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'NSURLSession_Mock.framework'>

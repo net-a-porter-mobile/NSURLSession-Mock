@@ -53,7 +53,9 @@ If you would like to fail requests that haven't been mocked, set the NSURLSessio
 
 ```swift
 NSURLSession.Evaluator.requestEvaluator = { request in
-    return request.URL?.host == "www.net-a-porter.com"
+    guard let url = request.URL else { return .Reject }
+
+    return url.host == "www.net-a-porter.com" ? .Reject : .PassThrough
 }
 
 ```

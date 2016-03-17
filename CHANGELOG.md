@@ -2,18 +2,22 @@ Changelog
 
 ### unreleased
 
-## 0.6.0
+### 0.6.1
++ Tweak to return values of RequestEvaluator to be explicit about intent
++ Automatically start mocking when the requestEvaluator is set
+
+## 0.6
 + Move state setting in task to after delegate callback
 + Add ability to block unmocked requests
 
-## 0.5.0
+## 0.5
 + Remove NSURLConnection mocking ability
 + Add format specifier to Logging
 
-## 0.4.0
+## 0.4
 + Add mock response (status and headers), thanks @kerrmarin
 
-## 0.3.0
+## 0.3
 + Internal tweaks from peer review
 
 ## 0.2.1
