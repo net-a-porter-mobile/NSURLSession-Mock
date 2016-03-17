@@ -8,11 +8,21 @@
 
 import Foundation
 
+public typealias RequestEvaluator = (NSURLRequest) -> Bool
+
 extension NSURLSession {
     /**
      Set this to output all requests which were mocked to the console
      */
     public static var debugMockRequests: RequestDebugLevel = .None
+    
+    /**
+     Set this to a block that will decide whether or not a request must be mocked.
+     */
+    public struct Evaluator {
+        public static var requestEvaluator: RequestEvaluator = { _ in return true }
+    }
+    
     
     // MARK: - Swizling
     
@@ -43,6 +53,14 @@ extension NSURLSession {
             return task
         }
         
+        guard NSURLSession.Evaluator.requestEvaluator(request) else {
+            let exception = NSException(name: "Mocking Exception",
+                reason: "Request \(request) was not mocked but is required to be mocked",
+                userInfo: nil)
+            exception.raise()
+            return self.swizzledDataTaskWithRequest(request)
+        }
+        
         if NSURLSession.debugMockRequests == .All {
             Log("request: \(request.debugMockDescription) not mocked")
         }
@@ -63,6 +81,14 @@ extension NSURLSession {
             return task
         }
         
+        guard NSURLSession.Evaluator.requestEvaluator(request) else {
+            let exception = NSException(name: "Mocking Exception",
+                reason: "Request \(request) was not mocked but is required to be mocked",
+                userInfo: nil)
+            exception.raise()
+            return self.swizzledDataTaskWithRequest(request)
+        }
+        
         if NSURLSession.debugMockRequests == .All {
             Log("request: \(request.debugMockDescription) not mocked")
         }
@@ -76,7 +102,7 @@ extension NSURLSession {
     private func taskForRequest(request: NSURLRequest) -> NSURLSessionDataTask? {
         if let mock = NSURLSession.register.nextSessionMockForRequest(request) {
             return try! mock.consumeRequest(request, session: self)
-
+            
         }
         return nil
     }
