@@ -52,7 +52,7 @@ NSURLSession.removeAllMocks(of: request)
 If you would like to fail requests that haven't been mocked, set the NSURLSession's request evaluator to return whether or not the requests must be allowed. For example, to ensure that all calls to Net-A-Porter's domain are mocked you would:
 
 ```swift
-NSURLSession.Evaluator.requestEvaluator = { request in
+NSURLSession.requestEvaluator = { request in
     guard let url = request.URL else { return .Reject }
 
     return url.host == "www.net-a-porter.com" ? .Reject : .PassThrough
