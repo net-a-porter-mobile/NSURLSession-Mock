@@ -8,34 +8,22 @@
 
 import Foundation
 
+/**
+ Describes a single response to a mocked request
+*/
 struct MockResponse {
-    /**
-     The mock data to return
-     */
-    let data: NSData?
-    
-    /**
-     An error to return
-     */
-    let error: NSError?
-    
-    /**
-     A set of headers to return
-     */
-    let headers: [String: String]
-    
-    /**
-     The status code to return from the response
-     */
+    let body: NSData?
     let statusCode: Int
+    let headers: [String:String]
+
+    init(body: NSData?, statusCode: Int = 200, headers: [String:String] = [:]) {
+        self.body = body
+        self.statusCode = statusCode
+        self.headers = headers
+    }
 }
 
-extension MockResponse : Equatable { }
-
-func ==(a: MockResponse, b: MockResponse) -> Bool {
-    return (a.data == b.data &&
-            a.statusCode == b.statusCode &&
-            a.error == b.error &&
-            a.headers == b.headers
-    )
-}
+/**
+ Given the URL and the extracted sections, what should be the response data, the status code and the headers.
+*/
+typealias MockResponseHandler = (url: NSURL, extractions: [String]) -> MockResponse

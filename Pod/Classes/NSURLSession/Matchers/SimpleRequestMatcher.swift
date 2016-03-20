@@ -28,13 +28,26 @@ struct SimpleRequestMatcher : RequestMatcher {
         self.method = method
     }
     
-    func matches(request: NSURLRequest) -> Bool {
-        guard request.HTTPMethod == self.method else { return false }
-        
+    func matches(request: NSURLRequest) -> MatchesResponse {
+        //
+        guard request.HTTPMethod == self.method else { return .NoMatch }
+
+        // Get the match
         let path = request.URL?.absoluteString ?? ""
-        let options = NSMatchingOptions(rawValue: 0)
         let range = NSMakeRange(0, path.utf16.count)
-        return pathMatcher.numberOfMatchesInString(path, options: options, range: range) == 1
+        let matches = self.pathMatcher.matchesInString(path, options: [], range: range)
+        guard let match = matches.first where matches.count == 1 else { return .NoMatch }
+
+        var extractions = [String]()
+        for n in 0 ..< match.numberOfRanges {
+            guard n > 0 else { continue }
+
+            let range = match.rangeAtIndex(n)
+            let extraction = (path as NSString).substringWithRange(range)
+            extractions.append(extraction)
+        }
+
+        return .Matches(extractions: extractions)
     }
     
 }

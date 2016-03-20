@@ -8,8 +8,13 @@
 
 import Foundation
 
+enum MatchesResponse {
+    case NoMatch
+    case Matches(extractions:[String])
+}
+
 protocol RequestMatcher {
 
-    func matches(request: NSURLRequest) -> Bool
+    func matches(request: NSURLRequest) -> MatchesResponse
     
 }

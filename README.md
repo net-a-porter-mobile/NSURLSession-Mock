@@ -38,6 +38,19 @@ The parameters `body` and `delay` are optional if you want you code to be a bit 
 NSURLSession.mockEvery(request)
 ```
 
+If you want your response to depend on the URL called, you can pass in a function like this:
+
+```objc
+let URL = NSURL(string: "https://www.example.com/product/([0-9]{6})")!
+let request = NSURLRequest.init(URL: URL)
+
+// Return a valid test product JSON response with the correct pid
+NSURLSession.mockEvery(request) { (matches:[String]) in
+    let pid = matches.first!
+    return "{ 'productId':'\(pid)', 'description':'This is a test product' }".datawithEncoding(UTF8StringEncoding)!
+}
+```
+
 To remove all the mocks (or just some of them) you can do
 
 
