@@ -21,19 +21,17 @@ extension NSURLSession {
      */
     public static var debugMockRequests: RequestDebugLevel = .None
     
+    private static let defaultEvaluator: RequestEvaluator = { _ in return .PassThrough }
+    
     /**
      Set this to a block that will decide whether or not a request must be mocked.
      */
-    public struct Evaluator {
-        private static let defaultEvaluator: RequestEvaluator = { _ in return .PassThrough }
-        
-        public static var requestEvaluator: RequestEvaluator = defaultEvaluator {
-            didSet {
-                NSURLSession.swizzleIfNeeded()
-            }
+    public static var requestEvaluator: RequestEvaluator = defaultEvaluator {
+        didSet {
+            NSURLSession.swizzleIfNeeded()
         }
     }
-    
+
     
     // MARK: - Swizling
     
@@ -64,7 +62,7 @@ extension NSURLSession {
             return task
         }
         
-        guard NSURLSession.Evaluator.requestEvaluator(request) == .PassThrough else {
+        guard NSURLSession.requestEvaluator(request) == .PassThrough else {
             let exception = NSException(name: "Mocking Exception",
                 reason: "Request \(request) was not mocked but is required to be mocked",
                 userInfo: nil)
@@ -92,7 +90,7 @@ extension NSURLSession {
             return task
         }
         
-        guard NSURLSession.Evaluator.requestEvaluator(request) == .PassThrough else {
+        guard NSURLSession.requestEvaluator(request) == .PassThrough else {
             let exception = NSException(name: "Mocking Exception",
                 reason: "Request \(request) was not mocked but is required to be mocked",
                 userInfo: nil)

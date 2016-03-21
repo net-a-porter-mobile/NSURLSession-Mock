@@ -238,7 +238,7 @@ class NSURLSessionTests: XCTestCase {
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
         let delegate = SessionTestDelegate(expectations: [ ])
         let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
-        NSURLSession.Evaluator.requestEvaluator = { request in
+        NSURLSession.requestEvaluator = { request in
             return .Reject
         }
         

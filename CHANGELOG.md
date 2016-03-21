@@ -1,6 +1,8 @@
 Changelog
 
 ### unreleased
++ Remove Evaluator struct from NSURLSession
+
 
 ### 0.6.1
 + Tweak to return values of RequestEvaluator to be explicit about intent
