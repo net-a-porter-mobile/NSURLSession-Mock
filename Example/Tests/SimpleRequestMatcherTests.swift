@@ -19,7 +19,14 @@ class SimpleRequestMatcherTests: XCTestCase {
         let matcher = SimpleRequestMatcher(url: URL, method: "GET")
         
         let r1 = NSURLRequest(URL: URL)
-        XCTAssertTrue(matcher.matches(r1))
+
+        let result = matcher.matches(r1)
+        switch(result) {
+        case .NoMatch:
+            XCTFail("Should have matched")
+        case .Matches(let extractions):
+            XCTAssertEqual([], extractions)
+        }
     }
     
     func testRequestMatcher_WithOddMethod_ShouldNotMatch() {
@@ -29,16 +36,29 @@ class SimpleRequestMatcherTests: XCTestCase {
         let matcher = SimpleRequestMatcher(url: URL, method: "HEAD")
         
         let r1 = NSURLRequest(URL: URL)
-        XCTAssertFalse(matcher.matches(r1))
+        let result = matcher.matches(r1)
+        switch(result) {
+        case .NoMatch:
+            break
+        case .Matches(_):
+            XCTFail("Should not have matched")
+        }
     }
     
     func testRequestMatcher_WithRegex_ShouldMatch() {
-        let path = ".*/a/b/c"
+        let path = ".*/a/b/(.)"
         let matcher = try! SimpleRequestMatcher(expression: path, method: "GET")
         
         let URL = NSURL(string: "www.example.com/a/b/c")!
         let r1 = NSURLRequest(URL: URL)
-        XCTAssertTrue(matcher.matches(r1))
+
+        let result = matcher.matches(r1)
+        switch(result) {
+        case .NoMatch:
+            XCTFail("Should have matched")
+        case .Matches(let extractions):
+            XCTAssertEqual([ "c" ], extractions)
+        }
     }
     
     func testRequestMatcher_WithRegex_ShouldNotMatch() {
@@ -47,6 +67,30 @@ class SimpleRequestMatcherTests: XCTestCase {
         
         let URL = NSURL(string: "www.example.com/b/c/a")!
         let r1 = NSURLRequest(URL: URL)
-        XCTAssertFalse(matcher.matches(r1))
+
+        let result = matcher.matches(r1)
+        switch(result) {
+        case .NoMatch:
+            break
+        case .Matches(_):
+            XCTFail("Should not have matched")
+        }
+    }
+
+    func testRequestMatcher_WithDuplicateMatch_ShouldMatch() {
+
+        let path = "/product/(...)"
+        let matcher = try! SimpleRequestMatcher(expression: path, method: "GET")
+
+        let URL = NSURL(string: "/product/123/product/456")!
+        let request = NSURLRequest(URL: URL)
+
+        let result = matcher.matches(request)
+        switch(result) {
+        case .NoMatch:
+            XCTFail("Should have matched")
+        case let .Matches(matches):
+            XCTAssertEqual(matches, [ "123", "456" ])
+        }
     }
 }

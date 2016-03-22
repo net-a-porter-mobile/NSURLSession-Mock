@@ -248,4 +248,39 @@ class NSURLSessionTests: XCTestCase {
                 XCTAssertTrue(exception.name == "Mocking Exception")
             }) {}
     }
+
+    func testSession_WithBlock_ShouldReturnModifiedData() {
+        // Create an expression which will match the product id
+        let expression = "http://www.example.com/product/([0-9]{6})"
+        try! NSURLSession.mockEvery(expression) { (matches: [String]) in
+            return matches.first!.dataUsingEncoding(NSUTF8StringEncoding)!
+        }
+
+        // We are going to make two requests, with two different product ids.
+        // When the delegate reports them both complete, we will check that the
+        // data returned was valid for that specific URL
+        let expectation1 = self.expectationWithDescription("Complete called for request 123456")
+        let expectation2 = self.expectationWithDescription("Complete called for request 654321")
+
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+
+        // Perform two tasks
+        let request1 = NSURLRequest(URL: NSURL(string: "http://www.example.com/product/123456")!)
+        let task1 = session.dataTaskWithRequest(request1)
+        task1.resume()
+
+        let request2 = NSURLRequest(URL: NSURL(string: "http://www.example.com/product/654321")!)
+        let task2 = session.dataTaskWithRequest(request2)
+        task2.resume()
+
+        self.waitForExpectationsWithTimeout(1) { timeoutError in
+            // Make sure it was the mock and not a valid response!
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], "123456".dataUsingEncoding(NSUTF8StringEncoding))
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], "654321".dataUsingEncoding(NSUTF8StringEncoding))
+        }
+
+    }
+
 }

@@ -8,15 +8,15 @@
 
 import Foundation
 
-internal class MockRegister {
+class MockRegister {
     
     private var mocks: [SessionMock] = []
     
-    internal func removeAllMocks() {
+    func removeAllMocks() {
         self.mocks.removeAll()
     }
     
-    internal func addMock(mock: SessionMock) {
+    func addMock(mock: SessionMock) {
         self.mocks.append(mock)
     }
     
@@ -24,13 +24,13 @@ internal class MockRegister {
      Remove all mocks matching the given request. All other requests will still
      be mocked
      */
-    internal func removeAllMocks(of request: NSURLRequest) {
+    func removeAllMocks(of request: NSURLRequest) {
         self.mocks = self.mocks.filter { item in
             return !item.matchesRequest(request)
         }
     }
     
-    internal func nextSessionMockForRequest(request: NSURLRequest) -> SessionMock? {
+    func nextSessionMockForRequest(request: NSURLRequest) -> SessionMock? {
         for mock in mocks {
             if mock.matchesRequest(request) {
                 return mock
