@@ -24,7 +24,7 @@ public enum RequestDebugLevel: Int {
 
 /**
  Mocks which are interested in sections of the URL to create the response body
- should pass in functions matching this signature to `mockSingle` or `mockOnce`
+ should pass in functions matching this signature to `mockSingle` or `mockEvery`
 */
 public typealias BodyFunction = [String] -> NSData
 
