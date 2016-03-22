@@ -29,7 +29,7 @@ struct SimpleRequestMatcher : RequestMatcher {
     }
 
     func matches(request: NSURLRequest) -> MatchesResponse {
-        //
+        // Quick check that the methods are the same
         guard request.HTTPMethod == self.method else { return .NoMatch }
 
         // Get the match

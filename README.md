@@ -41,15 +41,28 @@ NSURLSession.mockEvery(request)
 If you want your response to depend on the URL called, you can pass in a function like this:
 
 ```objc
-let URL = NSURL(string: "https://www.example.com/product/([0-9]{6})")!
-let request = NSURLRequest.init(URL: URL)
+let expression = "https://www.example.com/product/([0-9]{6})"
 
 // Return a valid test product JSON response with the correct pid
-NSURLSession.mockEvery(request) { (matches:[String]) in
+NSURLSession.mockEvery(expression) { (matches:[String]) in
     let pid = matches.first!
-    return "{ 'productId':'\(pid)', 'description':'This is a test product' }".datawithEncoding(UTF8StringEncoding)!
+    let body = "{ 'productId':'\(pid)', 'description':'This is a test product' }".datawithEncoding(UTF8StringEncoding)!
+    return .Success(statusCode: 200, headers: [:], body: body)
 }
 ```
+
+If you want to mock errors (internal ios error, not server errors; they are just responses with statusCode: 500) you can return a .Failure instead
+
+```objc
+let expression = "https://www.example.com/some_url.json"
+
+// Return a valid test product JSON response with the correct pid
+NSURLSession.mockEvery(expression) { (matches:[String]) in
+    let error = NSError(domain: "TestNetworkingLayerError", code: 0, userInfo: [NSLocalisedDescriptionKey: "Could not open session blah blah something"])
+    return .Failure(error)
+}
+```
+
 
 To remove all the mocks (or just some of them) you can do
 
