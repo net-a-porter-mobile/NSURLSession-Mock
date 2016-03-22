@@ -36,17 +36,19 @@ struct SimpleRequestMatcher : RequestMatcher {
         let path = request.URL?.absoluteString ?? ""
         let range = NSMakeRange(0, path.utf16.count)
         let matches = self.pathMatcher.matchesInString(path, options: [], range: range)
-        guard let match = matches.first where matches.count == 1 else { return .NoMatch }
+        guard matches.count > 0 else { return .NoMatch }
 
         // If there were any matches, extract them here (match at index 0 is the
         // whole string - skip that one)
         var extractions = [String]()
-        for n in 1 ..< match.numberOfRanges {
-            let range = match.rangeAtIndex(n)
-            let extraction = (path as NSString).substringWithRange(range)
-            extractions.append(extraction)
+        for match in matches {
+            for n in 1 ..< match.numberOfRanges {
+                let range = match.rangeAtIndex(n)
+                let extraction = (path as NSString).substringWithRange(range)
+                extractions.append(extraction)
+            }
         }
-        
+
         return .Matches(extractions: extractions)
     }
     
