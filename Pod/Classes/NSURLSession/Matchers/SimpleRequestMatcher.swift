@@ -41,12 +41,10 @@ struct SimpleRequestMatcher : RequestMatcher {
         // If there were any matches, extract them here (match at index 0 is the
         // whole string - skip that one)
         var extractions = [String]()
-        if match.numberOfRanges > 1 {
-            for n in 1 ..< match.numberOfRanges {
-                let range = match.rangeAtIndex(n)
-                let extraction = (path as NSString).substringWithRange(range)
-                extractions.append(extraction)
-            }
+        for n in 1 ..< match.numberOfRanges {
+            let range = match.rangeAtIndex(n)
+            let extraction = (path as NSString).substringWithRange(range)
+            extractions.append(extraction)
         }
         
         return .Matches(extractions: extractions)
