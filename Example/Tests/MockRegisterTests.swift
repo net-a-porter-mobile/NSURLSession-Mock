@@ -16,6 +16,8 @@ class MockRegisterTests: XCTestCase {
         
         let requestString : String
         
+        var canMatchRequests: Bool { return true }
+        
         init(requestString: String) {
             self.requestString = requestString
         }

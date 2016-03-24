@@ -15,6 +15,9 @@ class SuccessSessionMock : SessionMock {
     private let requestMatcher: RequestMatcher
     private let response: MockResponseHandler
     private let delay: Double
+    
+    // This mock will continue to consume forever
+    var canMatchRequests: Bool { return true }
 
     init(matching requestMatcher: RequestMatcher, response: MockResponseHandler, delay: Double) {
         self.requestMatcher = requestMatcher
@@ -85,7 +88,9 @@ class SuccessSessionMock : SessionMock {
 
 class SingleSuccessSessionMock : SuccessSessionMock {
 
-    var canRun = true
+    private var canRun = true
+    
+    override var canMatchRequests: Bool { return canRun }
 
     override func matchesRequest(request: NSURLRequest) -> Bool {
         return canRun && super.matchesRequest(request)

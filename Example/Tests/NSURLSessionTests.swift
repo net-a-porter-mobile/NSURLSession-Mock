@@ -282,5 +282,50 @@ class NSURLSessionTests: XCTestCase {
         }
 
     }
+    
+    func testSession_WithConsumedSingleMock_ShouldBeConsumed() {
+        let path = "http://www.example.com/test_path"
+        let URL = NSURL(string: path)!
+        let request = NSURLRequest(URL: URL)
+        let handle = NSURLSession.mockSingle(request, body: nil)
+        
+        let expectation1 = self.expectationWithDescription("Complete called")
+        
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation1 ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
+        
+        self.waitForExpectationsWithTimeout(1) { error in
+            let hasConsumed = NSURLSession.hasMockConsumed(handle)
+            XCTAssertTrue(hasConsumed, "The handle should have been consumed")
+        }
+    }
+    
+    func testSession_WithNotYetConsumedSingleMock_ShouldNotBeConsumed() {
+        let path = "http://www.example.com/test_path"
+        let URL = NSURL(string: path)!
+        let request = NSURLRequest(URL: URL)
+        let handle = NSURLSession.mockSingle(request, body: nil)
+        
+        let expectation1 = self.expectationWithDescription("Complete called")
+        
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation1 ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        
+        let testPath = "http://www.example.com/path_does_not_match"
+        let testURL = NSURL(string: testPath)!
+        let testRequest = NSURLRequest(URL: testURL)
+        let task = session.dataTaskWithRequest(testRequest)
+        task.resume()
+        
+        self.waitForExpectationsWithTimeout(1) { error in
+            let hasConsumed = NSURLSession.hasMockConsumed(handle)
+            XCTAssertFalse(hasConsumed, "The handle should not have been consumed")
+        }
+    }
 
 }

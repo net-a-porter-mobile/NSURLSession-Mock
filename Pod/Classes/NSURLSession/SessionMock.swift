@@ -24,6 +24,11 @@ protocol SessionMock {
      throw if it's asked to consume a request that it doesn't match
     */
     func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask
+    
+    /**
+    Can this mock accept any more requests?
+    */
+    var canMatchRequests: Bool { get }
 }
 
 enum SessionMockError: ErrorType {
