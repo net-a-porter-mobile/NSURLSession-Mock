@@ -13,7 +13,6 @@ import XCTest
 class MockRegisterTests: XCTestCase {
     
     class TestSessionMock : SessionMock {
-        var runsOnce = false
         let requestString : String
         
         init(requestString: String) {
@@ -28,19 +27,25 @@ class MockRegisterTests: XCTestCase {
             return NSURLSessionDataTask()
         }
     }
-    
-    class TestEphemeralMock : TestSessionMock {
-        override init(requestString: String) {
-            super.init(requestString: requestString)
-            self.runsOnce = true
-        }
-    }
 
-    func testMockRegister_WithTestMock_ShouldReturnTestMockWithCorrectURL() {
+
+    func testMockRegister_WithPermanentTestMock_ShouldReturnTestMockWithCorrectURL() {
         let register = MockRegister()
         let mock = TestSessionMock(requestString: "test")
         
-        register.addMock(mock)
+        register.addPermanentMock(mock)
+        
+        let request = NSURLRequest(URL: NSURL(string: "http://www.example.com/test")!)
+        let returnedMock = register.nextSessionMockForRequest(request)
+        
+        XCTAssertNotNil(returnedMock)
+    }
+    
+    func testMockRegister_WithEphemeralTestMock_ShouldReturnTestMockWithCorrectURL() {
+        let register = MockRegister()
+        let mock = TestSessionMock(requestString: "test")
+        
+        register.addEphemeralMock(mock)
         
         let request = NSURLRequest(URL: NSURL(string: "http://www.example.com/test")!)
         let returnedMock = register.nextSessionMockForRequest(request)
@@ -52,7 +57,8 @@ class MockRegisterTests: XCTestCase {
         let register = MockRegister()
         let mock = TestSessionMock(requestString: "test")
         
-        register.addMock(mock)
+        register.addPermanentMock(mock)
+        register.addEphemeralMock(mock)
         
         register.removeAllMocks()
         let request = NSURLRequest(URL: NSURL(string: "http://www.example.com/test")!)
@@ -65,7 +71,8 @@ class MockRegisterTests: XCTestCase {
         let register = MockRegister()
         let mock = TestSessionMock(requestString: "test")
         
-        register.addMock(mock)
+        register.addPermanentMock(mock)
+        register.addEphemeralMock(mock)
         
         let request = NSURLRequest(URL: NSURL(string: "http://www.example.com")!)
         let returnedMock = register.nextSessionMockForRequest(request)
@@ -73,13 +80,33 @@ class MockRegisterTests: XCTestCase {
         XCTAssertNil(returnedMock)
     }
     
-    func testMockRegister_WithRemovingCertainRequests_ShouldFilterOut() {
+    func testMockRegister_WithPermanentMockRemovingCertainRequests_ShouldFilterOut() {
         let register = MockRegister()
         let mock = TestSessionMock(requestString: "test")
         let permanent = TestSessionMock(requestString: "shouldstillbethere")
         
-        register.addMock(mock)
-        register.addMock(permanent)
+        register.addPermanentMock(mock)
+        register.addPermanentMock(permanent)
+        
+        let request = NSURLRequest(URL: NSURL(string: "http://www.example.com/test")!)
+        let permanentRequest = NSURLRequest(URL: NSURL(string: "http://www.example.com/shouldstillbethere")!)
+        
+        register.removeAllMocks(of: request)
+        
+        let permanentMock = register.nextSessionMockForRequest(permanentRequest)
+        let fleetingMock = register.nextSessionMockForRequest(request)
+        
+        XCTAssertNotNil(permanentMock)
+        XCTAssertNil(fleetingMock)
+    }
+    
+    func testMockRegister_WithEphemeralMockRemovingCertainRequests_ShouldFilterOut() {
+        let register = MockRegister()
+        let mock = TestSessionMock(requestString: "test")
+        let permanent = TestSessionMock(requestString: "shouldstillbethere")
+        
+        register.addEphemeralMock(mock)
+        register.addEphemeralMock(permanent)
         
         let request = NSURLRequest(URL: NSURL(string: "http://www.example.com/test")!)
         let permanentRequest = NSURLRequest(URL: NSURL(string: "http://www.example.com/shouldstillbethere")!)
@@ -114,7 +141,7 @@ class MockRegisterTests: XCTestCase {
         let register = MockRegister()
         let mock = TestEphemeralMock(requestString: "test")
         
-        register.addMock(mock)
+        register.addEphemeralMock(mock)
         
         let request = NSURLRequest(URL: NSURL(string: "http://www.example.com/test")!)
         let notNilMock = register.nextSessionMockForRequest(request)
@@ -126,21 +153,23 @@ class MockRegisterTests: XCTestCase {
     func testMockRegister_WithEphemeralAndPermanentMock_ShouldPrioritizeEphemeralMock() {
         
         let register = MockRegister()
-        let mock = TestEphemeralMock(requestString: "test")
+        let mock = TestSessionMock(requestString: "example.com/test")
         let permanentMock = TestSessionMock(requestString: "test")
         let secondPermanentMock = TestSessionMock(requestString: "test")
         
-        register.addMock(permanentMock)
-        register.addMock(mock)
-        register.addMock(secondPermanentMock)
+        register.addPermanentMock(permanentMock)
+        register.addEphemeralMock(mock)
+        register.addPermanentMock(secondPermanentMock)
         
         let request = NSURLRequest(URL: NSURL(string: "http://www.example.com/test")!)
-        guard let ephemeral = register.nextSessionMockForRequest(request) else {
+        guard let ephemeral = register.nextSessionMockForRequest(request) as? TestSessionMock else {
             XCTFail("Could not get ephemeral mock")
             return
         }
         
-        XCTAssertTrue(ephemeral.runsOnce)
+        
+        XCTAssertNotNil(ephemeral)
+        XCTAssertEqual(ephemeral.requestString, "example.com/test")
     }
 }
 

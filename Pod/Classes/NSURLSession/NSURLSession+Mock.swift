@@ -139,13 +139,15 @@ extension NSURLSession {
     
     // Add a request matcher to the list of mocks
     private class func mockNext(matcher: RequestMatcher, response: MockResponseHandler, delay: Double) {
-        self.register.addMock(SingleSuccessSessionMock(matching: matcher, response: response, delay: delay))
+        let mock = SuccessSessionMock(matching: matcher, response: response, delay: delay)
+        self.register.addEphemeralMock(mock)
         swizzleIfNeeded()
     }
     
     // Add a request matcher to the list of mocks
     private class func mockEvery(matcher: RequestMatcher, response: MockResponseHandler, delay: Double) {
-        self.register.addMock(SuccessSessionMock(matching: matcher, response: response, delay: delay))
+        let mock = SuccessSessionMock(matching: matcher, response: response, delay: delay)
+        self.register.addPermanentMock(mock)
         swizzleIfNeeded()
     }
 }

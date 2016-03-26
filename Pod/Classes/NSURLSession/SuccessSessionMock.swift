@@ -16,8 +16,6 @@ class SuccessSessionMock : SessionMock {
     private let response: MockResponseHandler
     private let delay: Double
     
-    var runsOnce = false
-
     init(matching requestMatcher: RequestMatcher, response: MockResponseHandler, delay: Double) {
         self.requestMatcher = requestMatcher
         self.response = response
@@ -83,12 +81,4 @@ class SuccessSessionMock : SessionMock {
         }
     }
 
-}
-
-class SingleSuccessSessionMock : SuccessSessionMock {
-    
-    override init(matching requestMatcher: RequestMatcher, response: MockResponseHandler, delay: Double) {
-        super.init(matching: requestMatcher, response: response, delay: delay)
-        self.runsOnce = true
-    }
 }

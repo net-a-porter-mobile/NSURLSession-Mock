@@ -18,12 +18,18 @@ class MockRegister {
         self.ephemeralMocks.removeAll()
     }
     
-    func addMock(mock: SessionMock) {
-        if mock.runsOnce {
-            self.ephemeralMocks.append(mock)
-        } else {
-            self.permanentMocks.append(mock)
-        }
+    /**
+     Adds a mock to the resgister that does not get removed after being returned
+    */
+    func addPermanentMock(mock: SessionMock) {
+        self.permanentMocks.append(mock)
+    }
+    
+    /**
+     Adds a mock to to the register that will be removed after being returned once
+    */
+    func addEphemeralMock(mock: SessionMock) {
+        self.ephemeralMocks.append(mock)
     }
     
     /**

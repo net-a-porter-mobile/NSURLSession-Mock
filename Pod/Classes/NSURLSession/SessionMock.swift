@@ -14,11 +14,6 @@ import Foundation
 protocol SessionMock {
     
     /**
-     Session mocks can either be run only once or forever until removed.
-    */
-    var runsOnce: Bool { get }
-    
-    /**
      For a given request, return `true` if this mock matches it (i.e. will return
      a data task from `consumeRequest(request:session:)`.
      */
