@@ -133,7 +133,7 @@ extension NSURLSession {
     
     // Add a request matcher to the list of mocks
     private class func mockNext(matcher: RequestMatcher, delay: Double, response: MockResponseHandler) {
-        let mock = SingleMockEntry(matching: matcher, response: response, delay: delay)
+        let mock = MockEntry(matching: matcher, response: response, delay: delay)
         self.register.addEphemeralMock(mock)
         swizzleIfNeeded()
     }

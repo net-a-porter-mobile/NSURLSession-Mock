@@ -104,25 +104,3 @@ class MockEntry : SessionMock {
         }
     }
 }
-
-class SingleMockEntry : MockEntry {
-
-    var canRun = true
-
-    override func matchesRequest(request: NSURLRequest) -> Bool {
-        return canRun && super.matchesRequest(request)
-    }
-    
-    override func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask {
-        guard self.matchesRequest(request) else { throw SessionMockError.InvalidRequest(request: request) }
-        
-        guard canRun else { throw SessionMockError.HasAlreadyRun }
-        
-        let task = try super.consumeRequest(request, session: session)
-        
-        canRun = false
-        
-        return task
-    }
-    
-}
