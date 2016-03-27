@@ -35,9 +35,9 @@ extension NSURLSession {
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
      */
-    public class func mockSingle(request: NSURLRequest, body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
+    public class func mockNext(request: NSURLRequest, body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
         let matcher = SimpleRequestMatcher(url: request.URL!, method: request.HTTPMethod!)
-        self.mockSingle(matcher, delay: delay) { _ in .Success(statusCode: statusCode, headers: headers, body: body) }
+        self.mockNext(matcher, delay: delay) { _ in .Success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
@@ -64,9 +64,9 @@ extension NSURLSession {
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
      */
-    public class func mockSingle(expression: String, HTTPMethod: String = "GET", body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws {
+    public class func mockNext(expression: String, HTTPMethod: String = "GET", body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
-        self.mockSingle(matcher, delay: delay) { _ in return .Success(statusCode: statusCode, headers: headers, body: body) }
+        self.mockNext(matcher, delay: delay) { _ in return .Success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
@@ -94,9 +94,9 @@ extension NSURLSession {
      - parameter delay: A artificial delay before the session data task starts to return response and data
      - parameter response: Returns data the data to be  returned by the session data task. If this returns `nil` then the didRecieveData callback won't be called.
      */
-    public class func mockSingle(expression: String, HTTPMethod: String = "GET", delay: Double = DefaultDelay, response: MockResponseHandler) throws {
+    public class func mockNext(expression: String, HTTPMethod: String = "GET", delay: Double = DefaultDelay, response: MockResponseHandler) throws {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
-        self.mockSingle(matcher, delay: delay, response: response)
+        self.mockNext(matcher, delay: delay, response: response)
     }
 
     /**
@@ -132,14 +132,16 @@ extension NSURLSession {
     //MARK: Private methods
     
     // Add a request matcher to the list of mocks
-    private class func mockSingle(matcher: RequestMatcher, delay: Double, response: MockResponseHandler) {
-        self.register.addMock(SingleMockEntry(matching: matcher, response: response, delay: delay))
+    private class func mockNext(matcher: RequestMatcher, delay: Double, response: MockResponseHandler) {
+        let mock = SingleMockEntry(matching: matcher, response: response, delay: delay)
+        self.register.addEphemeralMock(mock)
         swizzleIfNeeded()
     }
     
     // Add a request matcher to the list of mocks
     private class func mockEvery(matcher: RequestMatcher, delay: Double, response: MockResponseHandler) {
-        self.register.addMock(MockEntry(matching: matcher, response: response, delay: delay))
+        let mock = MockEntry(matching: matcher, response: response, delay: delay)
+        self.register.addPermanentMock(mock)
         swizzleIfNeeded()
     }
 }

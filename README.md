@@ -12,7 +12,7 @@ This pod is designed to help during functional testing by returning canned respo
 
 ### NSURLSession
 
-To mock a single request use `mockSingle` - this method can be called multiple times and the responses will be returned in the same order they were added in:
+To mock a single request use `mockNext` - this method can be called multiple times and the responses will be returned in the same order they were added in:
 
 ```objc
 let body1 = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
@@ -22,9 +22,10 @@ let URL = NSURL(string: "https://www.example.com/1")!
 let request = NSURLRequest.init(URL: URL)
 
 // Mock calls to that request returning both responses in turn
-NSURLSession.mockSingle(request, body: body1, delay: 1)
-NSURLSession.mockSingle(request, body: body2, delay: 1)
+NSURLSession.mockNext(request, body: body1, delay: 1)
+NSURLSession.mockNext(request, body: body2, delay: 1)
 ```
+
 
 To mock every call to a request, just use `mockEvery` instead:
 
@@ -37,6 +38,8 @@ The parameters `body` and `delay` are optional if you want you code to be a bit 
 ```objc
 NSURLSession.mockEvery(request)
 ```
+
+Ephemeral mocks have priority over permanent mocks. This is to say that, if you were to add permanent and ephemeral mocks for the same request, the ephemeral mocks would be returned and consumed first.
 
 If you want your response to depend on the URL called, you can pass in a function like this:
 

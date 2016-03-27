@@ -4,6 +4,7 @@ Changelog
 + Remove Evaluator struct from NSURLSession
 + Added a block parameter when mocking to use matching components in the URL in the response body
 + Allow block parameter to return networking failures as well as server responses
++ Single mocks now have priority over permanent mocks
 
 ### 0.6.1
 + Tweak to return values of RequestEvaluator to be explicit about intent

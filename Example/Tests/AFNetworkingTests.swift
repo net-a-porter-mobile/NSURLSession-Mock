@@ -25,7 +25,7 @@ class AFNetworkingTests: XCTestCase {
         let body = "{ \"data\": 1 }".dataUsingEncoding(NSUTF8StringEncoding)!
         let request = NSURLRequest.init(URL: URL)
         let headers = [ "Content-Type" : "application/json"]
-        NSURLSession.mockSingle(request, body: body, headers: headers)
+        NSURLSession.mockNext(request, body: body, headers: headers)
 
         let manager = AFHTTPSessionManager()
         
@@ -51,7 +51,7 @@ class AFNetworkingTests: XCTestCase {
         let request = NSMutableURLRequest.init(URL: URL)
         request.HTTPMethod = "POST"
         let headers = [ "Content-Type" : "application/json"]
-        NSURLSession.mockSingle(request, body: body, headers: headers)
+        NSURLSession.mockNext(request, body: body, headers: headers)
         
         let manager = AFHTTPSessionManager()
         
