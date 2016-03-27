@@ -15,7 +15,7 @@ class SuccessSessionMock : SessionMock {
     private let requestMatcher: RequestMatcher
     private let response: MockResponseHandler
     private let delay: Double
-
+    
     init(matching requestMatcher: RequestMatcher, response: MockResponseHandler, delay: Double) {
         self.requestMatcher = requestMatcher
         self.response = response
@@ -79,28 +79,6 @@ class SuccessSessionMock : SessionMock {
 
             return task
         }
-    }
-
-}
-
-class SingleSuccessSessionMock : SuccessSessionMock {
-
-    var canRun = true
-
-    override func matchesRequest(request: NSURLRequest) -> Bool {
-        return canRun && super.matchesRequest(request)
-    }
-
-    override func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask {
-        guard self.matchesRequest(request) else { throw SessionMockError.InvalidRequest(request: request) }
-
-        guard canRun else { throw SessionMockError.HasAlreadyRun }
-
-        let task = try super.consumeRequest(request, session: session)
-
-        canRun = false
-
-        return task
     }
 
 }
