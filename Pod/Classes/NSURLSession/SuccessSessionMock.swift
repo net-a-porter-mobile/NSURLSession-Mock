@@ -10,15 +10,12 @@ import Foundation
 
 private let mult = Double(NSEC_PER_SEC)
 
-class SuccessSessionMock : SessionMock {
+class SuccessSessionMock : SessionMock, Equatable {
 
     private let requestMatcher: RequestMatcher
     private let response: MockResponseHandler
     private let delay: Double
     
-    // This mock will continue to consume forever
-    var canMatchRequests: Bool { return true }
-
     init(matching requestMatcher: RequestMatcher, response: MockResponseHandler, delay: Double) {
         self.requestMatcher = requestMatcher
         self.response = response
@@ -86,26 +83,6 @@ class SuccessSessionMock : SessionMock {
 
 }
 
-class SingleSuccessSessionMock : SuccessSessionMock {
-
-    private var canRun = true
-    
-    override var canMatchRequests: Bool { return canRun }
-
-    override func matchesRequest(request: NSURLRequest) -> Bool {
-        return canRun && super.matchesRequest(request)
-    }
-
-    override func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask {
-        guard self.matchesRequest(request) else { throw SessionMockError.InvalidRequest(request: request) }
-
-        guard canRun else { throw SessionMockError.HasAlreadyRun }
-
-        let task = try super.consumeRequest(request, session: session)
-
-        canRun = false
-
-        return task
-    }
-
+func ==(lhs: SuccessSessionMock, rhs: SuccessSessionMock) -> Bool {
+    return lhs === rhs
 }

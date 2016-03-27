@@ -65,11 +65,11 @@ class NSURLSessionTests: XCTestCase {
         let URL = NSURL(string: "https://www.example.com/1")!
         let body1 = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
         let request1 = NSURLRequest.init(URL: URL)
-        NSURLSession.mockSingle(request1, body: body1)
+        NSURLSession.mockNext(request1, body: body1)
         
         let body2 = "Test response 2".dataUsingEncoding(NSUTF8StringEncoding)!
         let request2 = NSURLRequest.init(URL: URL)
-        NSURLSession.mockSingle(request2, body: body2)
+        NSURLSession.mockNext(request2, body: body2)
         
         // Create a session
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -172,7 +172,7 @@ class NSURLSessionTests: XCTestCase {
         let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
         let request = NSURLRequest.init(URL: URL)
         let headers = ["Content-Type" : "application/test", "Custom-Header" : "Is custom"]
-        NSURLSession.mockSingle(request, body: body, headers: headers, statusCode: 200)
+        NSURLSession.mockNext(request, body: body, headers: headers, statusCode: 200)
         
         // Create a session
         let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -280,14 +280,13 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], "123456".dataUsingEncoding(NSUTF8StringEncoding))
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], "654321".dataUsingEncoding(NSUTF8StringEncoding))
         }
-
     }
     
     func testSession_WithConsumedSingleMock_ShouldBeConsumed() {
         let path = "http://www.example.com/test_path"
         let URL = NSURL(string: path)!
         let request = NSURLRequest(URL: URL)
-        let handle = NSURLSession.mockSingle(request, body: nil)
+        let handle = NSURLSession.mockNext(request, body: nil)
         
         let expectation1 = self.expectationWithDescription("Complete called")
         
@@ -309,13 +308,13 @@ class NSURLSessionTests: XCTestCase {
         let path = "http://www.example.com/test_path"
         let URL = NSURL(string: path)!
         let request = NSURLRequest(URL: URL)
-        let handle = NSURLSession.mockSingle(request, body: nil)
+        let handle = NSURLSession.mockNext(request, body: nil)
         
         // Mock this url as well so that we don't rely on network traffic to pass the test :)
         let path2 = "http://www.example.com/path_does_not_match"
         let URL2 = NSURL(string: path2)!
         let request2 = NSURLRequest(URL: URL2)
-        NSURLSession.mockSingle(request2, body: nil)
+        NSURLSession.mockNext(request2, body: nil)
         
         // Sanity - make sure that we aren't going out to the network
         let originalEvaluator = NSURLSession.requestEvaluator
