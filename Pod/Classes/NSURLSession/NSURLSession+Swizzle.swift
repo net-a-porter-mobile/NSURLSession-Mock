@@ -19,7 +19,11 @@ extension NSURLSession {
     /**
      Set this to output all requests which were mocked to the console
      */
-    public static var debugMockRequests: RequestDebugLevel = .None
+    public static var debugMockRequests: RequestDebugLevel = .None {
+        didSet {
+            self.swizzleIfNeeded()
+        }
+    }
     
     private static let defaultEvaluator: RequestEvaluator = { _ in return .PassThrough }
     
@@ -55,8 +59,11 @@ extension NSURLSession {
         // If any of our mocks match this request, just do that instead
         if let task = taskForRequest(request) {
             
-            if NSURLSession.debugMockRequests != .None {
+            switch (NSURLSession.debugMockRequests) {
+            case .All, .Mocked:
                 Log("request: \(request.debugMockDescription) mocked")
+            default:
+                break
             }
             
             return task
@@ -70,8 +77,11 @@ extension NSURLSession {
             return self.swizzledDataTaskWithRequest(request)
         }
         
-        if NSURLSession.debugMockRequests == .All {
+        switch (NSURLSession.debugMockRequests) {
+        case .All, .Unmocked:
             Log("request: \(request.debugMockDescription) not mocked")
+        default:
+            break
         }
         
         // Otherwise, let NSURLSession deal with it

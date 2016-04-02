@@ -61,4 +61,8 @@ class MockSessionDataTask : NSURLSessionDataTask {
         get { return _response }
         set { _response = newValue }
     }
+    
+    override func cancel() {
+        self._state = .Canceling
+    }
 }

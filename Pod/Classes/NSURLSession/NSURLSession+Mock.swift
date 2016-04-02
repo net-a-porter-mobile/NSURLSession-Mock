@@ -19,6 +19,7 @@ import Foundation
 public enum RequestDebugLevel: Int {
     case None
     case Mocked
+    case Unmocked
     case All
 }
 
