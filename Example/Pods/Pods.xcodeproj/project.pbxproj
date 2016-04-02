@@ -43,7 +43,7 @@
 		7999F436677B92F6DDA1C3D45B67762F /* UIProgressView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 662F2B693F4836F935DF7B3734AABDE6 /* UIProgressView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		79D287D48B2A81896F365CA21F0B27D6 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = F710B9B751F58727F33992641D5ADAD7 /* UIWebView+AFNetworking.m */; };
 		80973D48266C1892D534113D6DD7A23D /* NSURLSession-Mock-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F086D67229F70B1BB5B78544E0F77ED /* NSURLSession-Mock-dummy.m */; };
-		86982039DBDED1E2DA9231201D810CB2 /* SuccessSessionMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A706E3DE325576B704A14F5150E9D46 /* SuccessSessionMock.swift */; settings = {COMPILER_FLAGS = "-Wall -Werror -Wextra"; }; };
+		86982039DBDED1E2DA9231201D810CB2 /* MockEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A706E3DE325576B704A14F5150E9D46 /* MockEntry.swift */; settings = {COMPILER_FLAGS = "-Wall -Werror -Wextra"; }; };
 		945C9834347A969CDD4FB9A5AB9FF0E0 /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D2A9F5CEBB28B52D2BC77AB22F4B37D4 /* AFURLSessionManager.m */; };
 		96247D22CC837A06A450BB49F1D2F79E /* AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 457AC41409DB67741790BD03BFA7D354 /* AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C6E0E56B52CA1D3B3A0B703770CAE28 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F2B5E013FD1D42752E768761E043FC /* CoreGraphics.framework */; };
@@ -139,7 +139,7 @@
 		67E7D6563A537614F07218B6756E64FE /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+AFNetworking.h"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
 		69031405F392DABAC15A65384A25D9F0 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69FDCA45562D02A8AB196E1718874625 /* UIProgressView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIProgressView+AFNetworking.m"; path = "UIKit+AFNetworking/UIProgressView+AFNetworking.m"; sourceTree = "<group>"; };
-		6A706E3DE325576B704A14F5150E9D46 /* SuccessSessionMock.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SuccessSessionMock.swift; sourceTree = "<group>"; };
+		6A706E3DE325576B704A14F5150E9D46 /* MockEntry.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockEntry.swift; sourceTree = "<group>"; };
 		6F1207E5E5C5430F46DBB4AD9FDCBBDE /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		73893480955183D438963D999AEBE8EF /* Pods_NSURLSession_Mock_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NSURLSession_Mock_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7932DD1281E11226F73102F16F8AE174 /* Swizzle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Swizzle.swift; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 				41076803E942F8BA6AFD1FBFD5EB3DF3 /* NSURLSession+Mock.swift */,
 				9A36E3320D3673305417B285C8AFEE3E /* NSURLSession+Swizzle.swift */,
 				A82526EB5135A48F81B14FE275C09CED /* SessionMock.swift */,
-				6A706E3DE325576B704A14F5150E9D46 /* SuccessSessionMock.swift */,
+				6A706E3DE325576B704A14F5150E9D46 /* MockEntry.swift */,
 				065E4A83080074B823DA3478CFCCF5B0 /* Matchers */,
 			);
 			path = NSURLSession;
@@ -696,7 +696,7 @@
 				3AA38848468736E5A6CBBED668A3B1F6 /* RequestMatcher.swift in Sources */,
 				DB9186903F507EEE8546D1FEFA75707B /* SessionMock.swift in Sources */,
 				E1A0B634425D62FF98BFEB70CE259591 /* SimpleRequestMatcher.swift in Sources */,
-				86982039DBDED1E2DA9231201D810CB2 /* SuccessSessionMock.swift in Sources */,
+				86982039DBDED1E2DA9231201D810CB2 /* MockEntry.swift in Sources */,
 				0D2088D24ABB1D87F8123DF12A98AC1E /* Swizzle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

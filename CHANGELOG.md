@@ -5,6 +5,7 @@ Changelog
 ## 0.7
 + Remove Evaluator struct from NSURLSession
 + Added a block parameter when mocking to use matching components in the URL in the response body
++ Allow block parameter to return networking failures as well as server responses
 + Single mocks now have priority over permanent mocks
 
 ### 0.6.1
@@ -27,7 +28,6 @@ Changelog
 
 ## 0.2.1
 + Fix for logging in NSURLSession when mocking my URL instead of request
-
 
 ## 0.2
 + Added log level to NSURLSession
