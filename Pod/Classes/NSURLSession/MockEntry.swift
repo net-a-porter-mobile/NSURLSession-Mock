@@ -1,5 +1,5 @@
 //
-//  SuccessSessionMock.swift
+//  MockEntry.swift
 //  Pods
 //
 //  Created by Sam Dean on 19/01/2016.
