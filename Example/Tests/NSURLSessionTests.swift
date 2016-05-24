@@ -286,6 +286,65 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], "654321".dataUsingEncoding(NSUTF8StringEncoding))
         }
     }
+    
+    func testSession_WithConsumedSingleMock_ShouldBeConsumed() {
+        let path = "http://www.example.com/test_path"
+        let URL = NSURL(string: path)!
+        let request = NSURLRequest(URL: URL)
+        let handle = NSURLSession.mockNext(request, body: nil)
+        
+        let expectation1 = self.expectationWithDescription("Complete called")
+        
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation1 ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
+        
+        self.waitForExpectationsWithTimeout(1) { error in
+            let hasConsumed = NSURLSession.hasMockConsumed(handle)
+            XCTAssertTrue(hasConsumed, "The handle should have been consumed")
+        }
+    }
+    
+    func testSession_WithNotYetConsumedSingleMock_ShouldNotBeConsumed() {
+        // This handle should never be consumed - we're not going to be calling this URL
+        let path = "http://www.example.com/test_path"
+        let URL = NSURL(string: path)!
+        let request = NSURLRequest(URL: URL)
+        let handle = NSURLSession.mockNext(request, body: nil)
+        
+        // Mock this url as well so that we don't rely on network traffic to pass the test :)
+        let path2 = "http://www.example.com/path_does_not_match"
+        let URL2 = NSURL(string: path2)!
+        let request2 = NSURLRequest(URL: URL2)
+        NSURLSession.mockNext(request2, body: nil)
+        
+        // Sanity - make sure that we aren't going out to the network
+        let originalEvaluator = NSURLSession.requestEvaluator
+        NSURLSession.requestEvaluator = { _ in return .Reject }
+        
+        let expectation1 = self.expectationWithDescription("Complete called")
+        
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation1 ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        
+        let testPath = "http://www.example.com/path_does_not_match"
+        let testURL = NSURL(string: testPath)!
+        let testRequest = NSURLRequest(URL: testURL)
+        let task = session.dataTaskWithRequest(testRequest)
+        task.resume()
+        
+        self.waitForExpectationsWithTimeout(1) { error in
+            let hasConsumed = NSURLSession.hasMockConsumed(handle)
+            XCTAssertFalse(hasConsumed, "The handle should not have been consumed")
+        }
+        
+        // Reset the evaluator so we aren't screwing with any other tests
+        NSURLSession.requestEvaluator = originalEvaluator
+    }
 
     func testSession_WithFailureBlock_ShouldReturnError() {
         // Create an expression which will match the product id - if it's 123456 return some data, 
@@ -358,4 +417,5 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body2)
         }
     }
+
 }

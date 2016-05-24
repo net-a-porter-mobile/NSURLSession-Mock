@@ -8,6 +8,7 @@ Changelog
 ## 0.7
 + Remove Evaluator struct from NSURLSession
 + Added a block parameter when mocking to use matching components in the URL in the response body
++ Add ability to evaluate whether a mock response has been sent or not
 + Single mocks now have priority over permanent mocks
 
 ### 0.6.1

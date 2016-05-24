@@ -8,10 +8,10 @@
 
 import Foundation
 
-class MockRegister {
+class MockRegister<T: SessionMock> {
     
-    private var permanentMocks: [SessionMock] = []
-    private var ephemeralMocks: [SessionMock] = []
+    private var permanentMocks: [T] = []
+    private var ephemeralMocks: [T] = []
     
     func removeAllMocks() {
         self.permanentMocks.removeAll()
@@ -21,14 +21,14 @@ class MockRegister {
     /**
      Adds a mock to the resgister that does not get removed after being returned
     */
-    func addPermanentMock(mock: SessionMock) {
+    func addPermanentMock(mock: T) {
         self.permanentMocks.append(mock)
     }
     
     /**
      Adds a mock to to the register that will be removed after being returned once
     */
-    func addEphemeralMock(mock: SessionMock) {
+    func addEphemeralMock(mock: T) {
         self.ephemeralMocks.append(mock)
     }
     
@@ -68,4 +68,15 @@ class MockRegister {
         
         return nil
     }
+}
+
+extension MockRegister where T: Equatable {
+
+    /**
+     Returns true if this register contains `mock` as an ephemeral mock
+     */
+    func containsEphemeralMock(mock: T) -> Bool {
+        return self.ephemeralMocks.contains(mock)
+    }
+
 }

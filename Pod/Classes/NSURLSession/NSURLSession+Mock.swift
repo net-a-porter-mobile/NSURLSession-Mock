@@ -23,9 +23,17 @@ public enum RequestDebugLevel: Int {
     case All
 }
 
+/**
+ An opaque reference to a request for mocking - this can be passed back in to determine the state of a mock
+*/
+public struct Handle {
+    private let sessionMock: MockEntry
+}
+
+
 extension NSURLSession {
     
-    internal static let register = MockRegister()
+    internal static let register = MockRegister<MockEntry>()
     
     /**
      The next call exactly matching `request` will successfully return `body`
@@ -36,9 +44,9 @@ extension NSURLSession {
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
      */
-    public class func mockNext(request: NSURLRequest, body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
+    public class func mockNext(request: NSURLRequest, body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) -> Handle {
         let matcher = SimpleRequestMatcher(url: request.URL!, method: request.HTTPMethod!)
-        self.mockNext(matcher, delay: delay) { _ in .Success(statusCode: statusCode, headers: headers, body: body) }
+        return self.mockNext(matcher, delay: delay) { _ in .Success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
@@ -65,9 +73,9 @@ extension NSURLSession {
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
      */
-    public class func mockNext(expression: String, HTTPMethod: String = "GET", body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws {
+    public class func mockNext(expression: String, HTTPMethod: String = "GET", body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws -> Handle {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
-        self.mockNext(matcher, delay: delay) { _ in return .Success(statusCode: statusCode, headers: headers, body: body) }
+        return self.mockNext(matcher, delay: delay) { _ in return .Success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
@@ -93,11 +101,11 @@ extension NSURLSession {
      - parameter headers: The headers returned by the session data task
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
-     - parameter response: Returns data the data to be  returned by the session data task. If this returns `nil` then the didRecieveData callback won't be called.
+     - parameter response: Returns data the data to be returned by the session data task. If this returns `nil` then the didRecieveData callback won't be called.
      */
-    public class func mockNext(expression: String, HTTPMethod: String = "GET", delay: Double = DefaultDelay, response: MockResponseHandler) throws {
+    public class func mockNext(expression: String, HTTPMethod: String = "GET", delay: Double = DefaultDelay, response: MockResponseHandler) throws -> Handle {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
-        self.mockNext(matcher, delay: delay, response: response)
+        return self.mockNext(matcher, delay: delay, response: response)
     }
 
     /**
@@ -129,14 +137,24 @@ extension NSURLSession {
     public class func removeAllMocks(of request: NSURLRequest) {
         self.register.removeAllMocks(of: request)
     }
+    
+    /**
+     For a given handle, has it been consumed or not?
+     
+     - paramater handle: The returned handle from a call to mock a request i.e. mockSingle(...)
+     */
+    public class func hasMockConsumed(handle: Handle) -> Bool {
+        return !register.containsEphemeralMock(handle.sessionMock)
+    }
 
     //MARK: Private methods
     
     // Add a request matcher to the list of mocks
-    private class func mockNext(matcher: RequestMatcher, delay: Double, response: MockResponseHandler) {
-        let mock = MockEntry(matching: matcher, response: response, delay: delay)
-        self.register.addEphemeralMock(mock)
+    private class func mockNext(matcher: RequestMatcher, delay: Double, response: MockResponseHandler) -> Handle {
+        let handle = Handle(sessionMock: MockEntry(matching: matcher, response: response, delay: delay))
+        self.register.addEphemeralMock(handle.sessionMock)
         swizzleIfNeeded()
+        return handle
     }
     
     // Add a request matcher to the list of mocks
@@ -145,4 +163,5 @@ extension NSURLSession {
         self.register.addPermanentMock(mock)
         swizzleIfNeeded()
     }
+
 }

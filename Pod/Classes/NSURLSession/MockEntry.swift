@@ -1,5 +1,5 @@
 //
-//  SuccessSessionMock.swift
+//  MockEntry.swift
 //  Pods
 //
 //  Created by Sam Dean on 19/01/2016.
@@ -10,7 +10,7 @@ import Foundation
 
 private let mult = Double(NSEC_PER_SEC)
 
-class MockEntry : SessionMock {
+class MockEntry : SessionMock, Equatable {
     
     private let requestMatcher: RequestMatcher
     private let response: MockResponseHandler
@@ -103,4 +103,8 @@ class MockEntry : SessionMock {
             }
         }
     }
+}
+
+func ==(lhs: MockEntry, rhs: MockEntry) -> Bool {
+    return lhs === rhs
 }
