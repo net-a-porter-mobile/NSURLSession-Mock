@@ -1,6 +1,11 @@
 Changelog
 
 ### unreleased
+
+## 0.8
++ Allow block parameter to return networking failures as well as server responses
+
+## 0.7
 + Remove Evaluator struct from NSURLSession
 + Added a block parameter when mocking to use matching components in the URL in the response body
 + Add ability to evaluate whether a mock response has been sent or not
@@ -26,7 +31,6 @@ Changelog
 
 ## 0.2.1
 + Fix for logging in NSURLSession when mocking my URL instead of request
-
 
 ## 0.2
 + Added log level to NSURLSession

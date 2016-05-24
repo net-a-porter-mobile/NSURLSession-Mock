@@ -13,7 +13,7 @@ private var globalTaskIdentifier: Int = 100000 // Some number bigger than the se
 /**
 Internal implementation of `NSURLSessionDataTask` with read-write properties.
 
-And, curiously, added the properties that `NSURLSessionDataTask` says it has but doesn't actuall have. Not sure what's going on there.
+And, curiously, added the properties that `NSURLSessionDataTask` says it has but doesn't actually have. Not sure what's going on there.
 */
 class MockSessionDataTask : NSURLSessionDataTask {
     
@@ -60,5 +60,9 @@ class MockSessionDataTask : NSURLSessionDataTask {
     override var response: NSURLResponse? {
         get { return _response }
         set { _response = newValue }
+    }
+    
+    override func cancel() {
+        self._state = .Canceling
     }
 }

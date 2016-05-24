@@ -13,8 +13,9 @@ import NSURLSession_Mock
 private class SessionTestDelegate: NSObject, NSURLSessionDataDelegate {
     var expectations: [XCTestExpectation]
     
-    var dataKeyedByTaskIdentifier : [Int : NSMutableData] = [:]
-    var responseKeyedByTaskIdentifier : [Int : NSURLResponse] = [:]
+    var dataKeyedByTaskIdentifier: [Int: NSMutableData] = [:]
+    var responseKeyedByTaskIdentifier: [Int: NSURLResponse] = [:]
+    var errorKeyedByTaskIdentifier: [Int: NSError] = [:]
     
     init(expectations: [XCTestExpectation]) {
         self.expectations = expectations
@@ -36,6 +37,10 @@ private class SessionTestDelegate: NSObject, NSURLSessionDataDelegate {
     }
     
     @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+        if let error = error {
+            self.errorKeyedByTaskIdentifier[task.taskIdentifier] = error
+        }
+
         let expectation = expectations.first!
         expectation.fulfill()
         expectations.removeFirst()
@@ -252,8 +257,8 @@ class NSURLSessionTests: XCTestCase {
     func testSession_WithBlock_ShouldReturnModifiedData() {
         // Create an expression which will match the product id
         let expression = "http://www.example.com/product/([0-9]{6})"
-        try! NSURLSession.mockEvery(expression) { (matches: [String]) in
-            return matches.first!.dataUsingEncoding(NSUTF8StringEncoding)!
+        try! NSURLSession.mockEvery(expression) { (url: NSURL, matches: [String]) in
+            return .Success(statusCode: 200, headers: [:], body: matches.first!.dataUsingEncoding(NSUTF8StringEncoding)!)
         }
 
         // We are going to make two requests, with two different product ids.
@@ -339,6 +344,78 @@ class NSURLSessionTests: XCTestCase {
         
         // Reset the evaluator so we aren't screwing with any other tests
         NSURLSession.requestEvaluator = originalEvaluator
+    }
+
+    func testSession_WithFailureBlock_ShouldReturnError() {
+        // Create an expression which will match the product id - if it's 123456 return some data, 
+        // if it isn't, return a networking error.
+        let expression = "http://www.example.com/product/([0-9]{6})"
+        try! NSURLSession.mockEvery(expression) { (url: NSURL, matches: [String]) in
+            let productID = matches.first!
+
+            if (productID == "123456") {
+                return .Success(statusCode: 200, headers: [:], body: matches.first!.dataUsingEncoding(NSUTF8StringEncoding)!)
+            } else {
+                let error = NSError(domain: "TestErrorDomain", code: 0, userInfo: [ NSLocalizedDescriptionKey: "Request invalid" ])
+                return .Failure(error: error)
+            }
+        }
+
+        // We are going to make two requests, with two different product ids.
+        // One should return data, the other should fail with an error
+        let expectation1 = self.expectationWithDescription("Complete called for request 123456")
+        let expectation2 = self.expectationWithDescription("Complete called for request 654321")
+
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+
+        // Perform two tasks
+        let request1 = NSURLRequest(URL: NSURL(string: "http://www.example.com/product/123456")!)
+        let task1 = session.dataTaskWithRequest(request1)
+        task1.resume()
+
+        let request2 = NSURLRequest(URL: NSURL(string: "http://www.example.com/product/654321")!)
+        let task2 = session.dataTaskWithRequest(request2)
+        task2.resume()
+
+        self.waitForExpectationsWithTimeout(1) { timeoutError in
+            // Make sure it was the mock and not a valid response!
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], "123456".dataUsingEncoding(NSUTF8StringEncoding))
+            XCTAssertNil(delegate.errorKeyedByTaskIdentifier[task1.taskIdentifier])
+            XCTAssertNotNil(delegate.errorKeyedByTaskIdentifier[task2.taskIdentifier])
+        }
+    }
+
+    func testSession_WithClearMocks_ShouldClearExistingMocks() {
+        let path = "www.example.com/test.json"
+        let URL = NSURL(string: path)!
+        let request = NSURLRequest(URL: URL)
+
+        // Mock every request to a path
+        let body1 = "{'mocked':1}".dataUsingEncoding(NSUTF8StringEncoding)
+        NSURLSession.mockEvery(request, body: body1)
+
+        // Clear all the mocks
+        NSURLSession.removeAllMocks()
+
+        // Mock the same request, with a different response
+        let body2 = "{'mocked':2}".dataUsingEncoding(NSUTF8StringEncoding)
+        NSURLSession.mockEvery(request, body: body2)
+
+        // Create a session
+        let expectation = self.expectationWithDescription("Request complete")
+        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let delegate = SessionTestDelegate(expectations: [expectation])
+        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+
+        // Perform task
+        let task = session.dataTaskWithRequest(request)
+        task.resume()
+
+        self.waitForExpectationsWithTimeout(1) { timeoutError in
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body2)
+        }
     }
 
 }

@@ -19,6 +19,7 @@ import Foundation
 public enum RequestDebugLevel: Int {
     case None
     case Mocked
+    case Unmocked
     case All
 }
 
@@ -26,18 +27,13 @@ public enum RequestDebugLevel: Int {
  An opaque reference to a request for mocking - this can be passed back in to determine the state of a mock
 */
 public struct Handle {
-    private let sessionMock: SuccessSessionMock
+    private let sessionMock: MockEntry
 }
 
-/**
- Mocks which are interested in sections of the URL to create the response body
- should pass in functions matching this signature to `mockSingle` or `mockEvery`
-*/
-public typealias BodyFunction = [String] -> NSData
 
 extension NSURLSession {
     
-    internal static let register = MockRegister<SuccessSessionMock>()
+    internal static let register = MockRegister<MockEntry>()
     
     /**
      The next call exactly matching `request` will successfully return `body`
@@ -50,9 +46,9 @@ extension NSURLSession {
      */
     public class func mockNext(request: NSURLRequest, body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) -> Handle {
         let matcher = SimpleRequestMatcher(url: request.URL!, method: request.HTTPMethod!)
-        return self.mockNext(matcher, response: { _ in MockResponse(body: body, statusCode: statusCode, headers: headers) }, delay: delay)
+        return self.mockNext(matcher, delay: delay) { _ in .Success(statusCode: statusCode, headers: headers, body: body) }
     }
-    
+
     /**
      All calls exactly matching `request` will successfully return `body`
      
@@ -64,7 +60,7 @@ extension NSURLSession {
      */
     public class func mockEvery(request: NSURLRequest, body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
         let matcher = SimpleRequestMatcher(url: request.URL!, method: request.HTTPMethod!)
-        self.mockEvery(matcher, response: { _ in return MockResponse(body: body, statusCode: statusCode, headers: headers) }, delay: delay)
+        self.mockEvery(matcher, delay:delay) { _ in return .Success(statusCode: statusCode, headers: headers, body: body) }
     }
     
     /**
@@ -79,7 +75,7 @@ extension NSURLSession {
      */
     public class func mockNext(expression: String, HTTPMethod: String = "GET", body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws -> Handle {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
-        return self.mockNext(matcher, response: { _ in return MockResponse(body: body, statusCode: statusCode, headers: headers) }, delay: delay)
+        return self.mockNext(matcher, delay: delay) { _ in return .Success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
@@ -94,39 +90,39 @@ extension NSURLSession {
      */
     public class func mockEvery(expression: String, HTTPMethod: String = "GET", body: NSData?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
-        self.mockEvery(matcher, response: { _ in return MockResponse(body: body, statusCode: statusCode, headers: headers) }, delay: delay)
+        self.mockEvery(matcher, delay: delay) { _ in return .Success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
-     The next request matching `expression` will successfully return the result of `body`, a method where the matches sections of the url as passed in as parameters.
+     The next request matching `expression` will successfully return the result of `response`, a method where the matched sections of the url are passed in as parameters.
 
      - parameter expression: The regular expression to compare incoming requests against
      - parameter HTTPMethod: The method to match against
      - parameter headers: The headers returned by the session data task
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
-     - parameter body: Returns data the data to be  returned by the session data task. If this returns `nil` then the didRecieveData callback won't be called.
+     - parameter response: Returns data the data to be returned by the session data task. If this returns `nil` then the didRecieveData callback won't be called.
      */
-    public class func mockNext(expression: String, HTTPMethod: String = "GET", headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay, body: BodyFunction) throws -> Handle {
+    public class func mockNext(expression: String, HTTPMethod: String = "GET", delay: Double = DefaultDelay, response: MockResponseHandler) throws -> Handle {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
-        return self.mockNext(matcher, response: { (url: NSURL, extractions: [String]) in return MockResponse(body: body(extractions), statusCode: statusCode, headers: headers) }, delay: delay)
+        return self.mockNext(matcher, delay: delay, response: response)
     }
 
     /**
-     All subsequent requests matching `expression` will successfully return the result of `body`, a method where the matches sections of the url as passed in as parameters.
+     All subsequent requests matching `expression` will successfully return the result of `response`, a method where the matched sections of the url are passed in as parameters.
 
      - parameter expression: The regular expression to compare incoming requests against
      - parameter HTTPMethod: The method to match against
      - parameter headers: The headers returned by the session data task
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
-     - parameter body: Returns data the data to be  returned by the session data task. If this returns `nil` then the didRecieveData callback won't be called.
+     - parameter response: Returns data the data to be  returned by the session data task. If this returns `nil` then the didRecieveData callback won't be called.
      */
-    public class func mockEvery(expression: String, HTTPMethod: String = "GET", headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay, body: BodyFunction) throws {
+    public class func mockEvery(expression: String, HTTPMethod: String = "GET", delay: Double = DefaultDelay, response: MockResponseHandler) throws {
         let matcher = try SimpleRequestMatcher(expression: expression, method: HTTPMethod)
-        self.mockEvery(matcher, response: { (url: NSURL, extractions: [String]) in return MockResponse(body: body(extractions), statusCode: statusCode, headers: headers) }, delay: delay)
+        self.mockEvery(matcher, delay: delay, response: response)
     }
-    
+
     /**
      Remove all mocks - NSURLSession will behave as if it had never been touched
      */
@@ -154,16 +150,16 @@ extension NSURLSession {
     //MARK: Private methods
     
     // Add a request matcher to the list of mocks
-    private class func mockNext(matcher: RequestMatcher, response: MockResponseHandler, delay: Double) -> Handle {
-        let handle = Handle(sessionMock: SuccessSessionMock(matching: matcher, response: response, delay: delay))
+    private class func mockNext(matcher: RequestMatcher, delay: Double, response: MockResponseHandler) -> Handle {
+        let handle = Handle(sessionMock: MockEntry(matching: matcher, response: response, delay: delay))
         self.register.addEphemeralMock(handle.sessionMock)
         swizzleIfNeeded()
         return handle
     }
     
     // Add a request matcher to the list of mocks
-    private class func mockEvery(matcher: RequestMatcher, response: MockResponseHandler, delay: Double) {
-        let mock = SuccessSessionMock(matching: matcher, response: response, delay: delay)
+    private class func mockEvery(matcher: RequestMatcher, delay: Double, response: MockResponseHandler) {
+        let mock = MockEntry(matching: matcher, response: response, delay: delay)
         self.register.addPermanentMock(mock)
         swizzleIfNeeded()
     }
