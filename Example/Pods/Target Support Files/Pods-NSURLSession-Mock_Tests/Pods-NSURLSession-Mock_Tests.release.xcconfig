@@ -1,8 +1,8 @@
-EMBEDDED_CONTENT_CONTAINS_SWIFT = YES
+FRAMEWORK_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/AFNetworking" "$PODS_CONFIGURATION_BUILD_DIR/NSURLSession-Mock"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_CFLAGS = $(inherited) -iquote "$CONFIGURATION_BUILD_DIR/AFNetworking.framework/Headers" -iquote "$CONFIGURATION_BUILD_DIR/NSURLSession_Mock.framework/Headers"
-OTHER_LDFLAGS = $(inherited) -framework "AFNetworking" -framework "NSURLSession_Mock"
-OTHER_SWIFT_FLAGS = $(inherited) "-D" "COCOAPODS"
-PODS_FRAMEWORK_BUILD_PATH = $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/Pods-NSURLSession-Mock_Tests
+OTHER_CFLAGS = $(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/AFNetworking/AFNetworking.framework/Headers" $(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/NSURLSession-Mock/NSURLSession_Mock.framework/Headers"
+OTHER_LDFLAGS = $(inherited) -framework "AFNetworking"
+PODS_BUILD_DIR = $BUILD_DIR
+PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_ROOT = ${SRCROOT}/Pods
