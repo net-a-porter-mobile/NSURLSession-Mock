@@ -2,6 +2,10 @@ Changelog
 
 ### unreleased
 
+### 0.9
++ Move to cocoapods 1.0 format (thanks @csknns)
++ Return a handle from single mocks to let clients validate they have been consumed
+
 ## 0.8
 + Allow block parameter to return networking failures as well as server responses
 
