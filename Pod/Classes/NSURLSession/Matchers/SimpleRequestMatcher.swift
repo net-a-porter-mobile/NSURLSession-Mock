@@ -19,7 +19,7 @@ struct SimpleRequestMatcher : RequestMatcher {
     let method: String
 
     init(url: NSURL, method: String) {
-        let path = NSRegularExpression.escapedPatternForString(url.absoluteString)
+        let path = NSRegularExpression.escapedPatternForString(url.absoluteString!)
         try! self.init(expression: "^\(path)$", method: method)
     }
 

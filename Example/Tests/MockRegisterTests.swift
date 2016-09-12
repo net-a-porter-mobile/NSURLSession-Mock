@@ -20,7 +20,7 @@ class TestSessionMock : SessionMock, Equatable {
     }
     
     func matchesRequest(request: NSURLRequest) -> Bool {
-        return (request.URL?.absoluteString.containsString(requestString))!
+        return (request.URL?.absoluteString!.containsString(requestString))!
     }
     
     func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask {
@@ -137,7 +137,7 @@ class MockRegisterTests: XCTestCase {
             }
             
             func matchesRequest(request: NSURLRequest) -> Bool {
-                return (request.URL?.absoluteString.containsString(requestString))!
+                return (request.URL?.absoluteString!.containsString(requestString))!
             }
             
             func consumeRequest(request: NSURLRequest, session: NSURLSession) throws -> NSURLSessionDataTask {
