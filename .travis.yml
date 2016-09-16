@@ -7,9 +7,9 @@ osx_image: xcode8
 
 env:
   - DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=9.1'
-  - DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=8.4'
+  - DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=10.0'
   - DESTINATION='platform=iOS Simulator,name=iPad Air,OS=9.1'
-  - DESTINATION='platform=iOS Simulator,name=iPad Air,OS=8.4'
+  - DESTINATION='platform=iOS Simulator,name=iPad Air,OS=10.0'
 
 #cache: cocoapods
 #podfile: Example/Podfile
