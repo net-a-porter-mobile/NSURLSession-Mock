@@ -9,14 +9,13 @@
 import Foundation
 
 
-extension NSURLRequest {
+extension URLRequest {
     
     var debugMockDescription: String {
         
-        let method = self.HTTPMethod ?? "<no method>"
-        let URL = self.URL?.absoluteString ?? "<no url>"
+        let method = self.httpMethod ?? "<no method>"
+        let URL = self.url?.absoluteString ?? "<no url>"
         
-        return "<NSURLRequest:\(unsafeAddressOf(self)) \(method) \(URL)"
+        return "<NSURLRequest \(method) \(URL)"
     }
-
 }

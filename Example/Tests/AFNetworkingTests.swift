@@ -15,21 +15,21 @@ import AFNetworking
 class AFNetworkingTests: XCTestCase {
     
     override func tearDown() {
-        NSURLSession.removeAllMocks()
+        URLSession.removeAllMocks()
     }
 
     func testAFNetworking_WithSessionMockGET_WorksTogether() {
-        let expectation = self.expectationWithDescription("Success completion block called")
+        let expectation = self.expectation(description: "Success completion block called")
         
-        let URL = NSURL(string: "https://www.example.com/1")!
-        let body = "{ \"data\": 1 }".dataUsingEncoding(NSUTF8StringEncoding)!
-        let request = NSURLRequest.init(URL: URL)
+        let url = URL(string: "https://www.example.com/1")!
+        let body = "{ \"data\": 1 }".data(using: String.Encoding.utf8)!
+        let request = URLRequest(url: url)
         let headers = [ "Content-Type" : "application/json"]
-        NSURLSession.mockNext(request, body: body, headers: headers)
+        URLSession.mockNext(request: request, body: body, headers: headers)
 
         let manager = AFHTTPSessionManager()
         
-        manager.GET(URL.absoluteString, parameters: nil, success: { (task, response) -> Void in
+        manager.get(url.absoluteString, parameters: nil, success: { (task, response) -> Void in
             
             XCTAssertEqual(response as? NSDictionary, [ "data": 1 ])
             
@@ -38,24 +38,24 @@ class AFNetworkingTests: XCTestCase {
             XCTFail("This shouldn't return an error")
         }
         
-        self.waitForExpectationsWithTimeout(1) { (expectationError) -> Void in
+        self.waitForExpectations(timeout: 1) { (expectationError) -> Void in
             XCTAssertNil(expectationError)
         }
     }
 
     func testAFNetworking_WithSessionMockPOST_WorksTogether() {
-        let expectation = self.expectationWithDescription("Success completion block called")
+        let expectation = self.expectation(description: "Success completion block called")
         
-        let URL = NSURL(string: "https://www.example.com/2")!
-        let body = "{ \"data\": 2 }".dataUsingEncoding(NSUTF8StringEncoding)!
-        let request = NSMutableURLRequest.init(URL: URL)
-        request.HTTPMethod = "POST"
+        let url = URL(string: "https://www.example.com/2")!
+        let body = "{ \"data\": 2 }".data(using: String.Encoding.utf8)!
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
         let headers = [ "Content-Type" : "application/json"]
-        NSURLSession.mockNext(request, body: body, headers: headers)
+        URLSession.mockNext(request: request, body: body, headers: headers)
         
         let manager = AFHTTPSessionManager()
         
-        manager.POST(URL.absoluteString, parameters: nil, success: { (task, response) -> Void in
+        manager.post(url.absoluteString, parameters: nil, success: { (task, response) -> Void in
             
             XCTAssertEqual(response as? NSDictionary, [ "data": 2 ])
             
@@ -64,7 +64,7 @@ class AFNetworkingTests: XCTestCase {
                 XCTFail("This shouldn't return an error")
         }
         
-        self.waitForExpectationsWithTimeout(1) { (expectationError) -> Void in
+        self.waitForExpectations(timeout: 1) { (expectationError) -> Void in
             XCTAssertNil(expectationError)
         }
     }

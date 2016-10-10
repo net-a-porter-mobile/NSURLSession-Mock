@@ -8,59 +8,68 @@
 
 import Foundation
 
+
 public enum EvaluationResult {
-    case PassThrough
-    case Reject
+    case passThrough
+    case reject
 }
 
-public typealias RequestEvaluator = (NSURLRequest) -> EvaluationResult
 
-extension NSURLSession {
+public typealias RequestEvaluator = (URLRequest) -> EvaluationResult
+
+
+extension URLSession {
     /**
      Set this to output all requests which were mocked to the console
      */
-    public static var debugMockRequests: RequestDebugLevel = .None {
+    public static var debugMockRequests: RequestDebugLevel = .none {
         didSet {
             self.swizzleIfNeeded()
         }
     }
     
-    private static let defaultEvaluator: RequestEvaluator = { _ in return .PassThrough }
+    private static let defaultEvaluator: RequestEvaluator = { _ in return .passThrough }
     
     /**
      Set this to a block that will decide whether or not a request must be mocked.
      */
     public static var requestEvaluator: RequestEvaluator = defaultEvaluator {
         didSet {
-            NSURLSession.swizzleIfNeeded()
+            URLSession.swizzleIfNeeded()
         }
     }
 
     
     // MARK: - Swizling
     
-    class func swizzleIfNeeded() {
-        struct Static {
-            static var token: dispatch_once_t = 0
+    class func swizzleIfNeeded() -> Bool {
+        enum Static {
+            fileprivate static let swizzled: Bool = {
+                do {
+                    try URLSession.swizzle(replace: "dataTaskWithRequest:", with: "swizzledDataTaskWithRequest:")
+                    try URLSession.swizzle(replace: "dataTaskWithURL:", with: "swizzledDataTaskWithURL:")
+                    
+                    Log("NSURLSession now mocked")
+                } catch let e {
+                    Log("ERROR: Swizzling failed \(e)")
+                }
+                
+                return true
+            }()
         }
-        
-        dispatch_once(&Static.token) {
-            try! swizzle(self, replace: "dataTaskWithRequest:", with: "swizzledDataTaskWithRequest:")
-            try! swizzle(self, replace: "dataTaskWithURL:", with: "swizzledDataTaskWithURL:")
-            
-            Log("NSURLSession now mocked")
-        }
+
+        return Static.swizzled
     }
     
     // MARK: Swizzled methods
     
     @objc(swizzledDataTaskWithRequest:)
-    private func swizzledDataTaskWithRequest(request: NSURLRequest!) -> NSURLSessionDataTask {
+    private func swizzledDataTaskWithRequest(request: URLRequest!) -> URLSessionDataTask {
         // If any of our mocks match this request, just do that instead
-        if let task = taskForRequest(request) {
+        if let task = task(for: request) {
             
-            switch (NSURLSession.debugMockRequests) {
-            case .All, .Mocked:
+            switch (URLSession.debugMockRequests) {
+            case .all, .mocked:
                 Log("request: \(request.debugMockDescription) mocked")
             default:
                 break
@@ -69,58 +78,58 @@ extension NSURLSession {
             return task
         }
         
-        guard NSURLSession.requestEvaluator(request) == .PassThrough else {
-            let exception = NSException(name: "Mocking Exception",
+        guard URLSession.requestEvaluator(request) == .passThrough else {
+            let exception = NSException(name: NSExceptionName(rawValue: "Mocking Exception"),
                 reason: "Request \(request) was not mocked but is required to be mocked",
                 userInfo: nil)
             exception.raise()
-            return self.swizzledDataTaskWithRequest(request)
+            return self.swizzledDataTaskWithRequest(request: request)
         }
         
-        switch (NSURLSession.debugMockRequests) {
-        case .All, .Unmocked:
+        switch (URLSession.debugMockRequests) {
+        case .all, .unmocked:
             Log("request: \(request.debugMockDescription) not mocked")
         default:
             break
         }
         
         // Otherwise, let NSURLSession deal with it
-        return swizzledDataTaskWithRequest(request)
+        return swizzledDataTaskWithRequest(request: request)
     }
     
     @objc(swizzledDataTaskWithURL:)
-    private func swizzledDataTaskWithURL(URL: NSURL!) -> NSURLSessionDataTask {
-        let request = NSURLRequest(URL: URL)
-        if let task = taskForRequest(request) {
+    private func swizzledDataTaskWithURL(url: URL!) -> URLSessionDataTask {
+        let request = URLRequest(url: url)
+        if let task = task(for: request) {
             
-            if NSURLSession.debugMockRequests != .None {
+            if URLSession.debugMockRequests != .none {
                 Log("request: \(request.debugMockDescription) mocked")
             }
             
             return task
         }
         
-        guard NSURLSession.requestEvaluator(request) == .PassThrough else {
-            let exception = NSException(name: "Mocking Exception",
+        guard URLSession.requestEvaluator(request) == .passThrough else {
+            let exception = NSException(name: NSExceptionName(rawValue: "Mocking Exception"),
                 reason: "Request \(request) was not mocked but is required to be mocked",
                 userInfo: nil)
             exception.raise()
-            return self.swizzledDataTaskWithRequest(request)
+            return self.swizzledDataTaskWithRequest(request: request)
         }
         
-        if NSURLSession.debugMockRequests == .All {
+        if URLSession.debugMockRequests == .all {
             Log("request: \(request.debugMockDescription) not mocked")
         }
         
-        // Otherwise, let NSURLSession deal with it
-        return swizzledDataTaskWithURL(URL)
+        // Otherwise, let URLSession deal with it
+        return swizzledDataTaskWithURL(url: url)
     }
     
     // MARK: - Helpers
     
-    private func taskForRequest(request: NSURLRequest) -> NSURLSessionDataTask? {
-        if let mock = NSURLSession.register.nextSessionMockForRequest(request) {
-            return try! mock.consumeRequest(request, session: self)
+    fileprivate func task(for request: URLRequest) -> URLSessionDataTask? {
+        if let mock = URLSession.register.nextSessionMock(for: request) {
+            return try! mock.consume(request: request, session: self)
         }
         return nil
     }

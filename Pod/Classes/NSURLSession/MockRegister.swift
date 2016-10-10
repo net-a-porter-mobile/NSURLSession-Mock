@@ -8,10 +8,11 @@
 
 import Foundation
 
+
 class MockRegister<T: SessionMock> {
     
-    private var permanentMocks: [T] = []
-    private var ephemeralMocks: [T] = []
+    fileprivate var permanentMocks: [T] = []
+    fileprivate var ephemeralMocks: [T] = []
     
     func removeAllMocks() {
         self.permanentMocks.removeAll()
@@ -21,14 +22,14 @@ class MockRegister<T: SessionMock> {
     /**
      Adds a mock to the resgister that does not get removed after being returned
     */
-    func addPermanentMock(mock: T) {
+    func add(permanent mock: T) {
         self.permanentMocks.append(mock)
     }
     
     /**
      Adds a mock to to the register that will be removed after being returned once
     */
-    func addEphemeralMock(mock: T) {
+    func add(ephemeral mock: T) {
         self.ephemeralMocks.append(mock)
     }
     
@@ -36,12 +37,12 @@ class MockRegister<T: SessionMock> {
      Remove all mocks matching the given request. All other requests will still
      be mocked
      */
-    func removeAllMocks(of request: NSURLRequest) {
+    func removeAllMocks(of request: URLRequest) {
         self.permanentMocks = self.permanentMocks.filter {
-            return !$0.matchesRequest(request)
+            return !$0.matches(request: request)
         }
         self.ephemeralMocks = self.ephemeralMocks.filter {
-            return !$0.matchesRequest(request)
+            return !$0.matches(request: request)
         }
     }
     
@@ -49,19 +50,19 @@ class MockRegister<T: SessionMock> {
     Returns the next mock for the given request. If the next mock is ephemeral, 
     it also removes it from the pool of ephemeral mocks.
     */
-    func nextSessionMockForRequest(request: NSURLRequest) -> SessionMock? {
+    func nextSessionMock(for request: URLRequest) -> SessionMock? {
         let mocksCopy = self.ephemeralMocks
         
         //Ephemeral mocks have precedence over permanent mocks
-        for (index, mock) in mocksCopy.enumerate() {
-            if mock.matchesRequest(request) {
-                self.ephemeralMocks.removeAtIndex(index)
+        for (index, mock) in mocksCopy.enumerated() {
+            if mock.matches(request: request) {
+                self.ephemeralMocks.remove(at: index)
                 return mock
             }
         }
         
         for mock in self.permanentMocks {
-            if mock.matchesRequest(request) {
+            if mock.matches(request: request) {
                 return mock
             }
         }
@@ -70,13 +71,13 @@ class MockRegister<T: SessionMock> {
     }
 }
 
+
 extension MockRegister where T: Equatable {
 
     /**
      Returns true if this register contains `mock` as an ephemeral mock
      */
-    func containsEphemeralMock(mock: T) -> Bool {
+    func contains(ephemeral mock: T) -> Bool {
         return self.ephemeralMocks.contains(mock)
     }
-
 }
