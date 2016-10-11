@@ -9,12 +9,12 @@
 import Foundation
 
 enum MatchesResponse {
-    case NoMatch
-    case Matches(extractions:[String])
+    case noMatch
+    case matches(extractions:[String])
 }
 
 protocol RequestMatcher {
 
-    func matches(request: NSURLRequest) -> MatchesResponse
+    func matches(request: URLRequest) -> MatchesResponse
     
 }

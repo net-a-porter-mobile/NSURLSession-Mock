@@ -10,40 +10,38 @@ import XCTest
 
 import NSURLSession_Mock
 
-private class SessionTestDelegate: NSObject, NSURLSessionDataDelegate {
+
+private class SessionTestDelegate: NSObject, URLSessionDataDelegate {
     var expectations: [XCTestExpectation]
     
-    var dataKeyedByTaskIdentifier: [Int: NSMutableData] = [:]
-    var responseKeyedByTaskIdentifier: [Int: NSURLResponse] = [:]
-    var errorKeyedByTaskIdentifier: [Int: NSError] = [:]
+    var dataKeyedByTaskIdentifier: [Int: Data] = [:]
+    var responseKeyedByTaskIdentifier: [Int: URLResponse] = [:]
+    var errorKeyedByTaskIdentifier: [Int: Error] = [:]
     
     init(expectations: [XCTestExpectation]) {
         self.expectations = expectations
     }
     
-    @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveResponse response: NSURLResponse, completionHandler: (NSURLSessionResponseDisposition) -> Void) {
+    @objc func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse, completionHandler: @escaping (URLSession.ResponseDisposition) -> Swift.Void) {
         self.responseKeyedByTaskIdentifier[dataTask.taskIdentifier] = response
     }
     
-    @objc func URLSession(session: NSURLSession, dataTask: NSURLSessionDataTask, didReceiveData recievedData: NSData) {
-        var data = dataKeyedByTaskIdentifier[dataTask.taskIdentifier]
+    @objc func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive recievedData: Data) {
+        var data = self.dataKeyedByTaskIdentifier[dataTask.taskIdentifier] ?? Data()
         
-        if data == nil {
-            data = NSMutableData()
-            dataKeyedByTaskIdentifier[dataTask.taskIdentifier] = data
-        }
+        data.append(recievedData)
         
-        data!.appendData(recievedData)
+        self.dataKeyedByTaskIdentifier[dataTask.taskIdentifier] = data
     }
     
-    @objc func URLSession(session: NSURLSession, task: NSURLSessionTask, didCompleteWithError error: NSError?) {
+    @objc func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
             self.errorKeyedByTaskIdentifier[task.taskIdentifier] = error
         }
 
-        let expectation = expectations.first!
+        let expectation = self.expectations.first!
         expectation.fulfill()
-        expectations.removeFirst()
+        self.expectations.removeFirst()
     }
 }
 
@@ -53,43 +51,43 @@ class NSURLSessionTests: XCTestCase {
     override func setUp() {
         super.setUp()
         
-        NSURLSession.debugMockRequests = .All
+        URLSession.debugMockRequests = .all
     }
     
     override func tearDown() {
-        NSURLSession.removeAllMocks()
+        URLSession.removeAllMocks()
         
         super.tearDown()
     }
     
     func testSession_WithSingleMock_ShouldReturnMockDataOnce() {
-        let expectation1 = self.expectationWithDescription("Complete called for 1")
-        let expectation2 = self.expectationWithDescription("Complete called for 2")
+        let expectation1 = self.expectation(description: "Complete called for 1")
+        let expectation2 = self.expectation(description: "Complete called for 2")
         
         // Tell NSURLSession to mock this URL, each time with different data
-        let URL = NSURL(string: "https://www.example.com/1")!
-        let body1 = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
-        let request1 = NSURLRequest.init(URL: URL)
-        NSURLSession.mockNext(request1, body: body1)
+        let url = URL(string: "https://www.example.com/1")!
+        let body1 = "Test response 1".data(using: String.Encoding.utf8)!
+        let request1 = URLRequest(url: url)
+        _ = URLSession.mockNext(request: request1, body: body1)
         
-        let body2 = "Test response 2".dataUsingEncoding(NSUTF8StringEncoding)!
-        let request2 = NSURLRequest.init(URL: URL)
-        NSURLSession.mockNext(request2, body: body2)
+        let body2 = "Test response 2".data(using: String.Encoding.utf8)!
+        let request2 = URLRequest(url: url)
+        _ = URLSession.mockNext(request: request2, body: body2)
         
         // Create a session
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
         
         // Perform both tasks
-        let task1 = session.dataTaskWithRequest(request1)
+        let task1 = session.dataTask(with: request1)
         task1.resume()
         
-        let task2 = session.dataTaskWithRequest(request2)
+        let task2 = session.dataTask(with: request2)
         task2.resume()
         
         // Validate that the mock data was returned
-        self.waitForExpectationsWithTimeout(1) { timeoutError in
+        self.waitForExpectations(timeout: 1) { timeoutError in
             XCTAssertNil(timeoutError)
             
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body1)
@@ -98,33 +96,33 @@ class NSURLSessionTests: XCTestCase {
     }
     
     func testSession_WithEveryMock_ShouldReturnMockEachTime() {
-        let expectation1 = self.expectationWithDescription("Complete called for 1")
-        let expectation2 = self.expectationWithDescription("Complete called for 2")
-        let expectation3 = self.expectationWithDescription("Complete called for 3")
+        let expectation1 = self.expectation(description: "Complete called for 1")
+        let expectation2 = self.expectation(description: "Complete called for 2")
+        let expectation3 = self.expectation(description: "Complete called for 3")
         
-        // Tell NSURLSession to mock thhis URL, each time with different data
-        let URL = NSURL(string: "https://www.example.com/1")!
-        let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
-        let request = NSURLRequest.init(URL: URL)
-        NSURLSession.mockEvery(request, body: body)
+        // Tell NSURLSession to mock this URL, each time with different data
+        let url = URL(string: "https://www.example.com/1")!
+        let body = "Test response 1".data(using: String.Encoding.utf8)!
+        let request = URLRequest(url: url)
+        URLSession.mockEvery(request: request, body: body)
         
         // Create a session
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2, expectation3 ])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
         
         // Perform the task a few times
-        let task1 = session.dataTaskWithRequest(request)
+        let task1 = session.dataTask(with: request)
         task1.resume()
         
-        let task2 = session.dataTaskWithRequest(request)
+        let task2 = session.dataTask(with: request)
         task2.resume()
         
-        let task3 = session.dataTaskWithRequest(request)
+        let task3 = session.dataTask(with: request)
         task3.resume()
         
         // Validate that the mock data was returned
-        self.waitForExpectationsWithTimeout(1) { timeoutError in
+        self.waitForExpectations(timeout: 1) { timeoutError in
             XCTAssertNil(timeoutError)
             
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
@@ -134,28 +132,28 @@ class NSURLSessionTests: XCTestCase {
     }
     
     func testSession_WithDelayedMock_ShouldReturnMockAfterDelay() {
-        let expectation = self.expectationWithDescription("Complete called")
+        let expectation = self.expectation(description: "Complete called")
         
         // Tell NSURLSession to mock this URL, each time with different data
-        let URL = NSURL(string: "https://www.example.com/1")!
-        let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
-        let request = NSURLRequest.init(URL: URL)
-        NSURLSession.mockEvery(request, body: body, delay: 1)
+        let url = URL(string: "https://www.example.com/1")!
+        let body = "Test response 1".data(using: String.Encoding.utf8)!
+        let request = URLRequest(url: url)
+        URLSession.mockEvery(request: request, body: body, delay: 1)
         
         // Create a session
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [expectation])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
         
         // Perform the task
-        let task1 = session.dataTaskWithRequest(request)
+        let task1 = session.dataTask(with: request)
         task1.resume()
         
         // Record the start time
         let start = NSDate()
         
         // Validate that the mock data was returned
-        self.waitForExpectationsWithTimeout(2) { timeoutError in
+        self.waitForExpectations(timeout: 2) { timeoutError in
             XCTAssertNil(timeoutError)
             
             // Sanity it's actually mocked
@@ -170,30 +168,30 @@ class NSURLSessionTests: XCTestCase {
     
     
     func testSession_WithStatusCodeAndHeaders_ShouldReturnTheCorrectStatusCodes() {
-        let expectation = self.expectationWithDescription("Complete called for headers and status code")
+        let expectation = self.expectation(description: "Complete called for headers and status code")
         
         // Tell NSURLSession to mock this URL, each time with different data
-        let URL = NSURL(string: "https://www.example.com/1")!
-        let body = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
-        let request = NSURLRequest.init(URL: URL)
+        let url = URL(string: "https://www.example.com/1")!
+        let body = "Test response 1".data(using: String.Encoding.utf8)!
+        let request = URLRequest(url: url)
         let headers = ["Content-Type" : "application/test", "Custom-Header" : "Is custom"]
-        NSURLSession.mockNext(request, body: body, headers: headers, statusCode: 200)
+        URLSession.mockNext(request: request, body: body, headers: headers, statusCode: 200)
         
         // Create a session
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [expectation])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
         
         // Perform task
-        let task = session.dataTaskWithRequest(request)
+        let task = session.dataTask(with: request)
         task.resume()
         
         // Validate that the mock data was returned
-        self.waitForExpectationsWithTimeout(1) { timeoutError in
+        self.waitForExpectations(timeout: 1) { timeoutError in
             XCTAssertNil(timeoutError)
             
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body)
-            guard let response = delegate.responseKeyedByTaskIdentifier[task.taskIdentifier] as? NSHTTPURLResponse else {
+            guard let response = delegate.responseKeyedByTaskIdentifier[task.taskIdentifier] as? HTTPURLResponse else {
                 XCTFail("Response isn't the correct type")
                 return
             }
@@ -207,28 +205,28 @@ class NSURLSessionTests: XCTestCase {
     }
     
     func testSession_WithRegularExpression_ShouldMatch() {
-        let expectation1 = self.expectationWithDescription("Complete called for request 1")
-        let expectation2 = self.expectationWithDescription("Complete called for request 2")
+        let expectation1 = self.expectation(description: "Complete called for request 1")
+        let expectation2 = self.expectation(description: "Complete called for request 2")
         
         // Mock with a regex
-        let body = "{'mocked':true}".dataUsingEncoding(NSUTF8StringEncoding)
-        try! NSURLSession.mockEvery(".*/a.json", body: body)
+        let body = "{'mocked':true}".data(using: String.Encoding.utf8)
+        try! URLSession.mockEvery(expression: ".*/a.json", body: body)
         
         // Create a session
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
         
         // Perform two tasks
-        let request1 = NSURLRequest(URL: NSURL(string: "http://www.example.com/a.json?param1=1")!)
-        let task1 = session.dataTaskWithRequest(request1)
+        let request1 = URLRequest(url: URL(string: "http://www.example.com/a.json?param1=1")!)
+        let task1 = session.dataTask(with: request1)
         task1.resume()
         
-        let request2 = NSURLRequest(URL: NSURL(string: "http://www.example.com/a.json?param2=2")!)
-        let task2 = session.dataTaskWithRequest(request2)
+        let request2 = URLRequest(url: URL(string: "http://www.example.com/a.json?param2=2")!)
+        let task2 = session.dataTask(with: request2)
         task2.resume()
         
-        self.waitForExpectationsWithTimeout(1) { timeoutError in
+        self.waitForExpectations(timeout: 1) { timeoutError in
             // Make sure it was the mock and not a valid response!
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body)
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], body)
@@ -236,74 +234,74 @@ class NSURLSessionTests: XCTestCase {
     }
     
     func testSession_WithUnauthorizedRequest_ShouldReturnCanceledTask() {
-        let url = NSURL(string: "http://www.google.com")!
-        let request = NSURLRequest(URL:url)
+        let url = URL(string: "http://www.google.com")!
+        let request = NSURLRequest(url: url as URL)
         
         // Create a session
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ ])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
-        NSURLSession.requestEvaluator = { request in
-            return .Reject
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
+        URLSession.requestEvaluator = { request in
+            return .reject
         }
         
-        SwiftTryCatch.tryBlock({ () -> Void in
-            let _ = session.dataTaskWithRequest(request)
-            }, catchBlock: { (exception) -> Void in
-                XCTAssertTrue(exception.name == "Mocking Exception")
+        SwiftTryCatch.try({ () -> Void in
+            let _ = session.dataTask(with: request as URLRequest)
+            }, catch: { (exception: NSException?) -> Void in
+                XCTAssertEqual(exception?.name, NSExceptionName(rawValue: "Mocking Exception"))
             }) {}
     }
 
     func testSession_WithBlock_ShouldReturnModifiedData() {
         // Create an expression which will match the product id
         let expression = "http://www.example.com/product/([0-9]{6})"
-        try! NSURLSession.mockEvery(expression) { (url: NSURL, matches: [String]) in
-            return .Success(statusCode: 200, headers: [:], body: matches.first!.dataUsingEncoding(NSUTF8StringEncoding)!)
+        try! URLSession.mockEvery(expression: expression) { (url: URL, matches: [String]) in
+            return .success(statusCode: 200, headers: [:], body: matches.first!.data(using: String.Encoding.utf8)!)
         }
 
         // We are going to make two requests, with two different product ids.
         // When the delegate reports them both complete, we will check that the
         // data returned was valid for that specific URL
-        let expectation1 = self.expectationWithDescription("Complete called for request 123456")
-        let expectation2 = self.expectationWithDescription("Complete called for request 654321")
+        let expectation1 = self.expectation(description: "Complete called for request 123456")
+        let expectation2 = self.expectation(description: "Complete called for request 654321")
 
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
 
         // Perform two tasks
-        let request1 = NSURLRequest(URL: NSURL(string: "http://www.example.com/product/123456")!)
-        let task1 = session.dataTaskWithRequest(request1)
+        let request1 = URLRequest(url: URL(string: "http://www.example.com/product/123456")!)
+        let task1 = session.dataTask(with: request1)
         task1.resume()
 
-        let request2 = NSURLRequest(URL: NSURL(string: "http://www.example.com/product/654321")!)
-        let task2 = session.dataTaskWithRequest(request2)
+        let request2 = URLRequest(url: URL(string: "http://www.example.com/product/654321")!)
+        let task2 = session.dataTask(with: request2)
         task2.resume()
 
-        self.waitForExpectationsWithTimeout(1) { timeoutError in
+        self.waitForExpectations(timeout: 1) { timeoutError in
             // Make sure it was the mock and not a valid response!
-            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], "123456".dataUsingEncoding(NSUTF8StringEncoding))
-            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], "654321".dataUsingEncoding(NSUTF8StringEncoding))
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], "123456".data(using: String.Encoding.utf8))
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], "654321".data(using: String.Encoding.utf8))
         }
     }
     
     func testSession_WithConsumedSingleMock_ShouldBeConsumed() {
         let path = "http://www.example.com/test_path"
-        let URL = NSURL(string: path)!
-        let request = NSURLRequest(URL: URL)
-        let handle = NSURLSession.mockNext(request, body: nil)
+        let url = URL(string: path)!
+        let request = URLRequest(url: url)
+        let handle = URLSession.mockNext(request: request, body: nil)
         
-        let expectation1 = self.expectationWithDescription("Complete called")
+        let expectation1 = self.expectation(description: "Complete called")
         
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1 ])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
         
-        let task = session.dataTaskWithRequest(request)
+        let task = session.dataTask(with: request)
         task.resume()
         
-        self.waitForExpectationsWithTimeout(1) { error in
-            let hasConsumed = NSURLSession.hasMockConsumed(handle)
+        self.waitForExpectations(timeout: 1) { error in
+            let hasConsumed = URLSession.hasMockConsumed(handle: handle)
             XCTAssertTrue(hasConsumed, "The handle should have been consumed")
         }
     }
@@ -311,77 +309,77 @@ class NSURLSessionTests: XCTestCase {
     func testSession_WithNotYetConsumedSingleMock_ShouldNotBeConsumed() {
         // This handle should never be consumed - we're not going to be calling this URL
         let path = "http://www.example.com/test_path"
-        let URL = NSURL(string: path)!
-        let request = NSURLRequest(URL: URL)
-        let handle = NSURLSession.mockNext(request, body: nil)
+        let url = URL(string: path)!
+        let request = URLRequest(url: url)
+        let handle = URLSession.mockNext(request: request, body: nil)
         
         // Mock this url as well so that we don't rely on network traffic to pass the test :)
         let path2 = "http://www.example.com/path_does_not_match"
-        let URL2 = NSURL(string: path2)!
-        let request2 = NSURLRequest(URL: URL2)
-        NSURLSession.mockNext(request2, body: nil)
+        let url2 = URL(string: path2)!
+        let request2 = URLRequest(url: url2)
+        URLSession.mockNext(request: request2, body: nil)
         
         // Sanity - make sure that we aren't going out to the network
-        let originalEvaluator = NSURLSession.requestEvaluator
-        NSURLSession.requestEvaluator = { _ in return .Reject }
+        let originalEvaluator = URLSession.requestEvaluator
+        URLSession.requestEvaluator = { _ in return .reject }
         
-        let expectation1 = self.expectationWithDescription("Complete called")
+        let expectation1 = self.expectation(description: "Complete called")
         
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1 ])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
         
         let testPath = "http://www.example.com/path_does_not_match"
-        let testURL = NSURL(string: testPath)!
-        let testRequest = NSURLRequest(URL: testURL)
-        let task = session.dataTaskWithRequest(testRequest)
+        let testURL = URL(string: testPath)!
+        let testRequest = URLRequest(url: testURL)
+        let task = session.dataTask(with: testRequest)
         task.resume()
         
-        self.waitForExpectationsWithTimeout(1) { error in
-            let hasConsumed = NSURLSession.hasMockConsumed(handle)
+        self.waitForExpectations(timeout: 1) { error in
+            let hasConsumed = URLSession.hasMockConsumed(handle: handle)
             XCTAssertFalse(hasConsumed, "The handle should not have been consumed")
         }
         
         // Reset the evaluator so we aren't screwing with any other tests
-        NSURLSession.requestEvaluator = originalEvaluator
+        URLSession.requestEvaluator = originalEvaluator
     }
 
     func testSession_WithFailureBlock_ShouldReturnError() {
         // Create an expression which will match the product id - if it's 123456 return some data, 
         // if it isn't, return a networking error.
         let expression = "http://www.example.com/product/([0-9]{6})"
-        try! NSURLSession.mockEvery(expression) { (url: NSURL, matches: [String]) in
+        try! URLSession.mockEvery(expression: expression) { (url: URL, matches: [String]) in
             let productID = matches.first!
 
             if (productID == "123456") {
-                return .Success(statusCode: 200, headers: [:], body: matches.first!.dataUsingEncoding(NSUTF8StringEncoding)!)
+                return .success(statusCode: 200, headers: [:], body: matches.first!.data(using: String.Encoding.utf8)!)
             } else {
                 let error = NSError(domain: "TestErrorDomain", code: 0, userInfo: [ NSLocalizedDescriptionKey: "Request invalid" ])
-                return .Failure(error: error)
+                return .failure(error: error)
             }
         }
 
         // We are going to make two requests, with two different product ids.
         // One should return data, the other should fail with an error
-        let expectation1 = self.expectationWithDescription("Complete called for request 123456")
-        let expectation2 = self.expectationWithDescription("Complete called for request 654321")
+        let expectation1 = self.expectation(description: "Complete called for request 123456")
+        let expectation2 = self.expectation(description: "Complete called for request 654321")
 
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
 
         // Perform two tasks
-        let request1 = NSURLRequest(URL: NSURL(string: "http://www.example.com/product/123456")!)
-        let task1 = session.dataTaskWithRequest(request1)
+        let request1 = URLRequest(url: URL(string: "http://www.example.com/product/123456")!)
+        let task1 = session.dataTask(with: request1)
         task1.resume()
 
-        let request2 = NSURLRequest(URL: NSURL(string: "http://www.example.com/product/654321")!)
-        let task2 = session.dataTaskWithRequest(request2)
+        let request2 = URLRequest(url: URL(string: "http://www.example.com/product/654321")!)
+        let task2 = session.dataTask(with: request2)
         task2.resume()
 
-        self.waitForExpectationsWithTimeout(1) { timeoutError in
+        self.waitForExpectations(timeout: 1) { timeoutError in
             // Make sure it was the mock and not a valid response!
-            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], "123456".dataUsingEncoding(NSUTF8StringEncoding))
+            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], "123456".data(using: String.Encoding.utf8))
             XCTAssertNil(delegate.errorKeyedByTaskIdentifier[task1.taskIdentifier])
             XCTAssertNotNil(delegate.errorKeyedByTaskIdentifier[task2.taskIdentifier])
         }
@@ -389,33 +387,32 @@ class NSURLSessionTests: XCTestCase {
 
     func testSession_WithClearMocks_ShouldClearExistingMocks() {
         let path = "www.example.com/test.json"
-        let URL = NSURL(string: path)!
-        let request = NSURLRequest(URL: URL)
+        let url = URL(string: path)!
+        let request = URLRequest(url: url)
 
         // Mock every request to a path
-        let body1 = "{'mocked':1}".dataUsingEncoding(NSUTF8StringEncoding)
-        NSURLSession.mockEvery(request, body: body1)
+        let body1 = "{'mocked':1}".data(using: String.Encoding.utf8)
+        URLSession.mockEvery(request: request, body: body1)
 
         // Clear all the mocks
-        NSURLSession.removeAllMocks()
+        URLSession.removeAllMocks()
 
         // Mock the same request, with a different response
-        let body2 = "{'mocked':2}".dataUsingEncoding(NSUTF8StringEncoding)
-        NSURLSession.mockEvery(request, body: body2)
+        let body2 = "{'mocked':2}".data(using: String.Encoding.utf8)
+        URLSession.mockEvery(request: request, body: body2)
 
         // Create a session
-        let expectation = self.expectationWithDescription("Request complete")
-        let conf = NSURLSessionConfiguration.defaultSessionConfiguration()
+        let expectation = self.expectation(description: "Request complete")
+        let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [expectation])
-        let session = NSURLSession(configuration: conf, delegate: delegate, delegateQueue: NSOperationQueue())
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
 
         // Perform task
-        let task = session.dataTaskWithRequest(request)
+        let task = session.dataTask(with: request)
         task.resume()
 
-        self.waitForExpectationsWithTimeout(1) { timeoutError in
+        self.waitForExpectations(timeout: 1) { timeoutError in
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body2)
         }
     }
-
 }

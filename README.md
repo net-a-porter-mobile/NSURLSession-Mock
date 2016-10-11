@@ -15,28 +15,28 @@ This pod is designed to help during functional testing by returning canned respo
 To mock a single request use `mockNext` - this method can be called multiple times and the responses will be returned in the same order they were added in:
 
 ```objc
-let body1 = "Test response 1".dataUsingEncoding(NSUTF8StringEncoding)!
-let body2 = "Test response 2".dataUsingEncoding(NSUTF8StringEncoding)!
+let body1 = "Test response 1".data(using: String.Encoding.utf8)!
+let body2 = "Test response 2".data(using: String.Encoding.utf8)!
 
-let URL = NSURL(string: "https://www.example.com/1")!
-let request = NSURLRequest.init(URL: URL)
+let url = URL(string: "https://www.example.com/1")!
+let request = URLRequest(url: url)
 
 // Mock calls to that request returning both responses in turn
-NSURLSession.mockNext(request, body: body1, delay: 1)
-NSURLSession.mockNext(request, body: body2, delay: 1)
+_ = URLSession.mockNext(request: request, body: body1, delay: 1)
+_ = URLSession.mockNext(request: request, body: body2, delay: 1)
 ```
 
 
 To mock every call to a request, just use `mockEvery` instead:
 
 ```objc
-NSURLSession.mockEvery(request, body: body, delay: 1)
+URLSession.mockEvery(request: request, body: body, delay: 1)
 ```
 
 The parameters `body` and `delay` are optional if you want you code to be a bit more succinct. i.e. to just return 200 with no data you can do:
 
 ```objc
-NSURLSession.mockEvery(request)
+URLSession.mockEvery(request: request)
 ```
 
 Ephemeral mocks have priority over permanent mocks. This is to say that, if you were to add permanent and ephemeral mocks for the same request, the ephemeral mocks would be returned and consumed first.
@@ -47,10 +47,10 @@ If you want your response to depend on the URL called, you can pass in a functio
 let expression = "https://www.example.com/product/([0-9]{6})"
 
 // Return a valid test product JSON response with the correct pid
-NSURLSession.mockEvery(expression) { (matches:[String]) in
+URLSession.mockEvery(expression: expression) { (matches:[String]) in
     let pid = matches.first!
-    let body = "{ 'productId':'\(pid)', 'description':'This is a test product' }".datawithEncoding(UTF8StringEncoding)!
-    return .Success(statusCode: 200, headers: [:], body: body)
+    let body = "{ 'productId':'\(pid)', 'description':'This is a test product' }".data(using: String.Encoding.utf8)!
+    return .success(statusCode: 200, headers: [:], body: body)
 }
 ```
 
@@ -60,9 +60,9 @@ If you want to mock errors (internal ios error, not server errors; they are just
 let expression = "https://www.example.com/some_url.json"
 
 // Return a valid test product JSON response with the correct pid
-NSURLSession.mockEvery(expression) { (matches:[String]) in
+URLSession.mockEvery(expression: expression) { (matches:[String]) in
     let error = NSError(domain: "TestNetworkingLayerError", code: 0, userInfo: [NSLocalisedDescriptionKey: "Could not open session blah blah something"])
-    return .Failure(error)
+    return .failure(error)
 }
 ```
 
@@ -82,9 +82,9 @@ If you would like to fail requests that haven't been mocked, set the NSURLSessio
 
 ```swift
 NSURLSession.requestEvaluator = { request in
-    guard let url = request.URL else { return .Reject }
+    guard let url = request.URL else { return .reject }
 
-    return url.host == "www.net-a-porter.com" ? .Reject : .PassThrough
+    return url.host == "www.net-a-porter.com" ? .reject : .passThrough
 }
 
 ```

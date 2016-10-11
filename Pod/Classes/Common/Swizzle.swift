@@ -8,23 +8,31 @@
 
 import Foundation
 
-enum Swizzle: ErrorType {
-    case Failed(method: String)
+
+enum Swizzle: Error {
+    case failed(method: String)
 }
 
-func swizzle(reciever: AnyClass, replace from: String, with to: String) throws {
-    let originalSelector = Selector(from)
-    let swizzledSelector = Selector(to)
+
+extension NSObject {
     
-    let originalMethod = class_getInstanceMethod(reciever, originalSelector)
-    let swizzledMethod = class_getInstanceMethod(reciever, swizzledSelector)
-    
-    let didAddMethod = class_addMethod(reciever, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
-    
-    if didAddMethod {
-        // class_replaceMethod(self, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
-        throw Swizzle.Failed(method: from)
-    } else {
-        method_exchangeImplementations(originalMethod, swizzledMethod)
+    static func swizzle(replace from: String, with to: String) throws {
+        let originalSelector = Selector(from)
+        let swizzledSelector = Selector(to)
+        
+        guard
+            let originalMethod = class_getInstanceMethod(self, originalSelector),
+            let swizzledMethod = class_getInstanceMethod(self, swizzledSelector) else {
+                throw Swizzle.failed(method: from)
+        }
+        
+        let didAddMethod = class_addMethod(self, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
+        
+        if didAddMethod {
+            // class_replaceMethod(self, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
+            throw Swizzle.failed(method: from)
+        } else {
+            method_exchangeImplementations(originalMethod, swizzledMethod)
+        }
     }
 }

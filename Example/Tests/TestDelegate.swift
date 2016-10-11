@@ -10,32 +10,32 @@ import UIKit
 
 class TestDelegate : NSObject, NSURLConnectionDelegate, NSURLConnectionDataDelegate {
     
-    var response: NSURLResponse?
+    var response: URLResponse?
     var data: NSMutableData?
-    var error: NSError?
+    var error: Error?
     
     let complete: () -> ()
     
-    init(complete: () -> ()) {
+    init(complete: @escaping () -> ()) {
         self.complete = complete
     }
     
-    func connection(connection: NSURLConnection, didReceiveResponse response: NSURLResponse) {
+    func connection(_ connection: NSURLConnection, didReceive response: URLResponse) {
         self.response = response
     }
     
-    func connection(connection: NSURLConnection, didReceiveData data: NSData) {
+    func connection(_ connection: NSURLConnection, didReceive data: Data) {
         if self.data == nil {
             self.data = NSMutableData()
         }
-        self.data!.appendData(data)
+        self.data!.append(data)
     }
     
-    func connectionDidFinishLoading(connection: NSURLConnection) {
+    func connectionDidFinishLoading(_ connection: NSURLConnection) {
         self.complete()
     }
     
-    func connection(connection: NSURLConnection, didFailWithError error: NSError) {
+    func connection(_ connection: NSURLConnection, didFailWithError error: Error) {
         self.error = error
         self.complete()
     }
