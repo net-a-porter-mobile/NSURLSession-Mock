@@ -42,6 +42,7 @@ extension URLSession {
     
     // MARK: - Swizling
     
+    @discardableResult
     class func swizzleIfNeeded() -> Bool {
         enum Static {
             fileprivate static let swizzled: Bool = {

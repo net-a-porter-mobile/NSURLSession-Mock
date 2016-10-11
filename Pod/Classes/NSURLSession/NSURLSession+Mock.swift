@@ -46,6 +46,7 @@ extension URLSession {
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
      */
+    @discardableResult
     public class func mockNext(request: URLRequest, body: Data?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) -> Handle {
         let matcher = SimpleRequestMatcher(url: request.url!, method: request.httpMethod!)
         return self.mock(next: matcher, delay: delay) { _ in .success(statusCode: statusCode, headers: headers, body: body) }
@@ -75,6 +76,7 @@ extension URLSession {
      - parameter statusCode: The status code (default=200) returned by the session data task
      - parameter delay: A artificial delay before the session data task starts to return response and data
      */
+    @discardableResult
     public class func mockNext(expression: String, httpMethod: String = "GET", body: Data?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws -> Handle {
         let matcher = try SimpleRequestMatcher(expression: expression, method: httpMethod)
         return self.mock(next: matcher, delay: delay) { _ in return .success(statusCode: statusCode, headers: headers, body: body) }
@@ -105,6 +107,7 @@ extension URLSession {
      - parameter delay: A artificial delay before the session data task starts to return response and data
      - parameter response: Returns data the data to be returned by the session data task. If this returns `nil` then the didRecieveData callback won't be called.
      */
+    @discardableResult
     public class func mockNext(expression: String, httpMethod: String = "GET", delay: Double = DefaultDelay, response: @escaping MockResponseHandler) throws -> Handle {
         let matcher = try SimpleRequestMatcher(expression: expression, method: httpMethod)
         return self.mock(next: matcher, delay: delay, response: response)

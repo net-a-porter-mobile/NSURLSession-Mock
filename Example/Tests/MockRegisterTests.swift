@@ -194,7 +194,7 @@ class MockRegisterTests: XCTestCase {
         register.add(ephemeral: mock)
 
         // Consume the mock again
-        register.nextSessionMock(for: URLRequest(url: URL(string: mock.requestString)!))
+        _ = register.nextSessionMock(for: URLRequest(url: URL(string: mock.requestString)!))
         XCTAssertFalse(register.contains(ephemeral: mock))
         
         // Make sure it's not still contained in the register
