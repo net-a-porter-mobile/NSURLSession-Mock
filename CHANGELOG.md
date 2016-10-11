@@ -2,6 +2,9 @@ Changelog
 
 ### unreleased
 
+# 1.0.0
++ Swift 3
+
 ### 0.9
 + Move to cocoapods 1.0 format (thanks @csknns)
 + Return a handle from single mocks to let clients validate they have been consumed
