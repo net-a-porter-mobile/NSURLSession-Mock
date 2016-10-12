@@ -2,6 +2,9 @@ Changelog
 
 ### unreleased
 
+## 1.0.1
++ Support for AFNetworking 3
+
 # 1.0.0
 + Swift 3
 

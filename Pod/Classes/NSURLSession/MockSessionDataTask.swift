@@ -67,4 +67,12 @@ class MockSessionDataTask: URLSessionDataTask {
     override func cancel() {
         self._state = .canceling
     }
+    
+    override var countOfBytesExpectedToSend: Int64 {
+        return 0
+    }
+    
+    override var countOfBytesExpectedToReceive: Int64 {
+        return NSURLSessionTransferSizeUnknown
+    }
 }
