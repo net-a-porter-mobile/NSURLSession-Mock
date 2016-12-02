@@ -23,7 +23,7 @@ protocol SessionMock {
      For a given request, this method will return a data task. This method will
      throw if it's asked to consume a request that it doesn't match
     */
-    func consume(request: URLRequest, session: URLSession) throws -> URLSessionDataTask
+    func consume(request: URLRequest, session: URLSession, with completionHandler:@escaping TaskCompletionHandler) throws -> URLSessionDataTask
 }
 
 

@@ -16,6 +16,7 @@ public enum EvaluationResult {
 
 
 public typealias RequestEvaluator = (URLRequest) -> EvaluationResult
+public typealias TaskCompletionHandler = (_ data: Data?, _ response: URLResponse?, _ error: Error?) -> Void
 
 
 extension URLSession {
@@ -38,7 +39,9 @@ extension URLSession {
             URLSession.swizzleIfNeeded()
         }
     }
-
+    
+    
+    
     
     // MARK: - Swizling
     
@@ -48,7 +51,9 @@ extension URLSession {
             fileprivate static let swizzled: Bool = {
                 do {
                     try URLSession.swizzle(replace: "dataTaskWithRequest:", with: "swizzledDataTaskWithRequest:")
+                    try URLSession.swizzle(replace: "dataTaskWithRequest:completionHandler:", with: "swizzledDataTaskWithRequest:completionHandler:")
                     try URLSession.swizzle(replace: "dataTaskWithURL:", with: "swizzledDataTaskWithURL:")
+                    try URLSession.swizzle(replace: "dataTaskWithURL:completionHandler:", with: "swizzledDataTaskWithURL:completionHandler:")
                     
                     Log("NSURLSession now mocked")
                 } catch let e {
@@ -58,17 +63,30 @@ extension URLSession {
                 return true
             }()
         }
-
+        
         return Static.swizzled
     }
     
     // MARK: Swizzled methods
     
+    private var emptyCompletionHandler:TaskCompletionHandler {
+        get { return { TaskCompletionHandler in return } }
+    }
+    
     @objc(swizzledDataTaskWithRequest:)
     private func swizzledDataTaskWithRequest(request: URLRequest!) -> URLSessionDataTask {
+        return dataTask(with: request, completionHandler: emptyCompletionHandler)
+    }
+    
+    @objc(swizzledDataTaskWithURL:)
+    private func swizzledDataTaskWithURL(url: URL!) -> URLSessionDataTask {
+        return dataTask(with: url, completionHandler: emptyCompletionHandler)
+    }
+    
+    @objc(swizzledDataTaskWithRequest:completionHandler:)
+    private func swizzledDataTaskWithRequest(request: URLRequest!, completionHandler: @escaping TaskCompletionHandler) -> URLSessionDataTask {
         // If any of our mocks match this request, just do that instead
-        if let task = task(for: request) {
-            
+        if let task = task(for: request, with: completionHandler) {
             switch (URLSession.debugMockRequests) {
             case .all, .mocked:
                 Log("request: \(request.debugMockDescription) mocked")
@@ -81,10 +99,10 @@ extension URLSession {
         
         guard URLSession.requestEvaluator(request) == .passThrough else {
             let exception = NSException(name: NSExceptionName(rawValue: "Mocking Exception"),
-                reason: "Request \(request) was not mocked but is required to be mocked",
+                                        reason: "Request \(request) was not mocked but is required to be mocked",
                 userInfo: nil)
             exception.raise()
-            return self.swizzledDataTaskWithRequest(request: request)
+            return self.swizzledDataTaskWithRequest(request: request, completionHandler: completionHandler)
         }
         
         switch (URLSession.debugMockRequests) {
@@ -95,13 +113,13 @@ extension URLSession {
         }
         
         // Otherwise, let NSURLSession deal with it
-        return swizzledDataTaskWithRequest(request: request)
+        return swizzledDataTaskWithRequest(request: request, completionHandler: completionHandler)
     }
     
-    @objc(swizzledDataTaskWithURL:)
-    private func swizzledDataTaskWithURL(url: URL!) -> URLSessionDataTask {
+    @objc(swizzledDataTaskWithURL:completionHandler:)
+    private func swizzledDataTaskWithURL(url: URL!, completionHandler: @escaping TaskCompletionHandler) -> URLSessionDataTask {
         let request = URLRequest(url: url)
-        if let task = task(for: request) {
+        if let task = task(for: request, with: completionHandler) {
             
             if URLSession.debugMockRequests != .none {
                 Log("request: \(request.debugMockDescription) mocked")
@@ -112,10 +130,10 @@ extension URLSession {
         
         guard URLSession.requestEvaluator(request) == .passThrough else {
             let exception = NSException(name: NSExceptionName(rawValue: "Mocking Exception"),
-                reason: "Request \(request) was not mocked but is required to be mocked",
+                                        reason: "Request \(request) was not mocked but is required to be mocked",
                 userInfo: nil)
             exception.raise()
-            return self.swizzledDataTaskWithRequest(request: request)
+            return self.swizzledDataTaskWithRequest(request: request, completionHandler: completionHandler)
         }
         
         if URLSession.debugMockRequests == .all {
@@ -123,14 +141,14 @@ extension URLSession {
         }
         
         // Otherwise, let URLSession deal with it
-        return swizzledDataTaskWithURL(url: url)
+        return swizzledDataTaskWithURL(url: url, completionHandler: completionHandler)
     }
     
     // MARK: - Helpers
     
-    fileprivate func task(for request: URLRequest) -> URLSessionDataTask? {
+    fileprivate func task(for request: URLRequest, with completionHandler: @escaping TaskCompletionHandler) -> URLSessionDataTask? {
         if let mock = URLSession.register.nextSessionMock(for: request) {
-            return try! mock.consume(request: request, session: self)
+            return try! mock.consume(request: request, session: self, with: completionHandler)
         }
         return nil
     }

@@ -31,8 +31,8 @@ class MockEntry: SessionMock, Equatable {
         }
     }
     
-    func consume(request: URLRequest, session: URLSession) throws -> URLSessionDataTask {
-
+    func consume(request: URLRequest, session: URLSession, with completionHandler:@escaping TaskCompletionHandler) throws -> URLSessionDataTask {
+        
         switch (self.requestMatcher.matches(request: request)) {
 
         // If this isn't for us, we shouldn't have been called, throw and let
@@ -46,13 +46,12 @@ class MockEntry: SessionMock, Equatable {
                 task._state = .running
 
                 let response = self.response(request.url!, extractions)
-
                 switch(response) {
                 case let .success(statusCode, headers, body):
-                    self.respondWith(request: request, session: session, task: task, statusCode: statusCode, headers: headers, body: body)
+                    self.respondWith(request: request, session: session, task: task, statusCode: statusCode, headers: headers, body: body, with: completionHandler)
 
                 case let .failure(error):
-                    self.respondWith(request: request, session: session, task: task, error: error)
+                    self.respondWith(request: request, session: session, task: task, error: error, with: completionHandler)
                 }
             }
             
@@ -62,14 +61,14 @@ class MockEntry: SessionMock, Equatable {
         }
     }
 
-    private func respondWith(request: URLRequest, session: URLSession, task: MockSessionDataTask, statusCode: Int, headers: [String:String], body: Data?) {
+    private func respondWith(request: URLRequest, session: URLSession, task: MockSessionDataTask, statusCode: Int, headers: [String:String], body: Data?, with completionHandler:@escaping TaskCompletionHandler) {
         let timeDelta = 0.02
         var time = self.delay
 
+        let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "HTTP/1.1", headerFields: headers)!
+        
         if let delegate = session.delegate as? URLSessionDataDelegate {
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + time) {
-                let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "HTTP/1.1", headerFields: headers)!
                 task.response = response
                 
                 delegate.urlSession?(session, dataTask: task, didReceive: response) { _ in }
@@ -94,14 +93,19 @@ class MockEntry: SessionMock, Equatable {
                 task._state = .completed
             }
         }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+            completionHandler(body, response, nil)
+        }
 
     }
 
-    private func respondWith(request: URLRequest, session: URLSession, task: MockSessionDataTask, error: NSError) {
+    private func respondWith(request: URLRequest, session: URLSession, task: MockSessionDataTask, error: NSError, with completionHandler:@escaping TaskCompletionHandler) {
         if let delegate = session.delegate as? URLSessionTaskDelegate {
 
             DispatchQueue.main.asyncAfter(deadline: .now() + self.delay) {
                 delegate.urlSession?(session, task: task, didCompleteWithError: error)
+                completionHandler(nil, nil, error)
                 task._state = .completed
             }
         }
