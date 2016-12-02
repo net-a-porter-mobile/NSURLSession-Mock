@@ -23,7 +23,7 @@ class TestSessionMock: SessionMock, Equatable {
         return (request.url?.absoluteString.contains(requestString))!
     }
     
-    func consume(request: URLRequest, session: URLSession) throws -> URLSessionDataTask {
+    func consume(request: URLRequest, session: URLSession, with completionHandler:@escaping TaskCompletionHandler ) throws -> URLSessionDataTask {
         return URLSessionDataTask()
     }
 }
@@ -140,7 +140,7 @@ class MockRegisterTests: XCTestCase {
                 return (request.url?.absoluteString.contains(requestString))!
             }
             
-            func consume(request: URLRequest, session: URLSession) throws -> URLSessionDataTask {
+            func consume(request: URLRequest, session: URLSession, with completionHandler:@escaping TaskCompletionHandler) throws -> URLSessionDataTask {
                 return URLSessionDataTask()
             }
         }

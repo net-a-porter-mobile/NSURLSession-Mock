@@ -63,15 +63,17 @@ class NSURLSessionTests: XCTestCase {
     func testSession_WithSingleMock_ShouldReturnMockDataOnce() {
         let expectation1 = self.expectation(description: "Complete called for 1")
         let expectation2 = self.expectation(description: "Complete called for 2")
+        let expectation3 = self.expectation(description: "Complete callback called for 2")
         
         // Tell NSURLSession to mock this URL, each time with different data
-        let url = URL(string: "https://www.example.com/1")!
+        let url1 = URL(string: "https://www.example.com/1")!
         let body1 = "Test response 1".data(using: String.Encoding.utf8)!
-        let request1 = URLRequest(url: url)
+        let request1 = URLRequest(url: url1)
         _ = URLSession.mockNext(request: request1, body: body1)
         
+        let url2 = URL(string: "https://www.example.com/2")!
         let body2 = "Test response 2".data(using: String.Encoding.utf8)!
-        let request2 = URLRequest(url: url)
+        let request2 = URLRequest(url: url2)
         _ = URLSession.mockNext(request: request2, body: body2)
         
         // Create a session
@@ -83,13 +85,19 @@ class NSURLSessionTests: XCTestCase {
         let task1 = session.dataTask(with: request1)
         task1.resume()
         
-        let task2 = session.dataTask(with: request2)
+        let task2 = session.dataTask(with: request2) { (_ data: Data?, _ response: URLResponse?, _ error: Error?) in
+            
+            XCTAssertNil(error, "Error in callback")
+            
+            XCTAssertEqual(data!, body2)
+            expectation3.fulfill()
+            return
+        }
         task2.resume()
         
         // Validate that the mock data was returned
         self.waitForExpectations(timeout: 1) { timeoutError in
             XCTAssertNil(timeoutError)
-            
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task1.taskIdentifier], body1)
             XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task2.taskIdentifier], body2)
         }
@@ -99,6 +107,7 @@ class NSURLSessionTests: XCTestCase {
         let expectation1 = self.expectation(description: "Complete called for 1")
         let expectation2 = self.expectation(description: "Complete called for 2")
         let expectation3 = self.expectation(description: "Complete called for 3")
+        let expectation4 = self.expectation(description: "Complete callback called for 3")
         
         // Tell NSURLSession to mock this URL, each time with different data
         let url = URL(string: "https://www.example.com/1")!
@@ -118,7 +127,14 @@ class NSURLSessionTests: XCTestCase {
         let task2 = session.dataTask(with: request)
         task2.resume()
         
-        let task3 = session.dataTask(with: request)
+        let task3 = session.dataTask(with: request) { (_ data: Data?, _ response: URLResponse?, _ error: Error?) in
+            
+            XCTAssertNil(error, "Error in callback")
+            
+            XCTAssertEqual(data, body)
+            expectation4.fulfill()
+            return
+        }
         task3.resume()
         
         // Validate that the mock data was returned
@@ -132,7 +148,9 @@ class NSURLSessionTests: XCTestCase {
     }
     
     func testSession_WithDelayedMock_ShouldReturnMockAfterDelay() {
-        let expectation = self.expectation(description: "Complete called")
+        let expectation1 = self.expectation(description: "Complete called for 1")
+        let expectation2 = self.expectation(description: "Complete called for 2")
+        let expectation3 = self.expectation(description: "Complete callback called for 2")
         
         // Tell NSURLSession to mock this URL, each time with different data
         let url = URL(string: "https://www.example.com/1")!
@@ -142,15 +160,34 @@ class NSURLSessionTests: XCTestCase {
         
         // Create a session
         let conf = URLSessionConfiguration.default
-        let delegate = SessionTestDelegate(expectations: [expectation])
+        let delegate = SessionTestDelegate(expectations: [expectation1, expectation2])
         let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
+        
+        // Record the start time
+        let start = NSDate()
         
         // Perform the task
         let task1 = session.dataTask(with: request)
         task1.resume()
         
-        // Record the start time
-        let start = NSDate()
+        // Perform the task with callback
+        let task2 = session.dataTask(with: request) { (_ data: Data?, _ response: URLResponse?, _ error: Error?) in
+            
+            XCTAssertNil(error, "Error in callback")
+            
+            // Sanity it's actually mocked
+            XCTAssertEqual(data, body)
+            
+            // Check the delay
+            let interval = -start.timeIntervalSinceNow
+            XCTAssert(interval > 1, "Should have taken more than one second to perform (it took \(interval)")
+            XCTAssert(interval < 1.2, "Should have taken less than 1.2 seconds to perform (it took \(interval)")
+            
+            expectation3.fulfill()
+            
+            return
+        }
+        task2.resume()
         
         // Validate that the mock data was returned
         self.waitForExpectations(timeout: 2) { timeoutError in
@@ -168,7 +205,9 @@ class NSURLSessionTests: XCTestCase {
     
     
     func testSession_WithStatusCodeAndHeaders_ShouldReturnTheCorrectStatusCodes() {
-        let expectation = self.expectation(description: "Complete called for headers and status code")
+        let expectation1 = self.expectation(description: "Complete called for headers and status code for 1")
+        let expectation2 = self.expectation(description: "Complete called for headers and status code for 2")
+        let expectation3 = self.expectation(description: "Complete callback called for headers and status code for 2")
         
         // Tell NSURLSession to mock this URL, each time with different data
         let url = URL(string: "https://www.example.com/1")!
@@ -176,37 +215,63 @@ class NSURLSessionTests: XCTestCase {
         let request = URLRequest(url: url)
         let headers = ["Content-Type" : "application/test", "Custom-Header" : "Is custom"]
         URLSession.mockNext(request: request, body: body, headers: headers, statusCode: 200)
+        URLSession.mockNext(request: request, body: body, headers: headers, statusCode: 200)
         
         // Create a session
         let conf = URLSessionConfiguration.default
-        let delegate = SessionTestDelegate(expectations: [expectation])
+        let delegate = SessionTestDelegate(expectations: [expectation1, expectation2])
         let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
         
         // Perform task
-        let task = session.dataTask(with: request)
-        task.resume()
+        let task1 = session.dataTask(with: request)
+        task1.resume()
+        
+        // Perform task
+        let task2 = session.dataTask(with: request) { (_ data: Data?, _ response: URLResponse?, _ error: Error?) in
+            
+            XCTAssertNil(error, "Error in callback")
+            
+            guard let response = response as? HTTPURLResponse else {
+                XCTFail("Response in callback isn't the correct type")
+                return
+            }
+            
+            XCTAssertEqual(response.statusCode, 200)
+            guard let responseHeaders = response.allHeaderFields as? [String : String] else {
+                XCTFail("Response headers  in callback couldn't be transformed to String")
+                return
+            }
+            XCTAssertEqual(responseHeaders, headers)
+            
+            expectation3.fulfill()
+        }
+        task2.resume()
         
         // Validate that the mock data was returned
         self.waitForExpectations(timeout: 1) { timeoutError in
             XCTAssertNil(timeoutError)
             
-            XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body)
-            guard let response = delegate.responseKeyedByTaskIdentifier[task.taskIdentifier] as? HTTPURLResponse else {
-                XCTFail("Response isn't the correct type")
-                return
+            for task in [task1, task2] {
+                XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body)
+                XCTAssertEqual(delegate.dataKeyedByTaskIdentifier[task.taskIdentifier], body)
+                guard let response = delegate.responseKeyedByTaskIdentifier[task.taskIdentifier] as? HTTPURLResponse else {
+                    XCTFail("Response 1 isn't the correct type")
+                    return
+                }
+                XCTAssertEqual(response.statusCode, 200)
+                guard let responseHeaders = response.allHeaderFields as? [String : String] else {
+                    XCTFail("Response headers couldn't be transformed to String")
+                    return
+                }
+                XCTAssertEqual(responseHeaders, headers)
             }
-            XCTAssertEqual(response.statusCode, 200)
-            guard let responseHeaders = response.allHeaderFields as? [String : String] else {
-                XCTFail("Response headers couldn't be transformed to String")
-                return
-            }
-            XCTAssertEqual(responseHeaders, headers)
         }
     }
     
     func testSession_WithRegularExpression_ShouldMatch() {
         let expectation1 = self.expectation(description: "Complete called for request 1")
         let expectation2 = self.expectation(description: "Complete called for request 2")
+        let expectation3 = self.expectation(description: "Complete callback called for request 2")
         
         // Mock with a regex
         let body = "{'mocked':true}".data(using: String.Encoding.utf8)
@@ -223,7 +288,15 @@ class NSURLSessionTests: XCTestCase {
         task1.resume()
         
         let request2 = URLRequest(url: URL(string: "http://www.example.com/a.json?param2=2")!)
-        let task2 = session.dataTask(with: request2)
+        let task2 = session.dataTask(with: request2)  { (_ data: Data?, _ response: URLResponse?, _ error: Error?) in
+            
+            XCTAssertNil(error, "Error in callback")
+            
+            XCTAssertEqual(data!, body)
+            
+            expectation3.fulfill()
+            
+        }
         task2.resume()
         
         self.waitForExpectations(timeout: 1) { timeoutError in
@@ -250,6 +323,12 @@ class NSURLSessionTests: XCTestCase {
             }, catch: { (exception: NSException?) -> Void in
                 XCTAssertEqual(exception?.name, NSExceptionName(rawValue: "Mocking Exception"))
             }) {}
+        
+        SwiftTryCatch.try({ () -> Void in
+            let _ = session.dataTask(with: request as URLRequest) { (_ data: Data?, _ response: URLResponse?, _ error: Error?) in return }
+            }, catch: { (exception: NSException?) -> Void in
+                XCTAssertEqual(exception?.name, NSExceptionName(rawValue: "Mocking Exception"))
+            }) {}
     }
 
     func testSession_WithBlock_ShouldReturnModifiedData() {
@@ -264,6 +343,7 @@ class NSURLSessionTests: XCTestCase {
         // data returned was valid for that specific URL
         let expectation1 = self.expectation(description: "Complete called for request 123456")
         let expectation2 = self.expectation(description: "Complete called for request 654321")
+        let expectation3 = self.expectation(description: "Complete callback called for request 654321")
 
         let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
@@ -275,7 +355,14 @@ class NSURLSessionTests: XCTestCase {
         task1.resume()
 
         let request2 = URLRequest(url: URL(string: "http://www.example.com/product/654321")!)
-        let task2 = session.dataTask(with: request2)
+        let task2 = session.dataTask(with: request2) { (_ data: Data?, _ response: URLResponse?, _ error: Error?) in
+            
+            XCTAssertNil(error, "Error in callback")
+            
+            XCTAssertEqual(data!, "654321".data(using: String.Encoding.utf8))
+            
+            expectation3.fulfill()
+        }
         task2.resume()
 
         self.waitForExpectations(timeout: 1) { timeoutError in
@@ -363,6 +450,7 @@ class NSURLSessionTests: XCTestCase {
         // One should return data, the other should fail with an error
         let expectation1 = self.expectation(description: "Complete called for request 123456")
         let expectation2 = self.expectation(description: "Complete called for request 654321")
+        let expectation3 = self.expectation(description: "Complete called for request 654321")
 
         let conf = URLSessionConfiguration.default
         let delegate = SessionTestDelegate(expectations: [ expectation1, expectation2 ])
@@ -374,7 +462,10 @@ class NSURLSessionTests: XCTestCase {
         task1.resume()
 
         let request2 = URLRequest(url: URL(string: "http://www.example.com/product/654321")!)
-        let task2 = session.dataTask(with: request2)
+        let task2 = session.dataTask(with: request2) { (_ data: Data?, _ response: URLResponse?, _ error: Error?) in
+            XCTAssertNotNil(error)
+            expectation3.fulfill()
+        }
         task2.resume()
 
         self.waitForExpectations(timeout: 1) { timeoutError in
