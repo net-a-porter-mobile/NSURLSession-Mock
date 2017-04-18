@@ -17,6 +17,7 @@
 		E531253F1C4EDC9A00C4AF2E /* AFNetworkingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53125371C4EDC7A00C4AF2E /* AFNetworkingTests.swift */; };
 		E53125411C4EDC9A00C4AF2E /* NSURLSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E53125391C4EDC7A00C4AF2E /* NSURLSessionTests.swift */; };
 		E53125421C4EDC9A00C4AF2E /* TestDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E531253A1C4EDC7A00C4AF2E /* TestDelegate.swift */; };
+		E56754531EA6335200B62D4F /* CallbackMethodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E56754521EA6335200B62D4F /* CallbackMethodTests.swift */; };
 		F26151781C635404009D86BC /* MockRegisterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F26151761C6353AC009D86BC /* MockRegisterTests.swift */; };
 		F28F6694301F2FC25B2B9F9A /* Pods_NSURLSession_Mock_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 49733E286B2F57817F18A87C /* Pods_NSURLSession_Mock_Example.framework */; };
 		F2F35D741C9970C30002910E /* SwiftTryCatch.m in Sources */ = {isa = PBXBuildFile; fileRef = F2F35D731C9970C30002910E /* SwiftTryCatch.m */; };
@@ -56,6 +57,7 @@
 		E531253A1C4EDC7A00C4AF2E /* TestDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestDelegate.swift; sourceTree = "<group>"; };
 		E53125431C4EDCFA00C4AF2E /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = CHANGELOG.md; path = ../CHANGELOG.md; sourceTree = "<group>"; };
 		E53125451C4F9B9700C4AF2E /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = .travis.yml; path = ../.travis.yml; sourceTree = "<group>"; };
+		E56754521EA6335200B62D4F /* CallbackMethodTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CallbackMethodTests.swift; sourceTree = "<group>"; };
 		F26151761C6353AC009D86BC /* MockRegisterTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRegisterTests.swift; sourceTree = "<group>"; };
 		F2F35D711C9970C30002910E /* NSURLSession-Mock_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURLSession-Mock_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		F2F35D721C9970C30002910E /* SwiftTryCatch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwiftTryCatch.h; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 				F2F35D721C9970C30002910E /* SwiftTryCatch.h */,
 				F2F35D731C9970C30002910E /* SwiftTryCatch.m */,
 				F2F35D711C9970C30002910E /* NSURLSession-Mock_Tests-Bridging-Header.h */,
+				E56754521EA6335200B62D4F /* CallbackMethodTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -395,6 +398,7 @@
 				F2F35D741C9970C30002910E /* SwiftTryCatch.m in Sources */,
 				F26151781C635404009D86BC /* MockRegisterTests.swift in Sources */,
 				E531253F1C4EDC9A00C4AF2E /* AFNetworkingTests.swift in Sources */,
+				E56754531EA6335200B62D4F /* CallbackMethodTests.swift in Sources */,
 				E53125411C4EDC9A00C4AF2E /* NSURLSessionTests.swift in Sources */,
 				E506F01A1C609A21000D42DE /* SimpleRequestMatcherTests.swift in Sources */,
 			);

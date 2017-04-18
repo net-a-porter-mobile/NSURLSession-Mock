@@ -13,7 +13,6 @@ private let mult = Double(NSEC_PER_SEC)
 
 
 class MockEntry: SessionMock, Equatable {
-    
     private let requestMatcher: RequestMatcher
     private let response: MockResponseHandler
     private let delay: Double
@@ -31,7 +30,7 @@ class MockEntry: SessionMock, Equatable {
         }
     }
     
-    func consume(request: URLRequest, session: URLSession) throws -> URLSessionDataTask {
+    func consume(request: URLRequest, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?, session: URLSession) throws -> URLSessionDataTask {
 
         switch (self.requestMatcher.matches(request: request)) {
 
@@ -42,18 +41,19 @@ class MockEntry: SessionMock, Equatable {
 
         // Use the extractions from the match to create the data
         case .matches(let extractions):
+            // Do we respond to the completion handler, or the session delegate?
+            let handler = { (completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) -> (MockSessionDataTask) -> Void in
+                if let completionHandler = completionHandler {
+                    return self.respondToCompletionHandler(request: request, extractions: extractions, completionHandler: completionHandler)
+                } else {
+                    return self.respondToDelegate(request: request, extractions: extractions, session: session)
+                }
+            }(completionHandler)
+
             let task = MockSessionDataTask() { task in
                 task._state = .running
 
-                let response = self.response(request.url!, extractions)
-
-                switch(response) {
-                case let .success(statusCode, headers, body):
-                    self.respondWith(request: request, session: session, task: task, statusCode: statusCode, headers: headers, body: body)
-
-                case let .failure(error):
-                    self.respondWith(request: request, session: session, task: task, error: error)
-                }
+                handler(task)
             }
             
             task._originalRequest = request
@@ -62,7 +62,38 @@ class MockEntry: SessionMock, Equatable {
         }
     }
 
-    private func respondWith(request: URLRequest, session: URLSession, task: MockSessionDataTask, statusCode: Int, headers: [String:String], body: Data?) {
+    // MARK: - Completion handler responder
+    private func respondToCompletionHandler(request: URLRequest, extractions: [String], completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> (MockSessionDataTask) -> Void {
+        return { task in
+            let response = self.response(request.url!, extractions)
+
+            switch response {
+            case .success(let statusCode, let headers, let body):
+                let urlResponse = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "HTTP/1.1", headerFields: headers)!
+                completionHandler(body, urlResponse, nil)
+            case .failure(let error):
+                let urlResponse = HTTPURLResponse(url: request.url!, statusCode: 500, httpVersion: "HTTP/1.1", headerFields: [:])!
+                completionHandler(nil, urlResponse, error)
+            }
+        }
+    }
+
+    // MARK: - Session delegate responder
+    private func respondToDelegate(request: URLRequest, extractions: [String], session: URLSession) -> (MockSessionDataTask) -> Void {
+        return { task in
+            let response = self.response(request.url!, extractions)
+
+            switch response {
+            case let .success(statusCode, headers, body):
+                self.respondToDelegateWith(request: request, session: session, task: task, statusCode: statusCode, headers: headers, body: body)
+
+            case let .failure(error):
+                self.respondToDelegateWith(request: request, session: session, task: task, error: error)
+            }
+        }
+    }
+
+    private func respondToDelegateWith(request: URLRequest, session: URLSession, task: MockSessionDataTask, statusCode: Int, headers: [String:String], body: Data?) {
         let timeDelta = 0.02
         var time = self.delay
 
@@ -97,7 +128,7 @@ class MockEntry: SessionMock, Equatable {
 
     }
 
-    private func respondWith(request: URLRequest, session: URLSession, task: MockSessionDataTask, error: NSError) {
+    private func respondToDelegateWith(request: URLRequest, session: URLSession, task: MockSessionDataTask, error: NSError) {
         if let delegate = session.delegate as? URLSessionTaskDelegate {
 
             DispatchQueue.main.asyncAfter(deadline: .now() + self.delay) {
