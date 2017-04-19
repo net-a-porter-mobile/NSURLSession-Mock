@@ -82,6 +82,22 @@ extension URLSession {
 
     }
 
+    @objc(swizzledDataTaskWithURL:)
+    private func swizzledDataTaskWithURL(url: URL!) -> URLSessionDataTask {
+        let request = URLRequest(url: url)
+
+        return self.dataTask(with: request)
+    }
+
+    @objc(swizzledDataTaskWithURL:completionHandler:)
+    private func swizzledDataTaskWithURL(url: URL!, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
+        let request = URLRequest(url: url)
+
+        return self.dataTask(with: request, completionHandler: completionHandler)
+    }
+
+    // MARK: - Helpers
+
     private func actOnDataTask(withRequest request: URLRequest, fallback: () -> URLSessionDataTask, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) -> URLSessionDataTask {
         // If any of our mocks match this request, just do that instead
         if let task = task(for: request, completionHandler: completionHandler) {
@@ -115,23 +131,7 @@ extension URLSession {
         return fallback()
     }
     
-    @objc(swizzledDataTaskWithURL:)
-    private func swizzledDataTaskWithURL(url: URL!) -> URLSessionDataTask {
-        let request = URLRequest(url: url)
-
-        return self.dataTask(with: request)
-    }
-
-    @objc(swizzledDataTaskWithURL:completionHandler:)
-    private func swizzledDataTaskWithURL(url: URL!, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        let request = URLRequest(url: url)
-
-        return self.dataTask(with: request, completionHandler: completionHandler)
-    }
-
-    // MARK: - Helpers
-    
-    fileprivate func task(for request: URLRequest, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) -> URLSessionDataTask? {
+    private func task(for request: URLRequest, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?) -> URLSessionDataTask? {
         if let mock = URLSession.register.nextSessionMock(for: request) {
             return try! mock.consume(request: request, completionHandler: completionHandler, session: self)
         }
