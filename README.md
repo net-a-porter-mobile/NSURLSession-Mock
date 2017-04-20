@@ -23,8 +23,8 @@ let url = URL(string: "https://www.example.com/1")!
 let request = URLRequest(url: url)
 
 // Mock calls to that request returning both responses in turn
-_ = URLSession.mockNext(request: request, body: body1, delay: 1)
-_ = URLSession.mockNext(request: request, body: body2, delay: 1)
+URLSession.mockNext(request: request, body: body1, delay: 1)
+URLSession.mockNext(request: request, body: body2, delay: 1)
 ```
 
 
@@ -40,7 +40,7 @@ The parameters `body` and `delay` are optional if you want you code to be a bit 
 URLSession.mockEvery(request: request)
 ```
 
-Ephemeral mocks have priority over permanent mocks. This is to say that, if you were to add permanent and ephemeral mocks for the same request, the ephemeral mocks would be returned and consumed first.
+Ephemeral mocks (i.e. mock responses added using `mockNext`) have priority over permanent mocks (i.e. mock responses added using `mockEvery`). This is to say that, if you were to add permanent and ephemeral mocks for the same request, the ephemeral mocks would be returned and consumed first.
 
 If you want your response to depend on the URL called, you can pass in a function like this:
 
@@ -116,4 +116,4 @@ Sam Dean, sam.dean@net-a-porter.com
 
 ## License
 
-NSURLSession-Mock is available under the Apache license. See the LICENSE file for more info.
+NSURLSession-Mock is available under the MIT license. See the LICENSE file for more info.
