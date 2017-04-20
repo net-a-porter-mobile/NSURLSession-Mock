@@ -96,6 +96,9 @@ If a request to www.net-a-porter.com is made and not mocked, an exception will b
 
 This pod is designed to be AFNetworking (~>2.0) friendly - mocks to NSURLSession will work via AFNetworking's `AFHTTPSessionManager` methods. Checkout `AFNetworkingTests.swift` for an example.
 
+### Alamofire
+
+This pod also works with Alamofire - see AlamofireTests.swift for working examples
 
 ### Example project
 

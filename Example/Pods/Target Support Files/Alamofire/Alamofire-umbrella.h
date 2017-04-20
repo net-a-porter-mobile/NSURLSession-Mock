@@ -11,6 +11,6 @@
 #endif
 
 
-FOUNDATION_EXPORT double NSURLSession_MockVersionNumber;
-FOUNDATION_EXPORT const unsigned char NSURLSession_MockVersionString[];
+FOUNDATION_EXPORT double AlamofireVersionNumber;
+FOUNDATION_EXPORT const unsigned char AlamofireVersionString[];
 
