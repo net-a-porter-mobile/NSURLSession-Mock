@@ -13,31 +13,25 @@ final class CallbackMethodTests: XCTestCase {
     func testSession_WithSingleMock_Callback() {
         let expectation = self.expectation(description: "Callback called back")
 
-        // Tell NSURLSession to mock this URL, each time with different data
+        // Make the request we are going to mock
         let url = URL(string: "https://www.example.com")!
-        let body = "Test response 1".data(using: String.Encoding.utf8)!
         let request = URLRequest(url: url)
-        _ = URLSession.mockNext(request: request, body: body)
+
+        // Tell URLSession to mock this URL
+        let body = "Test response 1".data(using: .utf8)!
+        URLSession.mockNext(request: request, body: body)
 
         // Create a session
-        let conf = URLSessionConfiguration.default
-        let session = URLSession(configuration: conf)
+        let session = URLSession(configuration: .default)
 
         // Perform the task
         let task = session.dataTask(with: request) { data, response, error in
             XCTAssertEqual(data, body)
 
-            if (data != nil) {
-                let str = String(data: data!, encoding: .utf8)
-                if (str != nil) {
-                    print(str!)
-                }
-            }
-
             expectation.fulfill()
         }
         task.resume()
 
-        self.waitForExpectations(timeout: 10.1) { _ in }
+        self.waitForExpectations(timeout: 0.1) { _ in }
     }
 }
