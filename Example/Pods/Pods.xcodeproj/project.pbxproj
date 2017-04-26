@@ -957,9 +957,9 @@
 			};
 			name = Release;
 		};
-		43A6C0B9AF27B82FECACEACA8E9E4310 /* Debug */ = {
+		12D0B5522E87291EA24D8CD412BE8BFE /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 60D21D8537E73D0D825D12042FA49EF0 /* Pods-NSURLSession-Mock_Example.debug.xcconfig */;
+			baseConfigurationReference = E4081D657FA94A03D625DA5EB17FF9D0 /* Pods-NSURLSession-Mock_Tests.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -972,29 +972,28 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Target Support Files/Pods-NSURLSession-Mock_Example/Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-NSURLSession-Mock_Tests/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-NSURLSession-Mock_Example/Pods-NSURLSession-Mock_Example.modulemap";
+				MODULEMAP_FILE = "Target Support Files/Pods-NSURLSession-Mock_Tests/Pods-NSURLSession-Mock_Tests.modulemap";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = Pods_NSURLSession_Mock_Example;
+				PRODUCT_NAME = Pods_NSURLSession_Mock_Tests;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		55C0C32CB507F59DD8FA3DBA36BE7250 /* Release */ = {
+		7BB4078848BD78F1A25DE964721592E4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = B18488377811F3451CA5E83D318C0F76 /* Pods-NSURLSession-Mock_Tests.release.xcconfig */;
 			buildSettings = {
@@ -1023,7 +1022,6 @@
 				PRODUCT_NAME = Pods_NSURLSession_Mock_Tests;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -1102,15 +1100,15 @@
 			};
 			name = Release;
 		};
-		9458BE84F4F2DB0DFC33E3FE31BAB975 /* Release */ = {
+		9ADDA5914BEA5C6C95F2AFCB0F04E054 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2DCE3AA8C588DB5F85D123B5F9D04A55 /* Pods-NSURLSession-Mock_Example.release.xcconfig */;
+			baseConfigurationReference = 60D21D8537E73D0D825D12042FA49EF0 /* Pods-NSURLSession-Mock_Example.debug.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1123,7 +1121,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
 				MODULEMAP_FILE = "Target Support Files/Pods-NSURLSession-Mock_Example/Pods-NSURLSession-Mock_Example.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
@@ -1131,12 +1129,12 @@
 				PRODUCT_NAME = Pods_NSURLSession_Mock_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 3.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
 		9E1E4E48AF2EAB23169E611BF694090A /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1215,42 +1213,40 @@
 			};
 			name = Debug;
 		};
-		C69327F59013F11D17CE27B0D8A60EDE /* Debug */ = {
+		D5BAAC63197420EFEF5BE7880F62F58C /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E4081D657FA94A03D625DA5EB17FF9D0 /* Pods-NSURLSession-Mock_Tests.debug.xcconfig */;
+			baseConfigurationReference = 2DCE3AA8C588DB5F85D123B5F9D04A55 /* Pods-NSURLSession-Mock_Example.release.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Target Support Files/Pods-NSURLSession-Mock_Tests/Info.plist";
+				INFOPLIST_FILE = "Target Support Files/Pods-NSURLSession-Mock_Example/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-NSURLSession-Mock_Tests/Pods-NSURLSession-Mock_Tests.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MODULEMAP_FILE = "Target Support Files/Pods-NSURLSession-Mock_Example/Pods-NSURLSession-Mock_Example.modulemap";
+				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_LDFLAGS = "";
 				OTHER_LIBTOOLFLAGS = "";
 				PODS_ROOT = "$(SRCROOT)";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = Pods_NSURLSession_Mock_Tests;
+				PRODUCT_NAME = Pods_NSURLSession_Mock_Example;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
 		E0695E55897F09C6C94B443561B22DA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1350,8 +1346,8 @@
 		89A4A5E903859A90E748900EE9EF0A76 /* Build configuration list for PBXNativeTarget "Pods-NSURLSession-Mock_Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				43A6C0B9AF27B82FECACEACA8E9E4310 /* Debug */,
-				9458BE84F4F2DB0DFC33E3FE31BAB975 /* Release */,
+				9ADDA5914BEA5C6C95F2AFCB0F04E054 /* Debug */,
+				D5BAAC63197420EFEF5BE7880F62F58C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1368,8 +1364,8 @@
 		FE9CBE38BB95CB59D6214255DA628564 /* Build configuration list for PBXNativeTarget "Pods-NSURLSession-Mock_Tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				C69327F59013F11D17CE27B0D8A60EDE /* Debug */,
-				55C0C32CB507F59DD8FA3DBA36BE7250 /* Release */,
+				12D0B5522E87291EA24D8CD412BE8BFE /* Debug */,
+				7BB4078848BD78F1A25DE964721592E4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
