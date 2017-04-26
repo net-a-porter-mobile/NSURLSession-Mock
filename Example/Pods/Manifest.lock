@@ -14,7 +14,7 @@ PODS:
   - AFNetworking/Serialization (3.1.0)
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
-  - NSURLSession-Mock (1.0.0)
+  - NSURLSession-Mock (1.1.0)
 
 DEPENDENCIES:
   - AFNetworking (~> 3.0)
@@ -26,8 +26,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
-  NSURLSession-Mock: d121085faf6762fbff504fce211f674300ce01aa
+  NSURLSession-Mock: 10d4360503b21407c0df94e826bd983717fc11ce
 
-PODFILE CHECKSUM: 4a83b766995e93bfb47fcedda674bb6e7a5ca734
+PODFILE CHECKSUM: a71c1d1adf72d49758274201b8ab6113b6f12da4
 
-COCOAPODS: 1.1.0.rc.3
+COCOAPODS: 1.2.0
