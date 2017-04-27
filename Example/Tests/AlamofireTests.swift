@@ -15,9 +15,9 @@ import Alamofire
 final class AlamofireTests: XCTestCase {
     
     override func tearDown() {
-        super.tearDown()
-
         URLSession.removeAllMocks()
+
+        super.tearDown()
     }
 
     func testAlamofire_WithSessionMockGET_WorksTogether() {
