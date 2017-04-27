@@ -3,7 +3,7 @@
 //  NSURLSession-Mock
 //
 //  Created by Sam Dean on 19/01/2016.
-//  Copyright © 2016 CocoaPods. All rights reserved.
+//  Copyright © 2016 YOOX NET-A-PORTER. All rights reserved.
 //
 
 import XCTest
@@ -15,6 +15,8 @@ import Alamofire
 final class AlamofireTests: XCTestCase {
     
     override func tearDown() {
+        super.tearDown()
+
         URLSession.removeAllMocks()
     }
 

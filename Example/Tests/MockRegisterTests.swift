@@ -3,7 +3,7 @@
 //  NSURLSession-Mock
 //
 //  Created by Kerr Miller on 04/02/2016.
-//  Copyright © 2016 CocoaPods. All rights reserved.
+//  Copyright © 2016 YOOX NET-A-PORTER. All rights reserved.
 //
 
 import XCTest
