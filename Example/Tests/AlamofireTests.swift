@@ -1,5 +1,5 @@
 //
-//  AFNetworkingTests.swift
+//  AlamofireTests.swift
 //  NSURLSession-Mock
 //
 //  Created by Sam Dean on 19/01/2016.
@@ -10,34 +10,40 @@ import XCTest
 
 import NSURLSession_Mock
 
-import AFNetworking
+import Alamofire
 
-class AFNetworkingTests: XCTestCase {
+final class AlamofireTests: XCTestCase {
     
     override func tearDown() {
         URLSession.removeAllMocks()
+
+        super.tearDown()
     }
 
-    func testAFNetworking_WithSessionMockGET_WorksTogether() {
+    func testAlamofire_WithSessionMockGET_WorksTogether() {
         let expectation = self.expectation(description: "Success completion block called")
         
         let url = URL(string: "https://www.example.com/1")!
-        let body = "{ \"data\": 1 }".data(using: String.Encoding.utf8)!
+        let body = "{ \"data\": \"1\" }".data(using: String.Encoding.utf8)!
         let request = URLRequest(url: url)
         let headers = [ "Content-Type" : "application/json"]
         URLSession.mockNext(request: request, body: body, headers: headers)
 
-        let manager = AFHTTPSessionManager()
-        
-        manager.get(url.absoluteString, parameters: nil, progress: nil, success: { (task, response) -> Void in
-            
-            XCTAssertEqual(response as? NSDictionary, [ "data": 1 ])
-            
+        let manager = SessionManager()
+
+        manager.request(url).responseJSON { response in
+            switch response.result {
+            case .success(let dictionary as [String: String]):
+                XCTAssertEqual(dictionary, [ "data": "1" ])
+            case .success(let value):
+                XCTFail("Invalid response: \(value)")
+            case .failure(let error):
+                XCTFail("Should have been success, got \(error) instead.")
+            }
+
             expectation.fulfill()
-        }) { (task, error) -> Void in
-            XCTFail("This shouldn't return an error")
         }
-        
+
         self.waitForExpectations(timeout: 1) { (expectationError) -> Void in
             XCTAssertNil(expectationError)
         }
@@ -47,26 +53,29 @@ class AFNetworkingTests: XCTestCase {
         let expectation = self.expectation(description: "Success completion block called")
         
         let url = URL(string: "https://www.example.com/2")!
-        let body = "{ \"data\": 2 }".data(using: String.Encoding.utf8)!
+        let body = "{ \"data\": \"2\" }".data(using: String.Encoding.utf8)!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         let headers = [ "Content-Type" : "application/json"]
         URLSession.mockNext(request: request, body: body, headers: headers)
         
-        let manager = AFHTTPSessionManager()
+        let manager = SessionManager()
         
-        manager.post(url.absoluteString, parameters: nil, progress: nil, success: { (task, response) -> Void in
-            
-            XCTAssertEqual(response as? NSDictionary, [ "data": 2 ])
-            
+        manager.request(url, method: .post).responseJSON { response in
+            switch response.result {
+            case .success(let dictionary as [String: String]):
+                XCTAssertEqual(dictionary, [ "data": "2" ])
+            case .success(let value):
+                XCTFail("Invalid response: \(value)")
+            case .failure(let error):
+                XCTFail("Should have been success, got \(error) instead.")
+            }
+
             expectation.fulfill()
-            }) { (task, error) -> Void in
-                XCTFail("This shouldn't return an error")
         }
         
         self.waitForExpectations(timeout: 1) { (expectationError) -> Void in
             XCTAssertNil(expectationError)
         }
     }
-
 }

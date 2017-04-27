@@ -2,11 +2,12 @@ source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
 target 'NSURLSession-Mock_Example' do
-  pod "NSURLSession-Mock", :path => "../"
+  pod 'NSURLSession-Mock', :path => '../'
   
   target 'NSURLSession-Mock_Tests' do
       inherit! :search_paths
       
-      pod "AFNetworking", "~> 3.0"
+      pod 'AFNetworking', '~> 3.0'
+      pod 'Alamofire'
   end
 end

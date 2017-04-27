@@ -1,6 +1,7 @@
 Changelog
 
 ### unreleased
++ Proof the library works with Alamofire
 
 ## 1.1
 + Add support for dataTask(with:completionHandler:), both URLRequest and URL verisons.
