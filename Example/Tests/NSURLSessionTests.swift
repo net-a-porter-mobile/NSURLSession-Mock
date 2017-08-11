@@ -384,6 +384,36 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertNotNil(delegate.errorKeyedByTaskIdentifier[task2.taskIdentifier])
         }
     }
+    
+    func testSession_WithSingleMock_CancelShouldReturnError() {
+        let expectation = self.expectation(description: "Complete called for 1")
+        
+        // Tell NSURLSession to mock this URL, each time with different data
+        let url = URL(string: "https://www.example.com/1")!
+        let body = "Test response".data(using: String.Encoding.utf8)!
+        let request = URLRequest(url: url)
+        _ = URLSession.mockNext(request: request, body: body)
+        
+        // Create a session
+        let conf = URLSessionConfiguration.default
+        let delegate = SessionTestDelegate(expectations: [ expectation ])
+        let session = URLSession(configuration: conf, delegate: delegate, delegateQueue: OperationQueue())
+        
+        // Perform both tasks
+        let task = session.dataTask(with: request)
+        task.resume()
+        
+        task.cancel()
+        
+        // Validate that the mock data was returned
+        self.waitForExpectations(timeout: 1) { timeoutError in
+            XCTAssertNil(timeoutError)
+            
+            let cancelledError : NSError = NSError(domain: NSURLErrorDomain, code: NSURLErrorCancelled, userInfo: nil)
+            
+            XCTAssertEqual(delegate.errorKeyedByTaskIdentifier[task.taskIdentifier]! as NSError, cancelledError, "When event is cancelled delegate should return an error in domain NSURLErrorDomain with code NSURLErrorCancelled")
+        }
+    }
 
     func testSession_WithClearMocks_ShouldClearExistingMocks() {
         let path = "www.example.com/test.json"
