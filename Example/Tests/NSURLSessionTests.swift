@@ -68,11 +68,11 @@ class NSURLSessionTests: XCTestCase {
         let url = URL(string: "https://www.example.com/1")!
         let body1 = "Test response 1".data(using: String.Encoding.utf8)!
         let request1 = URLRequest(url: url)
-        _ = URLSession.mockNext(request: request1, body: body1)
+        URLSession.mockNext(request: request1, body: body1)
         
         let body2 = "Test response 2".data(using: String.Encoding.utf8)!
         let request2 = URLRequest(url: url)
-        _ = URLSession.mockNext(request: request2, body: body2)
+        URLSession.mockNext(request: request2, body: body2)
         
         // Create a session
         let conf = URLSessionConfiguration.default
@@ -246,7 +246,7 @@ class NSURLSessionTests: XCTestCase {
         }
         
         SwiftTryCatch.try({ () -> Void in
-            let _ = session.dataTask(with: request as URLRequest)
+            session.dataTask(with: request as URLRequest)
             }, catch: { (exception: NSException?) -> Void in
                 XCTAssertEqual(exception?.name, NSExceptionName(rawValue: "Mocking Exception"))
             }) {}
