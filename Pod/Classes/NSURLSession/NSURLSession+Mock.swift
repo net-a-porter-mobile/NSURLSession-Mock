@@ -49,7 +49,7 @@ extension URLSession {
     @discardableResult
     public class func mockNext(request: URLRequest, body: Data?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) -> Handle {
         let matcher = SimpleRequestMatcher(url: request.url!, method: request.httpMethod!)
-        return self.mock(next: matcher, delay: delay) { _ in .success(statusCode: statusCode, headers: headers, body: body) }
+        return self.mock(next: matcher, delay: delay) { _,_  in .success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
@@ -63,7 +63,7 @@ extension URLSession {
      */
     public class func mockEvery(request: URLRequest, body: Data?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) {
         let matcher = SimpleRequestMatcher(url: request.url!, method: request.httpMethod!)
-        self.mock(every: matcher, delay:delay) { _ in return .success(statusCode: statusCode, headers: headers, body: body) }
+        self.mock(every: matcher, delay:delay) { _,_  in return .success(statusCode: statusCode, headers: headers, body: body) }
     }
     
     /**
@@ -79,7 +79,7 @@ extension URLSession {
     @discardableResult
     public class func mockNext(expression: String, httpMethod: String = "GET", body: Data?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws -> Handle {
         let matcher = try SimpleRequestMatcher(expression: expression, method: httpMethod)
-        return self.mock(next: matcher, delay: delay) { _ in return .success(statusCode: statusCode, headers: headers, body: body) }
+        return self.mock(next: matcher, delay: delay) { _,_  in return .success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
@@ -94,7 +94,7 @@ extension URLSession {
      */
     public class func mockEvery(expression: String, httpMethod: String = "GET", body: Data?, headers: [String: String] = [:], statusCode: Int = 200, delay: Double = DefaultDelay) throws {
         let matcher = try SimpleRequestMatcher(expression: expression, method: httpMethod)
-        self.mock(every: matcher, delay: delay) { _ in return .success(statusCode: statusCode, headers: headers, body: body) }
+        self.mock(every: matcher, delay: delay) { _,_  in return .success(statusCode: statusCode, headers: headers, body: body) }
     }
 
     /**
