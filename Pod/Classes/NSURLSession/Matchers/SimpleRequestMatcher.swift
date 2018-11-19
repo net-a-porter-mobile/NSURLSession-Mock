@@ -43,7 +43,7 @@ struct SimpleRequestMatcher: RequestMatcher {
         var extractions = [String]()
         for match in matches {
             for n in 1 ..< match.numberOfRanges {
-                let range = match.rangeAt(n)
+                let range = match.range(at: n)
                 let extraction = (path as NSString).substring(with: range)
                 extractions.append(extraction)
             }
