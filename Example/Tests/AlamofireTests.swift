@@ -29,7 +29,7 @@ final class AlamofireTests: XCTestCase {
         let headers = [ "Content-Type" : "application/json"]
         URLSession.mockNext(request: request, body: body, headers: headers)
 
-        let manager = SessionManager()
+        let manager = Session()
 
         manager.request(url).responseJSON { response in
             switch response.result {
@@ -59,7 +59,7 @@ final class AlamofireTests: XCTestCase {
         let headers = [ "Content-Type" : "application/json"]
         URLSession.mockNext(request: request, body: body, headers: headers)
         
-        let manager = SessionManager()
+        let manager = Session()
         
         manager.request(url, method: .post).responseJSON { response in
             switch response.result {
