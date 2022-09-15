@@ -111,11 +111,11 @@ extension URLSession {
 
             return task
         }
-
+        
         guard URLSession.requestEvaluator(request) == .passThrough else {
             let exception = NSException(name: NSExceptionName(rawValue: "Mocking Exception"),
-                                        reason: "Request \(request) was not mocked but is required to be mocked",
-                userInfo: nil)
+                                        reason: "Request \(String(describing: request)) was not mocked but is required to be mocked",
+                                        userInfo: nil)
             exception.raise()
             return fallback()
         }
