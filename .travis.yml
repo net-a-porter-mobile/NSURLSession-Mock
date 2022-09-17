@@ -1,11 +1,8 @@
-language: objective-c
-osx_image: xcode8.3
+osx_image: xcode13.4
 
 env:
-  - DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=9.3'
-  - DESTINATION='platform=iOS Simulator,name=iPhone 6,OS=10.3.1'
-  - DESTINATION='platform=iOS Simulator,name=iPad Air,OS=9.3'
-  - DESTINATION='platform=iOS Simulator,name=iPad Air,OS=10.3.1'
+  - DESTINATION='platform=iOS Simulator,name=iPhone 13,OS=15.5'
+  - DESTINATION='platform=iOS Simulator,name=iPad Air 2,OS=15.5'
 
 cache: cocoapods
 
@@ -17,5 +14,5 @@ before_install:
 
 script:
   - set -o pipefail
-  - xcodebuild test -destination "$DESTINATION" -workspace Example/NSURLSession-Mock.xcworkspace -scheme NSURLSession-Mock-Example -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO | xcpretty
+  - xcodebuild test -destination "$DESTINATION" -workspace Example/NSURLSession-Mock.xcworkspace -scheme NSURLSession-Mock-Example -sdk iphonesimulator | xcpretty
   - pod lib lint
