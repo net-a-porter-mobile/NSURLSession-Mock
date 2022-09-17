@@ -1,7 +1,7 @@
 
 # NSURLSession-Mock
 
-[![CI Status](http://img.shields.io/travis/net-a-porter-mobile/NSURLSession-Mock.svg?style=flat)](https://travis-ci.org/net-a-porter-mobile/NSURLSession-Mock)
+[![CI Status](http://img.shields.io/travis/net-a-porter-mobile/NSURLSession-Mock.svg?style=flat)](https://travis-ci.com/net-a-porter-mobile/NSURLSession-Mock)
 [![Version](https://img.shields.io/cocoapods/v/NSURLSession-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLSession-Mock)
 [![License](https://img.shields.io/cocoapods/l/NSURLSession-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLSession-Mock)
 [![Platform](https://img.shields.io/cocoapods/p/NSURLSession-Mock.svg?style=flat)](http://cocoapods.org/pods/NSURLSession-Mock)
