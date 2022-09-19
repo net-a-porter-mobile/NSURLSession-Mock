@@ -29,7 +29,7 @@ class AFNetworkingTests: XCTestCase {
 
         let manager = AFHTTPSessionManager()
         
-        manager.get(url.absoluteString, parameters: nil, progress: nil, success: { (task, response) -> Void in
+        manager.get(url.absoluteString, parameters: nil, headers: nil, progress: nil, success: { (task, response) -> Void in
             
             XCTAssertEqual(response as? NSDictionary, [ "data": 1 ])
             
@@ -55,7 +55,7 @@ class AFNetworkingTests: XCTestCase {
         
         let manager = AFHTTPSessionManager()
         
-        manager.post(url.absoluteString, parameters: nil, progress: nil, success: { (task, response) -> Void in
+        manager.post(url.absoluteString, parameters: nil, headers: nil, progress: nil, success: { (task, response) -> Void in
             
             XCTAssertEqual(response as? NSDictionary, [ "data": 2 ])
             

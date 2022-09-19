@@ -16,20 +16,20 @@ class MockEntry: SessionMock, Equatable {
     private let requestMatcher: RequestMatcher
     private let response: MockResponseHandler
     private let delay: Double
-    
+
     init(matching requestMatcher: RequestMatcher, response: @escaping MockResponseHandler, delay: Double) {
         self.requestMatcher = requestMatcher
         self.response = response
         self.delay = delay
     }
-    
+
     func matches(request: URLRequest) -> Bool {
         switch(self.requestMatcher.matches(request: request)) {
         case .matches: return true
         case .noMatch: return false
         }
     }
-    
+
     func consume(request: URLRequest, completionHandler: ((Data?, URLResponse?, Error?) -> Void)?, session: URLSession) throws -> URLSessionDataTask {
 
         switch (self.requestMatcher.matches(request: request)) {
@@ -55,9 +55,9 @@ class MockEntry: SessionMock, Equatable {
 
                 handler(task)
             }
-            
+
             task._originalRequest = request
-            
+
             return task
         }
     }
@@ -98,11 +98,11 @@ class MockEntry: SessionMock, Equatable {
         var time = self.delay
 
         if let delegate = session.delegate as? URLSessionDataDelegate {
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+
+            DispatchQueue.current.asyncAfter(deadline: .now() + time) {
                 let response = HTTPURLResponse(url: request.url!, statusCode: statusCode, httpVersion: "HTTP/1.1", headerFields: headers)!
                 task.response = response
-                
+
                 delegate.urlSession?(session, dataTask: task, didReceive: response) { _ in }
             }
 
@@ -110,7 +110,7 @@ class MockEntry: SessionMock, Equatable {
 
             if let body = body {
 
-                DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+                DispatchQueue.current.asyncAfter(deadline: .now() + time) {
                     delegate.urlSession?(session, dataTask: task, didReceive: body)
                 }
 
@@ -120,7 +120,12 @@ class MockEntry: SessionMock, Equatable {
 
         if let delegate = session.delegate as? URLSessionTaskDelegate {
 
-            DispatchQueue.main.asyncAfter(deadline: .now() + time) {
+            DispatchQueue.current.asyncAfter(deadline: .now() + time) {
+                if #available(iOS 10.0, *) {
+                    let metrics = URLSessionTaskMetrics()
+                    // Alamofire waits for the didFinishCollecting to trigger the callbacks of a request
+                    delegate.urlSession?(session, task: task, didFinishCollecting: metrics)
+                }
                 delegate.urlSession?(session, task: task, didCompleteWithError: nil)
                 task._state = .completed
             }
@@ -142,4 +147,16 @@ class MockEntry: SessionMock, Equatable {
 
 func ==(lhs: MockEntry, rhs: MockEntry) -> Bool {
     return lhs === rhs
+}
+
+// Ugly work around for the demo mode work work we need to use the same queue as the one the requests where
+// scheduled. Alamofire uses its own queue and has assertions for checking this.
+extension DispatchQueue {
+    private static let dispatch_get_current_queue = dlsym(dlopen(nil, RTLD_GLOBAL), "dispatch_get_current_queue")
+
+    static var current: DispatchQueue {
+        dispatch_get_current_queue.map {
+            unsafeBitCast($0, to: (@convention(c) () -> Unmanaged<DispatchQueue>).self)().takeUnretainedValue()
+        } ?? .global(qos: .background)
+    }
 }

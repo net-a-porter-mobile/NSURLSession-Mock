@@ -36,4 +36,4 @@ enum SessionMockError: Error {
 /**
 A default delay to use when mocking requests
 */
-var DefaultDelay: Double = 0.25
+public var DefaultDelay: Double = 0.25

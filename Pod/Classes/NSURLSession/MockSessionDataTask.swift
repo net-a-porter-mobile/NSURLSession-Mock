@@ -75,4 +75,8 @@ class MockSessionDataTask: URLSessionDataTask {
     override var countOfBytesExpectedToReceive: Int64 {
         return NSURLSessionTransferSizeUnknown
     }
+
+    override var countOfBytesReceived: Int64 {
+        return 0
+    }
 }
